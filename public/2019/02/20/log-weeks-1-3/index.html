@@ -62,7 +62,7 @@
 
   <article class="article">
     
-    <span class="article-duration">6 min read</span>
+    <span class="article-duration">7 min read</span>
     
 
     <h1 class="article-title">MDI: Weeks 1 - 3</h1>
@@ -93,7 +93,7 @@ library(RColorBrewer)</code></pre>
 <p>We performed MDI on these 9 reduced datasets with 10,000 iterations, a burn-in of 1,000 and a thinning rate of 25. MDI overfits the clustering problem beginning with 50 clusters; this reduced down to around 10 occupied clusters per dataset. We assumed that the median cluster allocation was the predicted cluster forgetting about the <strong>label-flipping</strong> problem of unsupervised methods.</p>
 <p>We constructed a dataframe of the median allocation per dataset for each probe. The probes are translated to the associated gene using the <a href="http://139.165.108.18/srv/genmol/permanent/1be6993fe41c12a051c9244d67c91da2be49e5dd26a6cd79f442bc006971e2ef/CEDAR_GE/Probes_good_reanno_31137_TSS.txt">key available online</a>. As some of the probes mapped to non-unique genes we use a matrix to hold our data (as this does not require unique row names). We read this in and visually inspect the head of the data.</p>
 <pre class="r"><code># Read in the data and convert to a matrix with apporpriate row names
-compare_df &lt;- data.table::fread(&quot;~/Desktop/MDI/Runs/Run 1/allocation_data_run_1.csv&quot;)
+compare_df &lt;- data.table::fread(&quot;allocation_data_run_1.csv&quot;)
 compare_df_mat &lt;- as.matrix(compare_df[, -10])
 row.names(compare_df_mat) &lt;- compare_df$V1
 
@@ -132,7 +132,24 @@ head(compare_df_mat)</code></pre>
 <div id="including-all-probes" class="section level2">
 <h2>Including all probes</h2>
 <p>Next we attempt to include all probes present across the 9 datasets. The challenge here is to include the probes in such a fashion as to not add noise to the final clustering. To do this we first inspect the spread of the expression values in the datasets. As this is too large to consider in normal summary statistics, we inspect histograms of these - we notice that all of the probe expression values have very similar means and standard deviations - these are densely (i.e. within 1.0 for the mean, within 0.2 for the standard deviation) distributed around 7.0 and 2.10 respectively.</p>
-<p>We thus write <a href="https://github.com/stcolema/ra_chris_wallace/blob/master/finad_all_probe_ids.R">an Rscript</a> that finds the list of all unique probe IDs present across the 9 datasets and adds the required rows to each .csv file (filled with 0’s but any arbitrarily distant number from the range inhabitated by the actual measurements should be acceptable) and rearranging to have common row names and row orders in each dataset for all 18,900 prob IDs. Using these new datasets we perform MDI with the same arguments. This script also saves a binary matrix indicating for each probe which datasets it is present in. We will use this later as part of a sense check.</p>
+<p>We created <a href="https://github.com/stcolema/ra_chris_wallace/blob/master/finad_all_probe_ids.R">an Rscript</a> that finds the list of all unique probe IDs present across the 9 datasets and adds the required rows to each .csv file (filled with 0’s but any arbitrarily distant number from the range inhabitated by the actual measurements should be acceptable) and rearranging to have common row names and row orders in each dataset for all 18,517 prob IDs. Using these new datasets we perform MDI with the same arguments.</p>
+<p>This script also saves a binary matrix indicating for each probe which datasets it is present in. We use this as part of a sense check to ensure that the cluster containing the imputed probes contains no other members. This is done by taking the Hadamard product of the binary matrix with the allocation matrix and comparing the clusters occupied in this to those of the allocation matrix. Ideally one of the clusters should have completed disappeared and been replaced by a 0 cluster. This is the case below.</p>
+<p>As in the initial attempt we feed in our data and move the to a matrix format.</p>
+<pre class="r"><code># Read in the data and convert to a matrix with apporpriate row names
+compare_df_all &lt;- data.table::fread(&quot;allocation_data_run_2.csv&quot;)
+compare_df_all_mat &lt;- as.matrix(compare_df_all[, -10])
+row.names(compare_df_all_mat) &lt;- compare_df_all$V1</code></pre>
+<p>We now create a heatmap of these genes.</p>
+<p><img src="/post/2019-02-20-log-weeks-1-3_files/figure-html/mdi_2_heatmap-1.png" width="672" /></p>
+<p>Notice the clustering of datasets; we have groupings of the intestinal sample cells (IL, RE and TR), of CD14, CD19, CD4 and CD8 and then CD15 and platelets on their own.</p>
+<p>The grey areas are absent genes for the dataset in question. This is too dense (being some 18,517 observations long), so we consider subsets.</p>
+<p><img src="/post/2019-02-20-log-weeks-1-3_files/figure-html/mox_pheatmap-1.png" width="672" /></p>
+<p>Unfortunately too many of the MOX genes are absent from too many datasets to read to significantly into these results.</p>
+<p><img src="/post/2019-02-20-log-weeks-1-3_files/figure-html/mdi_2_granularity-1.png" width="672" /><img src="/post/2019-02-20-log-weeks-1-3_files/figure-html/mdi_2_granularity-2.png" width="672" /><img src="/post/2019-02-20-log-weeks-1-3_files/figure-html/mdi_2_granularity-3.png" width="672" /><img src="/post/2019-02-20-log-weeks-1-3_files/figure-html/mdi_2_granularity-4.png" width="672" /><img src="/post/2019-02-20-log-weeks-1-3_files/figure-html/mdi_2_granularity-5.png" width="672" /></p>
+<p>Recalling the clustering of datasets from the initial heatmap, we investigate these groupings. We inspect different combinations trying the CD combinations and the intestinal combinations.</p>
+<p><img src="/post/2019-02-20-log-weeks-1-3_files/figure-html/pheatmap_combinations_mdi_2-1.png" width="672" /><img src="/post/2019-02-20-log-weeks-1-3_files/figure-html/pheatmap_combinations_mdi_2-2.png" width="672" /></p>
+<p>To show that platelets and CD15 do not sit natually in any clustering of datasets we include the following heatmaps. The sparseness of the platelets dataset causes confusion and CD15 does not sit naturally in either clustering.</p>
+<p><img src="/post/2019-02-20-log-weeks-1-3_files/figure-html/pheatmap_combinations_mdi_2_pla_cd15-1.png" width="672" /><img src="/post/2019-02-20-log-weeks-1-3_files/figure-html/pheatmap_combinations_mdi_2_pla_cd15-2.png" width="672" /></p>
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1>References</h1>
