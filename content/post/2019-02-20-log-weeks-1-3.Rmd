@@ -55,12 +55,14 @@ Using this data we generated a heatmap.
 col_pal <- c("#DDDDDD", rev(RColorBrewer::brewer.pal(n = 11, "RdYlBu")))
 
 ph_full <- pheatmap::pheatmap(compare_df_mat,
- cluster_cols = F,
+ cluster_cols = T,
  color = col_pal,
  main = "Heatmap for common probes"
 )
 
 ```
+
+Notice that we have clusters of datasets; CD4, CD8 and CD14, RE and IL and then CD15, CD19 and TR. Platelets are outside of any clusters.
 
 There are 14 clusters present here; to enable comparison we went for a wider colour palette. This is the reason for the garishness of this heatplot. There is appears to have lower similarity than one might expect, particularly considering the selection of data - we only include the probes that are sufficiently expressed in each cell type to register for measurement. Possibly this is an artifact of not considering label-flipping. 
 
@@ -119,11 +121,11 @@ pheatmap::pheatmap(compare_df_mat[, -7],
 )
 ```
 
-We consider only four most similar datasets, CD14, CD4, CD8, RE and TR.
+We consider only the most similar datasets based on the clustering of datasets: CD4, CD8, CD14, RE and IL.
  
 ```{r sim_heatmaps, echo = FALSE}
-pheatmap::pheatmap(compare_df_mat[, -c(2, 3, 6, 7)],
- cluster_cols = F,
+pheatmap::pheatmap(compare_df_mat[, -c(2, 6, 7, 9)],
+ cluster_cols = T,
  color = col_pal,
  main = "Heatmap for datasets of greatest similarity"
 )
@@ -132,14 +134,14 @@ pheatmap::pheatmap(compare_df_mat[, -c(2, 3, 6, 7)],
 Out of curiousity we check the clustering and heatmap for the excluded datasets.
 
 ```{r dis_heatmaps, echo = FALSE}
-pheatmap::pheatmap(compare_df_mat[, c(2, 3, 6, 7)],
- cluster_cols = F,
+pheatmap::pheatmap(compare_df_mat[, c(2, 6, 7, 9)],
+ cluster_cols = T,
  color = col_pal,
  main = "Heatmap for datasets of least similarity"
 )
 ```
 
-This is sligthly more coherent than our first heatmap where we considered all datasets at once - this suggests that trying to process the output of all 9 datasets at once is not optimal and is in itself a non-trivial task (particulalrly if label-flipping cannot be ignored).
+These are more coherent than our first heatmap where we considered all datasets at once - this suggests that trying to process the output of all 9 datasets at once is not optimal and is in itself a non-trivial task (particulalrly if label-flipping cannot be ignored).
 
 ## Including all probes
 
@@ -192,37 +194,44 @@ pheatmap(compare_df_all_mat[MOX_ind, ],
 Unfortunately too many of the MOX genes are absent from too many datasets to read
 to significantly into these results.
 
+Investigate higher granularity.
+
 ```{r mdi_2_granularity, echo = FALSE}
 pheatmap(df_ph_order[1:2500, ],
   cluster_rows = F,
   cluster_cols = F,
-  color = col_pal
+  color = col_pal,
+  main = "Heatmap for genes 1:2500"
 )
 
 pheatmap(df_ph_order[2501:5000, ],
   cluster_rows = F,
   cluster_cols = F,
-  color = col_pal
+  color = col_pal,
+  main = "Heatmap for genes 2501:5000"
 )
 
 # There's very little information here
 pheatmap(df_ph_order[5001:10000, ],
   cluster_rows = F,
   cluster_cols = F,
-  color = col_pal
+  color = col_pal,
+  main = "Heatmap for genes 5001:10000"
 )
 
 pheatmap(df_ph_order[10001:15000, ],
   cluster_rows = F,
   cluster_cols = F,
-  color = col_pal
+  color = col_pal,
+  main = "Heatmap for genes 10001:15000"
 )
 
 # Here it quite similar
 pheatmap(df_ph_order[15001:18517, ],
   cluster_rows = F,
   cluster_cols = F,
-  color = col_pal
+  color = col_pal,
+  main = "Heatmap for genes 15001:18517"
 )
 ```
 
