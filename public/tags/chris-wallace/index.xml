@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Chris Wallace on Stats</title>
+    <link>/tags/chris-wallace/</link>
+    <description>Recent content in Chris Wallace on Stats</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-uk</language>
+    <lastBuildDate>Wed, 20 Feb 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/chris-wallace/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>MDI: Weeks 1 - 3</title>
+      <link>/2019/02/20/log-weeks-1-3/</link>
+      <pubDate>Wed, 20 Feb 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/2019/02/20/log-weeks-1-3/</guid>
+      <description>Prelude Many of the R snippets below require these R packages (Kolde 2019, Dowle and Srinivasan (2019), Neuwirth (2014)):
+library(pheatmap) library(data.table) library(RColorBrewer)  MDI Reading Inital work involved reading Mason et al. (2016) and reading the manual of the associated program. Expecting that this would have difficulties scaling (based on Paul’s beliefs from November) to nine datasets different sampling methods were researched (Bardenet, Doucet, and Holmes 2017). Hamiltonian Monte Carolo appears a likely candidate to improve convergence, with Betancourt (2017) providing an explanation of the theoretical framework.</description>
+    </item>
+    
+  </channel>
+</rss>

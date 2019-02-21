@@ -1,0 +1,90 @@
+---
+title: 'MDI: Weeks 1 - 3'
+author: Stephen Coleman
+date: '2019-02-20'
+slug: log-weeks-1-3
+categories: []
+tags:
+  - Chris Wallace
+  - MDI
+bibliography: weeks_123_bib.bib
+---
+
+
+
+<div id="prelude" class="section level2">
+<h2>Prelude</h2>
+<p>Many of the R snippets below require these R packages <span class="citation">(Kolde 2019, <span class="citation">Dowle and Srinivasan (2019)</span>, <span class="citation">Neuwirth (2014)</span>)</span>:</p>
+<pre class="r"><code>library(pheatmap)
+library(data.table)
+library(RColorBrewer)</code></pre>
+</div>
+<div id="mdi" class="section level2">
+<h2>MDI</h2>
+<div id="reading" class="section level3">
+<h3>Reading</h3>
+<p>Inital work involved reading <span class="citation">Mason et al. (2016)</span> and reading the manual of the associated program. Expecting that this would have difficulties scaling (based on Paul’s beliefs from November) to nine datasets different sampling methods were researched <span class="citation">(Bardenet, Doucet, and Holmes 2017)</span>. Hamiltonian Monte Carolo appears a likely candidate to improve convergence, with <span class="citation">Betancourt (2017)</span> providing an explanation of the theoretical framework. These topics were of interest as the MDI implementation uses a Gibbs sampler. We expected that we could make gains in the computational tractability of using all 9 datasets in a single call of MDI with a more clever sampling method.</p>
+</div>
+<div id="data-handling" class="section level3">
+<h3>Data handling</h3>
+<p>MDI uses data that has common row names across all datasets. The data from <a href="http://139.165.108.18/srv/genmol/permanent/1be6993fe41c12a051c9244d67c91da2be49e5dd26a6cd79f442bc006971e2ef/crohn-index.html">the CEDAR cohort</a> is in the form of [people <span class="math inline">\(\times\)</span> probes]. We want to transpose this; to accomplish this task we wrote <a href="https://github.com/stcolema/ra_chris_wallace/blob/master/matrix_transposer.R">an Rscript</a> that can be called form the Linux command line with appropriate arguments to transpose .csv files in a given directory. The <code>data.table</code> package by <span class="citation">Dowle and Srinivasan (2019)</span> was of great use in making this quick to run - for our 9 datasets of ~300 people and 8-16 thousand probes it took less than a minute to read, convert and write the files.</p>
+<p>Another <a href="https://github.com/stcolema/ra_chris_wallace/blob/master/common_rownames_data.R">script was required to remove all the non-ubiquitous probe IDs</a>. Any probe not present in all datasets was removed to allow MDI to perform as MDI cannot handle missing data. This reduced the set of probes to 4,964.</p>
+<p>We performed MDI on these 9 reduced datasets with 10,000 iterations, a burn-in of 1,000 and a thinning rate of 25. MDI overfits the clustering problem beginning with 50 clusters; this reduced down to around 10 occupied clusters per dataset. We assumed that the median cluster allocation was the predicted cluster forgetting about the <strong>label-flipping</strong> problem of unsupervised methods.</p>
+<p>We constructed a dataframe of the median allocation per dataset for each probe. The probes are translated to the associated gene using the <a href="http://139.165.108.18/srv/genmol/permanent/1be6993fe41c12a051c9244d67c91da2be49e5dd26a6cd79f442bc006971e2ef/CEDAR_GE/Probes_good_reanno_31137_TSS.txt">key available online</a>. As some of the probes mapped to non-unique genes we use a matrix to hold our data (as this does not require unique row names). We read this in and visually inspect the head of the data.</p>
+<pre class="r"><code># Read in the data and convert to a matrix with apporpriate row names
+compare_df &lt;- data.table::fread(&quot;~/Desktop/MDI/Runs/Run 1/allocation_data_run_1.csv&quot;)
+compare_df_mat &lt;- as.matrix(compare_df[, -10])
+row.names(compare_df_mat) &lt;- compare_df$V1
+
+# Inspect the data
+head(compare_df_mat)</code></pre>
+<pre><code>##        CD14 CD15 IL CD4 CD8 CD19 PLA RE TR
+## GGACT     8    8  8   8   8    8   8  8  8
+## A4GNT     5    6 10   6   6   10   5  5  5
+## AAAS      3    8  3   3   3    3   5  3  3
+## AACS      8   10  8   8   8    8   8  8  8
+## AACSP1    8    6  6   6   8    8   5  6  6
+## NCEH1    10    8 10  10  10   10   8 11 10</code></pre>
+<p>Using this data we generated a heatmap.</p>
+<p><img src="/post/2019-02-20-log-weeks-1-3_files/figure-html/mdi_1_heatmap-1.png" width="672" /></p>
+<p>There are 14 clusters present here; to enable comparison we went for a wider colour palette. This is the reason for the garishness of this heatplot. There is appears to have lower similarity than one might expect, particularly considering the selection of data - we only include the probes that are sufficiently expressed in each cell type to register for measurement. Possibly this is an artifact of not considering label-flipping.</p>
+<p>With the same allocation data and maintaining the ordering from the heatmap of the full dataset we inspect subsamples of the data.</p>
+<p><img src="/post/2019-02-20-log-weeks-1-3_files/figure-html/mdi_1_small_heatmaps-1.png" width="672" /><img src="/post/2019-02-20-log-weeks-1-3_files/figure-html/mdi_1_small_heatmaps-2.png" width="672" /><img src="/post/2019-02-20-log-weeks-1-3_files/figure-html/mdi_1_small_heatmaps-3.png" width="672" /><img src="/post/2019-02-20-log-weeks-1-3_files/figure-html/mdi_1_small_heatmaps-4.png" width="672" /><img src="/post/2019-02-20-log-weeks-1-3_files/figure-html/mdi_1_small_heatmaps-5.png" width="672" /></p>
+<p>With this increased granularity, we see that after the first 1,000 rows the similarity across tissues becomes greater. There is still large sections of dissimilarity, but the clustering more coherent than the first plot suggests. Notice also that the PLA dataset (platelets) is the greatest source of dissimialrity - this is also the thinnest dataset with only 8 thousand probes present in the full format.</p>
+<p>Please note that these following heatmaps have <strong>unique</strong> clusterings and have not inherited the clustering of the original heatmap unlike thpse preceding this section.</p>
+<p><img src="/post/2019-02-20-log-weeks-1-3_files/figure-html/no_platelets-1.png" width="672" /></p>
+<p>We consider only four most similar datasets, CD14, CD4, CD8, RE and TR.</p>
+<p><img src="/post/2019-02-20-log-weeks-1-3_files/figure-html/sim_heatmaps-1.png" width="672" /></p>
+<p>Out of curiousity we check the clustering and heatmap for the excluded datasets.</p>
+<p><img src="/post/2019-02-20-log-weeks-1-3_files/figure-html/dis_heatmaps-1.png" width="672" /></p>
+<p>This is sligthly more coherent than our first heatmap where we considered all datasets at once - this suggests that trying to process the output of all 9 datasets at once is not optimal and is in itself a non-trivial task (particulalrly if label-flipping cannot be ignored).</p>
+</div>
+</div>
+<div id="including-all-probes" class="section level2">
+<h2>Including all probes</h2>
+<p>Next we attempt to include all probes present across the 9 datasets. The challenge here is to include the probes in such a fashion as to not add noise to the final clustering. To do this we first inspect the spread of the expression values in the datasets. As this is too large to consider in normal summary statistics, we inspect histograms of these - we notice that all of the probe expression values have very similar means and standard deviations - these are densely (i.e. within 1.0 for the mean, within 0.2 for the standard deviation) distributed around 7.0 and 2.10 respectively.</p>
+<p>We thus write <a href="https://github.com/stcolema/ra_chris_wallace/blob/master/finad_all_probe_ids.R">an Rscript</a> that finds the list of all unique probe IDs present across the 9 datasets and adds the required rows to each .csv file (filled with 0’s but any arbitrarily distant number from the range inhabitated by the actual measurements should be acceptable) and rearranging to have common row names and row orders in each dataset for all 18,900 prob IDs. Using these new datasets we perform MDI with the same arguments. This script also saves a binary matrix indicating for each probe which datasets it is present in. We will use this later as part of a sense check.</p>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1>References</h1>
+<div id="refs" class="references">
+<div id="ref-bardenet2017markov">
+<p>Bardenet, Rémi, Arnaud Doucet, and Chris Holmes. 2017. “On Markov Chain Monte Carlo Methods for Tall Data.” <em>The Journal of Machine Learning Research</em> 18 (1). JMLR. org: 1515–57.</p>
+</div>
+<div id="ref-betancourt2017conceptual">
+<p>Betancourt, Michael. 2017. “A Conceptual Introduction to Hamiltonian Monte Carlo.” <em>arXiv Preprint arXiv:1701.02434</em>.</p>
+</div>
+<div id="ref-dowle2019data">
+<p>Dowle, Matt, and Arun Srinivasan. 2019. <em>Data.table: Extension of ‘Data.frame‘</em>. <a href="https://CRAN.R-project.org/package=data.table" class="uri">https://CRAN.R-project.org/package=data.table</a>.</p>
+</div>
+<div id="ref-kolde2019pheatmap">
+<p>Kolde, Raivo. 2019. <em>Pheatmap: Pretty Heatmaps</em>. <a href="https://CRAN.R-project.org/package=pheatmap" class="uri">https://CRAN.R-project.org/package=pheatmap</a>.</p>
+</div>
+<div id="ref-mason2016mdi">
+<p>Mason, Samuel A, Faiz Sayyid, Paul DW Kirk, Colin Starr, and David L Wild. 2016. “MDI-Gpu: Accelerating Integrative Modelling for Genomic-Scale Data Using Gp-Gpu Computing.” <em>Statistical Applications in Genetics and Molecular Biology</em> 15 (1). De Gruyter: 83–86.</p>
+</div>
+<div id="ref-neuwirth2014rcolorbrewer">
+<p>Neuwirth, Erich. 2014. <em>RColorBrewer: ColorBrewer Palettes</em>. <a href="https://CRAN.R-project.org/package=RColorBrewer" class="uri">https://CRAN.R-project.org/package=RColorBrewer</a>.</p>
+</div>
+</div>
+</div>
