@@ -82,14 +82,12 @@
 library(data.table)
 library(RColorBrewer)</code></pre>
 </div>
-<div id="mdi" class="section level2">
-<h2>MDI</h2>
-<div id="reading" class="section level3">
-<h3>Reading</h3>
-<p>Inital work involved reading <span class="citation">Mason et al. (2016)</span> and reading the manual of the associated program. Expecting that this would have difficulties scaling (based on Paul’s beliefs from November) to nine datasets different sampling methods were researched <span class="citation">(Bardenet, Doucet, and Holmes 2017)</span>. Hamiltonian Monte Carolo appears a likely candidate to improve convergence, with <span class="citation">Betancourt (2017)</span> providing an explanation of the theoretical framework. These topics were of interest as the MDI implementation uses a Gibbs sampler. We expected that we could make gains in the computational tractability of using all 9 datasets in a single call of MDI with a more clever sampling method.</p>
+<div id="reading" class="section level2">
+<h2>Reading</h2>
+<p>Inital work involved reading <span class="citation">Mason et al. (2016)</span> and reading the manual of the associated program. Expecting that this would have difficulties scaling (based on Paul’s beliefs from November) to nine datasets different sampling methods were researched <span class="citation">(Bardenet, Doucet, and Holmes 2017)</span>. Hamiltonian Monte Carolo appears a likely candidate to improve the rate of convergence, with <span class="citation">Betancourt (2017)</span> providing an explanation of the theoretical framework. These topics were of interest as the MDI implementation uses a Gibbs sampler. We expected that we could make gains in the computational tractability of using all 9 datasets in a single call of MDI with a more clever sampling method.</p>
 </div>
-<div id="data-handling" class="section level3">
-<h3>Data handling</h3>
+<div id="data-handling" class="section level2">
+<h2>Data handling</h2>
 <p>MDI uses data that has common row names across all datasets. The data from <a href="http://139.165.108.18/srv/genmol/permanent/1be6993fe41c12a051c9244d67c91da2be49e5dd26a6cd79f442bc006971e2ef/crohn-index.html">the CEDAR cohort</a> is in the form of [people <span class="math inline">\(\times\)</span> probes]. We want to transpose this; to accomplish this task we wrote <a href="https://github.com/stcolema/ra_chris_wallace/blob/master/matrix_transposer.R">an Rscript</a> that can be called form the Linux command line with appropriate arguments to transpose .csv files in a given directory. The <code>data.table</code> package by <span class="citation">Dowle and Srinivasan (2019)</span> was of great use in making this quick to run - for our 9 datasets of ~300 people and 8-16 thousand probes it took less than a minute to read, convert and write the files.</p>
 <p>Another <a href="https://github.com/stcolema/ra_chris_wallace/blob/master/common_rownames_data.R">script was required to remove all the non-ubiquitous probe IDs</a>. Any probe not present in all datasets was removed to allow MDI to perform as MDI cannot handle missing data. This reduced the set of probes to 4,964.</p>
 <p>We performed MDI on these 9 reduced datasets with 10,000 iterations, a burn-in of 1,000 and a thinning rate of 25. MDI overfits the clustering problem beginning with 50 clusters; this reduced down to around 10 occupied clusters per dataset. We assumed that the median cluster allocation was the predicted cluster forgetting about the <strong>label-flipping</strong> problem of unsupervised methods.</p>
@@ -108,13 +106,21 @@ head(compare_df_mat)</code></pre>
 ## AACS      8   10  8   8   8    8   8  8  8
 ## AACSP1    8    6  6   6   8    8   5  6  6
 ## NCEH1    10    8 10  10  10   10   8 11 10</code></pre>
+</div>
+<div id="visualisation" class="section level2">
+<h2>Visualisation</h2>
 <p>Using this data we generated a heatmap.</p>
 <p><img src="/post/2019-02-20-log-weeks-1-3_files/figure-html/mdi_1_heatmap-1.png" width="672" /></p>
 <p>There are 14 clusters present here; to enable comparison we went for a wider colour palette. This is the reason for the garishness of this heatplot. There is appears to have lower similarity than one might expect, particularly considering the selection of data - we only include the probes that are sufficiently expressed in each cell type to register for measurement. Possibly this is an artifact of not considering label-flipping.</p>
+<div id="investigate-subsections" class="section level3">
+<h3>Investigate subsections</h3>
 <p>With the same allocation data and maintaining the ordering from the heatmap of the full dataset we inspect subsamples of the data.</p>
 <p><img src="/post/2019-02-20-log-weeks-1-3_files/figure-html/mdi_1_small_heatmaps-1.png" width="672" /><img src="/post/2019-02-20-log-weeks-1-3_files/figure-html/mdi_1_small_heatmaps-2.png" width="672" /><img src="/post/2019-02-20-log-weeks-1-3_files/figure-html/mdi_1_small_heatmaps-3.png" width="672" /><img src="/post/2019-02-20-log-weeks-1-3_files/figure-html/mdi_1_small_heatmaps-4.png" width="672" /><img src="/post/2019-02-20-log-weeks-1-3_files/figure-html/mdi_1_small_heatmaps-5.png" width="672" /></p>
 <p>With this increased granularity, we see that after the first 1,000 rows the similarity across tissues becomes greater. There is still large sections of dissimilarity, but the clustering more coherent than the first plot suggests. Notice also that the PLA dataset (platelets) is the greatest source of dissimialrity - this is also the thinnest dataset with only 8 thousand probes present in the full format.</p>
-<p>Please note that these following heatmaps have <strong>unique</strong> clusterings and have not inherited the clustering of the original heatmap unlike thpse preceding this section.</p>
+</div>
+<div id="investigate-different-combinations" class="section level3">
+<h3>Investigate different combinations</h3>
+<p>Please note that these following heatmaps have <strong>unique</strong> clusterings and have not inherited the clustering of the original heatmap unlike those preceding this section.</p>
 <p><img src="/post/2019-02-20-log-weeks-1-3_files/figure-html/no_platelets-1.png" width="672" /></p>
 <p>We consider only four most similar datasets, CD14, CD4, CD8, RE and TR.</p>
 <p><img src="/post/2019-02-20-log-weeks-1-3_files/figure-html/sim_heatmaps-1.png" width="672" /></p>

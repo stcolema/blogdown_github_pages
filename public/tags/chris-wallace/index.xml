@@ -18,7 +18,7 @@
       
       <guid>/2019/02/20/log-weeks-1-3/</guid>
       <description>Prelude Many of the R snippets below require these R packages (Kolde 2019, Dowle and Srinivasan (2019), Neuwirth (2014)):
-library(pheatmap) library(data.table) library(RColorBrewer)  MDI Reading Inital work involved reading Mason et al. (2016) and reading the manual of the associated program. Expecting that this would have difficulties scaling (based on Paul’s beliefs from November) to nine datasets different sampling methods were researched (Bardenet, Doucet, and Holmes 2017). Hamiltonian Monte Carolo appears a likely candidate to improve convergence, with Betancourt (2017) providing an explanation of the theoretical framework.</description>
+library(pheatmap) library(data.table) library(RColorBrewer)  Reading Inital work involved reading Mason et al. (2016) and reading the manual of the associated program. Expecting that this would have difficulties scaling (based on Paul’s beliefs from November) to nine datasets different sampling methods were researched (Bardenet, Doucet, and Holmes 2017). Hamiltonian Monte Carolo appears a likely candidate to improve the rate of convergence, with Betancourt (2017) providing an explanation of the theoretical framework.</description>
     </item>
     
   </channel>
