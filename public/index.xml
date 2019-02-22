@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>A Hugo website</title>
+    <title>Scleronomous Rex</title>
     <link>/</link>
-    <description>Recent content on A Hugo website</description>
+    <description>Recent content on Scleronomous Rex</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-uk</language>
     <lastBuildDate>Wed, 20 Feb 2019 00:00:00 +0000</lastBuildDate>
@@ -45,7 +45,8 @@ library(pheatmap) library(data.table) library(RColorBrewer)  Reading The first s
       <pubDate>Thu, 05 May 2016 21:48:51 -0700</pubDate>
       
       <guid>/about/</guid>
-      <description>My research interests include Bayesian clustering applied to &amp;lsquo;omics data to extract biological information. Within &amp;lsquo;omics we have huge quantities of data; interpreting this and creating a coherent story of disease is a non-tirivial problem. My aim is to use Bayesian clustering methods (particularly non-parametric methods) in the area of immunology to help contribute to the understanding of disease. Previously I have worked with Paul Kirk, Laurent Gatto and Ollie Crook to extend Multiple Dataset Integration (MDI), an unsupervised clustering method based upon Dirichlet processes, to a semi-supervised predictive tool in spatial proetomics.</description>
+      <description>My research interests include Bayesian clustering applied to &amp;lsquo;omics data to extract biological information. Within &amp;lsquo;omics we have huge quantities of data; interpreting this and creating a coherent story of disease is a non-tirivial problem. My aim is to use Bayesian clustering methods (particularly non-parametric methods) in the area of immunology to help contribute to the understanding of disease.
+Previously I have worked with Paul Kirk, Laurent Gatto and Ollie Crook to extend Multiple Dataset Integration (MDI), an unsupervised clustering method based upon Dirichlet processes, to a semi-supervised predictive tool in spatial proetomics.</description>
     </item>
     
   </channel>
