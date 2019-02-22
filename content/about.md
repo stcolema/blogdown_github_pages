@@ -1,6 +1,6 @@
 ---
 date: "2016-05-05T21:48:51-07:00"
-title: About
+title: Stephen Coleman
 ---
 
 My research interests include Bayesian clustering applied to 'omics data to 

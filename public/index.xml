@@ -40,7 +40,7 @@ library(pheatmap) library(data.table) library(RColorBrewer)  Reading The first s
     </item>
     
     <item>
-      <title>About</title>
+      <title>Stephen Coleman</title>
       <link>/about/</link>
       <pubDate>Thu, 05 May 2016 21:48:51 -0700</pubDate>
       
