@@ -1,12 +1,12 @@
 ---
-title: An introduction to MDI
+title: 'An introduction to MDI'
 author: Stephen Coleman
 date: '2019-02-19'
 slug: an-introduction-to-mdi
 categories: []
 tags:
-  -MDI
-  -Paul Kirk
+  - MDI
+  - Paul Kirk
 bibliography: mdi.bib
 ---
 
