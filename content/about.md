@@ -15,4 +15,5 @@ method based upon Dirichlet processes, to a semi-supervised predictive tool in
 spatial proetomics. This is available online in 
 [`tagm-mdi`](https://github.com/stcolema/tagmmdi). Currently I am working  with 
 [**Chris Wallace**](http://chr1swallace.github.io), to apply MDI to gene 
-expression data across multiple tissue types.
+expression data across multiple tissue types with the aim of defining tissue 
+specific gene sets.

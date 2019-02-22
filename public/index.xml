@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Stats</title>
+    <title>A Hugo website</title>
     <link>/</link>
-    <description>Recent content on Stats</description>
+    <description>Recent content on A Hugo website</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-uk</language>
     <lastBuildDate>Wed, 20 Feb 2019 00:00:00 +0000</lastBuildDate>
@@ -28,6 +28,15 @@ library(pheatmap) library(data.table) library(RColorBrewer)  Reading The first s
       
       <guid>/2019/02/19/an-introduction-to-mdi/</guid>
       <description>Multiple Dataset Integration If we have observed paired datasets \(X_1=(x_{1,1},\ldots, x_{n,1})\), \(X_2=(x_{1,2},\ldots, x_{n,2})\), where observations in the \(i\)th row of each dataset represent information about the same individual. We would like to cluster using information common to both datasets. One could concatenate the datasets, adding additional covariates for each individual. However, if the two datasets have different clustering structures this would reduce the signal of both clusterings and probably have one dominate.</description>
+    </item>
+    
+    <item>
+      <title>Privacy Policy</title>
+      <link>/privacy/</link>
+      <pubDate>Thu, 28 Jun 2018 00:00:00 +0100</pubDate>
+      
+      <guid>/privacy/</guid>
+      <description>&amp;hellip;</description>
     </item>
     
     <item>
