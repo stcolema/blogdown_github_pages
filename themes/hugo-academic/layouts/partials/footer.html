@@ -5,6 +5,12 @@
     {{ $mathjax_config := resources.Get "js/mathjax-config.js" }}
     <script src="{{ $mathjax_config.RelPermalink }}"></script>
     {{ end }}
+    
+    
+    <script src="//yihui.name/js/math-code.js"></script>
+    <script async
+    src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
 
     {{/* Attempt to load local vendor JS, otherwise load from CDN. */}}
     {{ $js := .Site.Data.assets.js }}

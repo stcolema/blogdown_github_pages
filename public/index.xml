@@ -1,33 +1,298 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Scleronomous Rex</title>
+    <title>An Rí Rua on An Rí Rua</title>
     <link>/</link>
-    <description>Recent content on Scleronomous Rex</description>
+    <description>Recent content in An Rí Rua on An Rí Rua</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-uk</language>
-    <lastBuildDate>Wed, 20 Feb 2019 00:00:00 +0000</lastBuildDate>
+    <copyright>UA-135362222-1</copyright>
+    <lastBuildDate>Mon, 04 Mar 2019 00:00:00 +0000</lastBuildDate>
+    <atom:link href="/" rel="self" type="application/rss+xml" />
     
-	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
-    
+    <item>
+      <title>MDI: Week 4</title>
+      <link>/post/mdi-week-4/</link>
+      <pubDate>Mon, 04 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/post/mdi-week-4/</guid>
+      <description>
+
+
+&lt;div id=&#34;sensible-clustering&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Sensible Clustering&lt;/h1&gt;
+&lt;p&gt;We check if the &lt;strong&gt;modal&lt;/strong&gt; cluster from the MDI iterations is a sensible decision for allocating probes (&lt;strong&gt;note&lt;/strong&gt;: we referred to median clustering previously. This was wrong). To do this we construct heatmaps comparing the clustering across a sample of iterations and also plot the adjusted Rand index for the clustering at every iteration compared to the modal clustering.&lt;/p&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;/post/2019-03-04-mdi-week-4_files/rand_index_plot_TR.png&#34; /&gt;
+
+&lt;/div&gt;
+&lt;p&gt;We plot the adjusted Rand index comparing the allocation at a given iteration (corrected for thinning on the x-axis) to the modal clustering from all recorded iterations.&lt;/p&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;/post/2019-03-04-mdi-week-4_files/iteration_heatplot_TR.png&#34; /&gt;
+
+&lt;/div&gt;
+&lt;p&gt;We construct a heatmap of the clustering across a sample of iterations.&lt;/p&gt;
+&lt;div id=&#34;individual-clusterings&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Individual clusterings&lt;/h2&gt;
+&lt;p&gt;We also cluster the individual datasets using a Dirichlet process (i.e. we apply MDI with a single dataset). We carry out similar sense checks to ensure that the model clustering is representative.&lt;/p&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;/post/2019-03-04-mdi-week-4_files/TR.png&#34; /&gt;
+
+&lt;/div&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;/post/2019-03-04-mdi-week-4_files/RE.png&#34; /&gt;
+
+&lt;/div&gt;
+&lt;p&gt;We compare the clustering in the individual vs the multiple dataset cases. Note that the specific label does not matter, we are interested in the membership of clusters but do not have any reason to expect that the labels should correspond. We see that many of the clusters have a largely common membership across the two clusterings, but that there are significant differences.&lt;/p&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;/post/2019-03-04-mdi-week-4_files/mdi_comparison_heatplotTR.png&#34; /&gt;
+
+&lt;/div&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;/post/2019-03-04-mdi-week-4_files/mdi_comparison_heatplotRE.png&#34; /&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</description>
+    </item>
     
     <item>
       <title>MDI: Weeks 1 - 3</title>
-      <link>/2019/02/20/log-weeks-1-3/</link>
+      <link>/post/weeks-1-3/log-weeks-1-3/</link>
       <pubDate>Wed, 20 Feb 2019 00:00:00 +0000</pubDate>
       
-      <guid>/2019/02/20/log-weeks-1-3/</guid>
-      <description>Prelude Many of the R chunks below require these R packages (Kolde 2019, Dowle and Srinivasan (2019), Neuwirth (2014)):
-library(pheatmap) library(data.table) library(RColorBrewer)  Reading The first step in the project is to understand the tool we are using. Therefore a study of Mason et al. (2016) and reading the manual of the associated program were the first steps. Expecting that this would have difficulties scaling to nine datasets different sampling methods were researched (Bardenet, Doucet, and Holmes 2017).</description>
+      <guid>/post/weeks-1-3/log-weeks-1-3/</guid>
+      <description>
+
+
+&lt;div id=&#34;prelude&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Prelude&lt;/h2&gt;
+&lt;p&gt;Many of the R chunks below require these R packages &lt;span class=&#34;citation&#34;&gt;(Kolde 2019, &lt;span class=&#34;citation&#34;&gt;Dowle and Srinivasan (2019)&lt;/span&gt;, &lt;span class=&#34;citation&#34;&gt;Neuwirth (2014)&lt;/span&gt;)&lt;/span&gt;:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(pheatmap)
+library(data.table)
+library(RColorBrewer)&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;reading&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Reading&lt;/h2&gt;
+&lt;p&gt;The first step in the project is to understand the tool we are using. Therefore a study of &lt;span class=&#34;citation&#34;&gt;Mason et al. (2016)&lt;/span&gt; and reading the manual of the associated program were the first steps. Expecting that this would have difficulties scaling to nine datasets different sampling methods were researched &lt;span class=&#34;citation&#34;&gt;(Bardenet, Doucet, and Holmes 2017)&lt;/span&gt;. Hamiltonian Monte Carlo appears a likely candidate to improve the rate of convergence, with &lt;span class=&#34;citation&#34;&gt;Betancourt (2017)&lt;/span&gt; providing an explanation of the theoretical framework. These topics were of interest as the MDI implementation uses a Gibbs sampler. We expected that we could make gains in the computational tractability of using all 9 datasets in a single call of MDI with a more clever sampling method.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;data-handling&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Data handling&lt;/h2&gt;
+&lt;p&gt;MDI uses data that has common row names across all datasets. The data from &lt;a href=&#34;http://139.165.108.18/srv/genmol/permanent/1be6993fe41c12a051c9244d67c91da2be49e5dd26a6cd79f442bc006971e2ef/crohn-index.html&#34;&gt;the CEDAR cohort&lt;/a&gt; is in the form of [people &lt;span class=&#34;math inline&#34;&gt;\(\times\)&lt;/span&gt; probes]. We want to transpose this; to accomplish this task we wrote &lt;a href=&#34;https://github.com/stcolema/ra_chris_wallace/blob/master/matrix_transposer.R&#34;&gt;an Rscript&lt;/a&gt; that can be called form the terminal command line with appropriate arguments to transpose .csv files in a given directory. The &lt;code&gt;data.table&lt;/code&gt; package by &lt;span class=&#34;citation&#34;&gt;Dowle and Srinivasan (2019)&lt;/span&gt; was of great use in making this quick to run - for our 9 datasets of ~300 people and 8-16 thousand probes it aaproximately 30s using a desktop compuer to read in, transpose, handle missingness and write the file. In comparison, using &lt;code&gt;purrr&lt;/code&gt; of the &lt;code&gt;tidyverse&lt;/code&gt; suite for even one aspect of the missingness handling increased the time taken to roughly 1 minute 50s.&lt;/p&gt;
+&lt;p&gt;The nine datasets present are six circulating immune cell types (CD4+ T lymphocytes, CD8+ T lymphocytes, CD19+ B lymphocytes, CD14+ monocytes, CD15+ granulocytes, platelets) as well as ileal, colonic, and rectal biopsies (IL, TR, RE datasets respectively).&lt;/p&gt;
+&lt;p&gt;Another &lt;a href=&#34;https://github.com/stcolema/ra_chris_wallace/blob/master/common_rownames_data.R&#34;&gt;script was required to remove all the non-ubiquitous probe IDs&lt;/a&gt;. Any probe not present in all datasets was removed to allow MDI to perform as MDI cannot handle missing data. This reduced the set of probes to 4,964.&lt;/p&gt;
+&lt;p&gt;We performed MDI on these 9 reduced datasets with 10,000 iterations, a burn-in of 1,000 and a thinning rate of 25. MDI overfits the data, beginning with 50 clusters (as an approximation of a Dirichlet process - note that we can change the number of clusters present); as part of the sampling is reduced to around 10 occupied clusters per dataset (ranging from 8 - 13). We assumed that the median cluster allocation was the predicted cluster forgetting about the &lt;strong&gt;label-flipping&lt;/strong&gt; problem of unsupervised methods.&lt;/p&gt;
+&lt;p&gt;We constructed a dataframe of the median allocation per dataset for each probe. The probes are translated to the associated gene using the &lt;a href=&#34;http://139.165.108.18/srv/genmol/permanent/1be6993fe41c12a051c9244d67c91da2be49e5dd26a6cd79f442bc006971e2ef/CEDAR_GE/Probes_good_reanno_31137_TSS.txt&#34;&gt;key available online&lt;/a&gt;. As some of the probes mapped to non-unique genes we use a matrix to hold our data (as this does not require unique row names in R). We read this in and visually inspect the head of the data.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Read in the data and convert to a matrix with apporpriate row names
+compare_df &amp;lt;- data.table::fread(&amp;quot;allocation_data_run_1.csv&amp;quot;)
+compare_df_mat &amp;lt;- as.matrix(compare_df[, -10])
+row.names(compare_df_mat) &amp;lt;- compare_df$V1
+
+# Inspect the data
+head(compare_df_mat)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##        CD14 CD15 IL CD4 CD8 CD19 PLA RE TR
+## GGACT     8    8  8   8   8    8   8  8  8
+## A4GNT     5    6 10   6   6   10   5  5  5
+## AAAS      3    8  3   3   3    3   5  3  3
+## AACS      8   10  8   8   8    8   8  8  8
+## AACSP1    8    6  6   6   8    8   5  6  6
+## NCEH1    10    8 10  10  10   10   8 11 10&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;visualisation&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Visualisation&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt;: As one inspects the following plots please recall that the labels are arbitrary and proximity of colouring has no significance (i.e. there is no reason to believe that orange in the heatplots has any association with red).&lt;/p&gt;
+&lt;p&gt;Using this data we generated a heatmap of all the genes allocation across all datasets.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/post/weeks-1-3/2019-02-20-log-weeks-1-3_files/figure-html/mdi_1_heatmap-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Notice that we have clusters of datasets; CD4, CD8 and CD14, RE and IL and then CD15, CD19 and TR. Platelets are outside of any clusters of datasets; PLA is also the thinnest dataset with only 8 thousand probes present in the full format.&lt;/p&gt;
+&lt;p&gt;There are 13 clusters present here; to enable comparison we went for a wider colour palette. This is the reason for the garishness of this heatplot. A casual inspection suggests lower similarity than one might expect, particularly considering the selection of data. As we only include the genes that are sufficiently expressed in each cell type to register for measurement we would expect these to include the genes that are most similarly expressed across all tissues. We should consider the pssibility that this is an artifact of not considering label-flipping, but we investigate the clusters in finer detail first.&lt;/p&gt;
+&lt;!-- ### Investigate subsections --&gt;
+&lt;!-- With the same allocation data and maintaining the ordering from the heatmap of the full dataset we inspect subsamples of the data. --&gt;
+&lt;!-- ```{r mdi_1_small_heatmaps, echo = FALSE} --&gt;
+&lt;!-- row_order &lt;- ph_full$tree_row[[&#34;order&#34;]] --&gt;
+&lt;!-- df_ph_order &lt;- compare_df_mat[row_order, ] --&gt;
+&lt;!-- pheatmap(df_ph_order[1:1000, ], --&gt;
+&lt;!--   cluster_rows = F, --&gt;
+&lt;!--   cluster_cols = F, --&gt;
+&lt;!--   color = col_pal, --&gt;
+&lt;!--   main = &#34;Entries 1:1000&#34; --&gt;
+&lt;!-- ) --&gt;
+&lt;!-- pheatmap(df_ph_order[1001:2000, ], --&gt;
+&lt;!--   cluster_rows = F, --&gt;
+&lt;!--   cluster_cols = F, --&gt;
+&lt;!--   color = col_pal, --&gt;
+&lt;!--   main = &#34;Entries 1001:2000&#34; --&gt;
+&lt;!-- ) --&gt;
+&lt;!-- pheatmap(df_ph_order[2001:3000, ], --&gt;
+&lt;!--   cluster_rows = F, --&gt;
+&lt;!--   cluster_cols = F, --&gt;
+&lt;!--   color = col_pal, --&gt;
+&lt;!--   main = &#34;Entries 2001:3000&#34; --&gt;
+&lt;!-- ) --&gt;
+&lt;!-- pheatmap(df_ph_order[3001:4000, ], --&gt;
+&lt;!--   cluster_rows = F, --&gt;
+&lt;!--   cluster_cols = F, --&gt;
+&lt;!--   color = col_pal, --&gt;
+&lt;!--   main = &#34;Entries 3001:4000&#34; --&gt;
+&lt;!-- ) --&gt;
+&lt;!-- pheatmap(df_ph_order[4001:4964, ], --&gt;
+&lt;!--   cluster_rows = F, --&gt;
+&lt;!--   cluster_cols = F, --&gt;
+&lt;!--   color = col_pal, --&gt;
+&lt;!--   main = &#34;Entries 4001:4964&#34; --&gt;
+&lt;!-- ) --&gt;
+&lt;!-- ``` --&gt;
+&lt;!-- With this increased granularity, we see that after the first 1,000 rows of this ordering that the similarity across tissues becomes greater. There is still large sections of dissimilarity, but the clustering more coherent than the first plot suggests. Notice also that the PLA dataset (platelets) is the greatest source of dissimilarity - this is also the thinnest dataset with only 8 thousand probes present in the full format. --&gt;
+&lt;div id=&#34;investigate-different-combinations&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Investigate different combinations&lt;/h3&gt;
+&lt;!-- Please note that these following heatmaps have **unique** clusterings and have not inherited the clustering of the original heatmap unlike those preceding this section. --&gt;
+&lt;p&gt;We consider the data excluding the platelets. Even this change gives an appearance of greater similarity.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/post/weeks-1-3/2019-02-20-log-weeks-1-3_files/figure-html/no_platelets-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Recalling the first heatmap of the entire dataset, which included clustering of columns (i.e. the datasets), we consider only the separate clustering of datasets: CD4, CD8, CD14, RE and IL.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/post/weeks-1-3/2019-02-20-log-weeks-1-3_files/figure-html/sim_heatmaps-1.png&#34; width=&#34;672&#34; /&gt;&lt;img src=&#34;/post/weeks-1-3/2019-02-20-log-weeks-1-3_files/figure-html/sim_heatmaps-2.png&#34; width=&#34;672&#34; /&gt;&lt;img src=&#34;/post/weeks-1-3/2019-02-20-log-weeks-1-3_files/figure-html/sim_heatmaps-3.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;These are more coherent than our first heatmap where we considered all datasets at once - this suggests that trying to process the output of all 9 datasets at once is a non-trivial task and the naive method of heatmapping all of the data is unlikey to be useful. However, by including clustering of the datasets it is a useful initial step in the exploratory data analysis and will be considered as part of our analysis workflow.&lt;/p&gt;
+&lt;p&gt;Out of curiousity we check the clustering and heatmap for the excluded datasets.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/post/weeks-1-3/2019-02-20-log-weeks-1-3_files/figure-html/dis_heatmaps-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Unsurprisingly this is very noisy, with only small bands of genes clustering across multiple tissues.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;including-all-probes&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Including all probes&lt;/h2&gt;
+&lt;p&gt;Next we attempt to include all probes present across the 9 datasets. The challenge here is to impute the missing probes in such a fashion as to not add noise to the final clustering. To do this we first inspect the spread of the expression values in the datasets. As this is too large to consider in normal summary statistics, we inspect histograms of these - we notice that all of the probe expression values have very similar means and standard deviations - these are densely (i.e. within 1.0 for the mean, within 0.2 for the standard deviation) distributed around 7.0 and 2.10 respectively.&lt;/p&gt;
+&lt;p&gt;We created &lt;a href=&#34;https://github.com/stcolema/ra_chris_wallace/blob/master/finad_all_probe_ids.R&#34;&gt;an Rscript&lt;/a&gt; that finds the list of all unique probe IDs present across the 9 datasets and adds the required rows to each .csv file (filled with 0’s but any arbitrarily distant number from the range inhabitated by the actual measurements should be acceptable) and rearranging to have common row names and row orders in each dataset for all 18,517 prob IDs. Using these new datasets we perform MDI with the same arguments.&lt;/p&gt;
+&lt;p&gt;This script also saves a binary matrix indicating for each probe which datasets it is present in. We use this as part of a sense check to ensure that the cluster containing the imputed probes contains no other members. This is done by taking the Hadamard product of the binary matrix with the allocation matrix and comparing the clusters occupied in this to those of the allocation matrix. Ideally one of the clusters should have completed disappeared and been replaced by a 0 cluster. This is the case below.&lt;/p&gt;
+&lt;p&gt;As in the initial attempt we feed in our data and move the to a matrix format.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Read in the data and convert to a matrix with apporpriate row names
+compare_df_all &amp;lt;- data.table::fread(&amp;quot;allocation_data_run_2.csv&amp;quot;)
+compare_df_all_mat &amp;lt;- as.matrix(compare_df_all[, -10])
+row.names(compare_df_all_mat) &amp;lt;- compare_df_all$V1&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We now create a heatmap of these genes.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/post/weeks-1-3/2019-02-20-log-weeks-1-3_files/figure-html/mdi_2_heatmap-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Notice the clustering of datasets; we have groupings of the intestinal sample cells (IL, RE and TR), of CD14, CD19, CD4 and CD8 and then CD15 and platelets on their own.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Subset the similar datasets
+cd_subset &amp;lt;- c(1, 3, 4, 5)
+intestine_subset &amp;lt;- c(6, 8, 9)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The grey areas are absent genes for the dataset in question. This is too dense (being some 18,517 observations long) and with the dissmilarity of some features make it impossible to see patterns.&lt;/p&gt;
+&lt;div id=&#34;hox-gene-clusters&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;HOX gene clusters&lt;/h3&gt;
+&lt;p&gt;We investigate the clustering of HOX genes; these are a family of associated genes. We expect to see them cluster together in each dataset.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/post/weeks-1-3/2019-02-20-log-weeks-1-3_files/figure-html/hox_pheatmap-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;We see that for the HOX genes present in all datasets we have the majority in a common cluster across datasets, particularly in the blood cell types. There is slightly less homogeneity in the intestinal samples. We check to see if the clustering is more unanimous in the subsets of similar datasets.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/post/weeks-1-3/2019-02-20-log-weeks-1-3_files/figure-html/hox_genes_specific_data_sets_all_genes-1.png&#34; width=&#34;672&#34; /&gt;&lt;img src=&#34;/post/weeks-1-3/2019-02-20-log-weeks-1-3_files/figure-html/hox_genes_specific_data_sets_all_genes-2.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;!-- ```{r mdi_2_granularity, echo = FALSE} --&gt;
+&lt;!-- pheatmap(df_ph_order[1:2500, ], --&gt;
+&lt;!--   cluster_rows = F, --&gt;
+&lt;!--   cluster_cols = F, --&gt;
+&lt;!--   color = col_pal, --&gt;
+&lt;!--   main = &#34;Heatmap for genes 1:2500&#34; --&gt;
+&lt;!-- ) --&gt;
+&lt;!-- pheatmap(df_ph_order[2501:5000, ], --&gt;
+&lt;!--   cluster_rows = F, --&gt;
+&lt;!--   cluster_cols = F, --&gt;
+&lt;!--   color = col_pal, --&gt;
+&lt;!--   main = &#34;Heatmap for genes 2501:5000&#34; --&gt;
+&lt;!-- ) --&gt;
+&lt;!-- # There&#39;s very little information here --&gt;
+&lt;!-- pheatmap(df_ph_order[5001:10000, ], --&gt;
+&lt;!--   cluster_rows = F, --&gt;
+&lt;!--   cluster_cols = F, --&gt;
+&lt;!--   color = col_pal, --&gt;
+&lt;!--   main = &#34;Heatmap for genes 5001:10000&#34; --&gt;
+&lt;!-- ) --&gt;
+&lt;!-- pheatmap(df_ph_order[10001:15000, ], --&gt;
+&lt;!--   cluster_rows = F, --&gt;
+&lt;!--   cluster_cols = F, --&gt;
+&lt;!--   color = col_pal, --&gt;
+&lt;!--   main = &#34;Heatmap for genes 10001:15000&#34; --&gt;
+&lt;!-- ) --&gt;
+&lt;!-- # Here it quite similar --&gt;
+&lt;!-- pheatmap(df_ph_order[15001:18517, ], --&gt;
+&lt;!--   cluster_rows = F, --&gt;
+&lt;!--   cluster_cols = F, --&gt;
+&lt;!--   color = col_pal, --&gt;
+&lt;!--   main = &#34;Heatmap for genes 15001:18517&#34; --&gt;
+&lt;!-- ) --&gt;
+&lt;!-- ``` --&gt;
+&lt;p&gt;Recalling the clustering of datasets from the initial heatmap, we investigate these groupings. We inspect different combinations trying the CD combinations and the intestinal combinations.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/post/weeks-1-3/2019-02-20-log-weeks-1-3_files/figure-html/pheatmap_combinations_mdi_2-1.png&#34; width=&#34;672&#34; /&gt;&lt;img src=&#34;/post/weeks-1-3/2019-02-20-log-weeks-1-3_files/figure-html/pheatmap_combinations_mdi_2-2.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;To show that platelets and CD15 do not sit natually in any clustering of datasets we include the following heatmaps. The sparseness of the platelets dataset causes confusion and CD15 does not sit naturally in either clustering.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/post/weeks-1-3/2019-02-20-log-weeks-1-3_files/figure-html/pheatmap_combinations_mdi_2_pla_cd15-1.png&#34; width=&#34;672&#34; /&gt;&lt;img src=&#34;/post/weeks-1-3/2019-02-20-log-weeks-1-3_files/figure-html/pheatmap_combinations_mdi_2_pla_cd15-2.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;references&#34; class=&#34;section level1 unnumbered&#34;&gt;
+&lt;h1&gt;References&lt;/h1&gt;
+&lt;div id=&#34;refs&#34; class=&#34;references&#34;&gt;
+&lt;div id=&#34;ref-bardenet2017markov&#34;&gt;
+&lt;p&gt;Bardenet, Rémi, Arnaud Doucet, and Chris Holmes. 2017. “On Markov Chain Monte Carlo Methods for Tall Data.” &lt;em&gt;The Journal of Machine Learning Research&lt;/em&gt; 18 (1). JMLR. org: 1515–57.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-betancourt2017conceptual&#34;&gt;
+&lt;p&gt;Betancourt, Michael. 2017. “A Conceptual Introduction to Hamiltonian Monte Carlo.” &lt;em&gt;arXiv Preprint arXiv:1701.02434&lt;/em&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-dowle2019data&#34;&gt;
+&lt;p&gt;Dowle, Matt, and Arun Srinivasan. 2019. &lt;em&gt;Data.table: Extension of ‘Data.frame‘&lt;/em&gt;. &lt;a href=&#34;https://CRAN.R-project.org/package=data.table&#34; class=&#34;uri&#34;&gt;https://CRAN.R-project.org/package=data.table&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-kolde2019pheatmap&#34;&gt;
+&lt;p&gt;Kolde, Raivo. 2019. &lt;em&gt;Pheatmap: Pretty Heatmaps&lt;/em&gt;. &lt;a href=&#34;https://CRAN.R-project.org/package=pheatmap&#34; class=&#34;uri&#34;&gt;https://CRAN.R-project.org/package=pheatmap&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-mason2016mdi&#34;&gt;
+&lt;p&gt;Mason, Samuel A, Faiz Sayyid, Paul DW Kirk, Colin Starr, and David L Wild. 2016. “MDI-Gpu: Accelerating Integrative Modelling for Genomic-Scale Data Using Gp-Gpu Computing.” &lt;em&gt;Statistical Applications in Genetics and Molecular Biology&lt;/em&gt; 15 (1). De Gruyter: 83–86.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-neuwirth2014rcolorbrewer&#34;&gt;
+&lt;p&gt;Neuwirth, Erich. 2014. &lt;em&gt;RColorBrewer: ColorBrewer Palettes&lt;/em&gt;. &lt;a href=&#34;https://CRAN.R-project.org/package=RColorBrewer&#34; class=&#34;uri&#34;&gt;https://CRAN.R-project.org/package=RColorBrewer&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</description>
     </item>
     
     <item>
       <title>An introduction to MDI</title>
-      <link>/2019/02/19/an-introduction-to-mdi/</link>
+      <link>/post/intro-mdi/an-introduction-to-mdi/</link>
       <pubDate>Tue, 19 Feb 2019 00:00:00 +0000</pubDate>
       
-      <guid>/2019/02/19/an-introduction-to-mdi/</guid>
-      <description>Multiple Dataset Integration If we have observed paired datasets \(X_1=(x_{1,1},\ldots, x_{n,1})\), \(X_2=(x_{1,2},\ldots, x_{n,2})\), where observations in the \(i\)th row of each dataset represent information about the same individual. We would like to cluster using information common to both datasets. One could concatenate the datasets, adding additional covariates for each individual. However, if the two datasets have different clustering structures this would reduce the signal of both clusterings and probably have one dominate.</description>
+      <guid>/post/intro-mdi/an-introduction-to-mdi/</guid>
+      <description>
+
+
+&lt;div id=&#34;multiple-dataset-integration&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Multiple Dataset Integration&lt;/h1&gt;
+&lt;p&gt;If we have observed paired datasets &lt;span class=&#34;math inline&#34;&gt;\(X_1=(x_{1,1},\ldots, x_{n,1})\)&lt;/span&gt;, &lt;span class=&#34;math inline&#34;&gt;\(X_2=(x_{1,2},\ldots, x_{n,2})\)&lt;/span&gt;, where observations in the &lt;span class=&#34;math inline&#34;&gt;\(i\)&lt;/span&gt;th row of each dataset represent information about the same individual. We would like to cluster using information common to both datasets. One could concatenate the datasets, adding additional covariates for each individual. However, if the two datasets have different clustering structures this would reduce the signal of both clusterings and probably have one dominate. If the two datasets have the same structure but different signal-to-noise ratios this would reduce the signal in the final clustering. In both these cases independent models on each dataset would be preferable. &lt;span class=&#34;citation&#34;&gt;Kirk et al. (2012)&lt;/span&gt; suggest a method to carry out clustering on both datasets where common information is used but two individual clusterings are outputted. This method is driven by the allocation prior:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\[p(c_{i,1}, c_{i,2} | \phi ) \propto \pi_{i,1} \pi_{i,2} ( 1 + \phi \mathbb{I} ( c_{i,1} = c_{i,2}))\]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Here &lt;span class=&#34;math inline&#34;&gt;\(\phi \in \mathbb{R}_{+}\)&lt;/span&gt; controls the strength of association between datasets. The above equation states that the probability of allocating individual &lt;span class=&#34;math inline&#34;&gt;\(i\)&lt;/span&gt; to component &lt;span class=&#34;math inline&#34;&gt;\(c_{i,1}\)&lt;/span&gt; in dataset 1 and to component &lt;span class=&#34;math inline&#34;&gt;\(c_{i,2}\)&lt;/span&gt; in dataset 2 is proportional to the proportion of these components within each dataset and up-weighted by &lt;span class=&#34;math inline&#34;&gt;\(\phi\)&lt;/span&gt; if the individual has the same labelling in each dataset. Thus as &lt;span class=&#34;math inline&#34;&gt;\(\phi\)&lt;/span&gt; grows the correlation between the clusterings grow and we are more likely to see the same clustering emerge from each dataset. Conversely if &lt;span class=&#34;math inline&#34;&gt;\(\phi = 0\)&lt;/span&gt; we have independent mixture models. Note that &lt;span class=&#34;citation&#34;&gt;Kirk et al. (2012)&lt;/span&gt; include the generalised case for &lt;span class=&#34;math inline&#34;&gt;\(L\)&lt;/span&gt; datasets for any &lt;span class=&#34;math inline&#34;&gt;\(L \in \mathbb{N}\)&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;MDI has been applied to precision medicine, specifically glioblastoma sub-typing &lt;span class=&#34;citation&#34;&gt;(Savage et al. 2013)&lt;/span&gt;, in the past showing its potential as a tool.&lt;/p&gt;
+&lt;div id=&#34;references&#34; class=&#34;section level2 unnumbered&#34;&gt;
+&lt;h2&gt;References&lt;/h2&gt;
+&lt;div id=&#34;refs&#34; class=&#34;references&#34;&gt;
+&lt;div id=&#34;ref-kirk2012bayesian&#34;&gt;
+&lt;p&gt;Kirk, Paul, Jim E Griffin, Richard S Savage, Zoubin Ghahramani, and David L Wild. 2012. “Bayesian Correlated Clustering to Integrate Multiple Datasets.” &lt;em&gt;Bioinformatics&lt;/em&gt; 28 (24). Oxford University Press: 3290–7.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-savage2013identifying&#34;&gt;
+&lt;p&gt;Savage, Richard S, Zoubin Ghahramani, Jim E Griffin, Paul Kirk, and David L Wild. 2013. “Identifying Cancer Subtypes in Glioblastoma by Combining Genomic, Transcriptomic and Epigenomic Data.” &lt;em&gt;arXiv Preprint arXiv:1304.3577&lt;/em&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Example Page</title>
+      <link>/tutorial/example/</link>
+      <pubDate>Sun, 09 Sep 2018 00:00:00 +0100</pubDate>
+      
+      <guid>/tutorial/example/</guid>
+      <description>
+
+&lt;p&gt;In this tutorial, I&amp;rsquo;ll share my top 10 tips for getting started with Academic:&lt;/p&gt;
+
+&lt;h2 id=&#34;tip-1&#34;&gt;Tip 1&lt;/h2&gt;
+
+&lt;p&gt;&amp;hellip;&lt;/p&gt;
+
+&lt;h2 id=&#34;tip-2&#34;&gt;Tip 2&lt;/h2&gt;
+
+&lt;p&gt;&amp;hellip;&lt;/p&gt;
+</description>
     </item>
     
     <item>
@@ -36,17 +301,244 @@ library(pheatmap) library(data.table) library(RColorBrewer)  Reading The first s
       <pubDate>Thu, 28 Jun 2018 00:00:00 +0100</pubDate>
       
       <guid>/privacy/</guid>
-      <description>&amp;hellip;</description>
+      <description>&lt;p&gt;&amp;hellip;&lt;/p&gt;
+</description>
     </item>
     
     <item>
-      <title>Stephen Coleman</title>
-      <link>/about/</link>
-      <pubDate>Thu, 05 May 2016 21:48:51 -0700</pubDate>
+      <title>Example Talk</title>
+      <link>/talk/example/</link>
+      <pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/about/</guid>
-      <description>My research interests include Bayesian clustering applied to &amp;lsquo;omics data to extract biological information. Within &amp;lsquo;omics we have huge quantities of data; interpreting this and creating a coherent story of disease is a non-tirivial problem. My aim is to use Bayesian clustering methods (particularly non-parametric methods) in the area of immunology to help contribute to the understanding of disease.
-Previously I have worked with Paul Kirk, Laurent Gatto and Ollie Crook to extend Multiple Dataset Integration (MDI), an unsupervised clustering method based upon Dirichlet processes, to a semi-supervised predictive tool in spatial proetomics.</description>
+      <guid>/talk/example/</guid>
+      <description>&lt;div class=&#34;alert alert-note&#34;&gt;
+  &lt;div&gt;
+    &lt;p&gt;Click on the &lt;strong&gt;Slides&lt;/strong&gt; button above to view the built-in slides feature.&lt;/p&gt;
+
+  &lt;/div&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Slides can be added in a few ways:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Create&lt;/strong&gt; slides using Academic&amp;rsquo;s &lt;em&gt;Slides&lt;/em&gt; feature and link using &lt;code&gt;url_slides&lt;/code&gt; parameter in the front matter of the talk file&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Upload&lt;/strong&gt; an existing slide deck to &lt;code&gt;static/&lt;/code&gt; and link using &lt;code&gt;url_slides&lt;/code&gt; parameter in the front matter of the talk file&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Embed&lt;/strong&gt; your slides (e.g. Google Slides) or presentation video on this page using &lt;a href=&#34;https://sourcethemes.com/academic/docs/writing-markdown-latex/&#34; target=&#34;_blank&#34;&gt;shortcodes&lt;/a&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Further talk details can easily be added to this page using &lt;em&gt;Markdown&lt;/em&gt; and $\rm \LaTeX$ math code.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>External Project</title>
+      <link>/project/external-project/</link>
+      <pubDate>Wed, 27 Apr 2016 00:00:00 +0100</pubDate>
+      
+      <guid>/project/external-project/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Internal Project</title>
+      <link>/project/internal-project/</link>
+      <pubDate>Wed, 27 Apr 2016 00:00:00 +0100</pubDate>
+      
+      <guid>/project/internal-project/</guid>
+      <description>&lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis posuere tellus ac convallis placerat. Proin tincidunt magna sed ex sollicitudin condimentum. Sed ac faucibus dolor, scelerisque sollicitudin nisi. Cras purus urna, suscipit quis sapien eu, pulvinar tempor diam. Quisque risus orci, mollis id ante sit amet, gravida egestas nisl. Sed ac tempus magna. Proin in dui enim. Donec condimentum, sem id dapibus fringilla, tellus enim condimentum arcu, nec volutpat est felis vel metus. Vestibulum sit amet erat at nulla eleifend gravida.&lt;/p&gt;
+
+&lt;p&gt;Nullam vel molestie justo. Curabitur vitae efficitur leo. In hac habitasse platea dictumst. Sed pulvinar mauris dui, eget varius purus congue ac. Nulla euismod, lorem vel elementum dapibus, nunc justo porta mi, sed tempus est est vel tellus. Nam et enim eleifend, laoreet sem sit amet, elementum sem. Morbi ut leo congue, maximus velit ut, finibus arcu. In et libero cursus, rutrum risus non, molestie leo. Nullam congue quam et volutpat malesuada. Sed risus tortor, pulvinar et dictum nec, sodales non mi. Phasellus lacinia commodo laoreet. Nam mollis, erat in feugiat consectetur, purus eros egestas tellus, in auctor urna odio at nibh. Mauris imperdiet nisi ac magna convallis, at rhoncus ligula cursus.&lt;/p&gt;
+
+&lt;p&gt;Cras aliquam rhoncus ipsum, in hendrerit nunc mattis vitae. Duis vitae efficitur metus, ac tempus leo. Cras nec fringilla lacus. Quisque sit amet risus at ipsum pharetra commodo. Sed aliquam mauris at consequat eleifend. Praesent porta, augue sed viverra bibendum, neque ante euismod ante, in vehicula justo lorem ac eros. Suspendisse augue libero, venenatis eget tincidunt ut, malesuada at lorem. Donec vitae bibendum arcu. Aenean maximus nulla non pretium iaculis. Quisque imperdiet, nulla in pulvinar aliquet, velit quam ultrices quam, sit amet fringilla leo sem vel nunc. Mauris in lacinia lacus.&lt;/p&gt;
+
+&lt;p&gt;Suspendisse a tincidunt lacus. Curabitur at urna sagittis, dictum ante sit amet, euismod magna. Sed rutrum massa id tortor commodo, vitae elementum turpis tempus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean purus turpis, venenatis a ullamcorper nec, tincidunt et massa. Integer posuere quam rutrum arcu vehicula imperdiet. Mauris ullamcorper quam vitae purus congue, quis euismod magna eleifend. Vestibulum semper vel augue eget tincidunt. Fusce eget justo sodales, dapibus odio eu, ultrices lorem. Duis condimentum lorem id eros commodo, in facilisis mauris scelerisque. Morbi sed auctor leo. Nullam volutpat a lacus quis pharetra. Nulla congue rutrum magna a ornare.&lt;/p&gt;
+
+&lt;p&gt;Aliquam in turpis accumsan, malesuada nibh ut, hendrerit justo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Quisque sed erat nec justo posuere suscipit. Donec ut efficitur arcu, in malesuada neque. Nunc dignissim nisl massa, id vulputate nunc pretium nec. Quisque eget urna in risus suscipit ultricies. Pellentesque odio odio, tincidunt in eleifend sed, posuere a diam. Nam gravida nisl convallis semper elementum. Morbi vitae felis faucibus, vulputate orci placerat, aliquet nisi. Aliquam erat volutpat. Maecenas sagittis pulvinar purus, sed porta quam laoreet at.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Slides</title>
+      <link>/slides/example-slides/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/slides/example-slides/</guid>
+      <description>
+
+&lt;h1 id=&#34;welcome-to-slides&#34;&gt;Welcome to Slides&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://sourcethemes.com/academic/&#34; target=&#34;_blank&#34;&gt;Academic&lt;/a&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&#34;features&#34;&gt;Features&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Efficiently write slides in Markdown&lt;/li&gt;
+&lt;li&gt;3-in-1: Create, Present, and Publish your slides&lt;/li&gt;
+&lt;li&gt;Supports speaker notes&lt;/li&gt;
+&lt;li&gt;Mobile friendly slides&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&#34;controls&#34;&gt;Controls&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Next: &lt;code&gt;Right Arrow&lt;/code&gt; or &lt;code&gt;Space&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Previous: &lt;code&gt;Left Arrow&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Start: &lt;code&gt;Home&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Finish: &lt;code&gt;End&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Overview: &lt;code&gt;Esc&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Speaker notes: &lt;code&gt;S&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Fullscreen: &lt;code&gt;F&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Zoom: &lt;code&gt;Alt + Click&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/hakimel/reveal.js#pdf-export&#34; target=&#34;_blank&#34;&gt;PDF Export&lt;/a&gt;: &lt;code&gt;E&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&#34;code-highlighting&#34;&gt;Code Highlighting&lt;/h2&gt;
+
+&lt;p&gt;Inline code: &lt;code&gt;variable&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Code block:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;porridge = &amp;quot;blueberry&amp;quot;
+if porridge == &amp;quot;blueberry&amp;quot;:
+    print(&amp;quot;Eating...&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&#34;math&#34;&gt;Math&lt;/h2&gt;
+
+&lt;p&gt;In-line math: $x + y = z$&lt;/p&gt;
+
+&lt;p&gt;Block math:&lt;/p&gt;
+
+&lt;p&gt;$$
+f\left( x \right) = \;\frac{{2\left( {x + 4} \right)\left( {x - 4} \right)}}{{\left( {x + 4} \right)\left( {x + 1} \right)}}
+$$&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&#34;fragments&#34;&gt;Fragments&lt;/h2&gt;
+
+&lt;p&gt;Make content appear incrementally&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;{{% fragment %}} One {{% /fragment %}}
+{{% fragment %}} **Two** {{% /fragment %}}
+{{% fragment %}} Three {{% /fragment %}}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Press &lt;code&gt;Space&lt;/code&gt; to play!&lt;/p&gt;
+
+&lt;p&gt;&lt;span class=&#34;fragment &#34; &gt;
+  One
+&lt;/span&gt;
+&lt;span class=&#34;fragment &#34; &gt;
+  &lt;strong&gt;Two&lt;/strong&gt;
+&lt;/span&gt;
+&lt;span class=&#34;fragment &#34; &gt;
+  Three
+&lt;/span&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;A fragment can accept two optional parameters:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;class&lt;/code&gt;: use a custom style (requires definition in custom CSS)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;weight&lt;/code&gt;: sets the order in which a fragment appears&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&#34;speaker-notes&#34;&gt;Speaker Notes&lt;/h2&gt;
+
+&lt;p&gt;Add speaker notes to your presentation&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markdown&#34;&gt;{{% speaker_note %}}
+- Only the speaker can read these notes
+- Press `S` key to view
+{{% /speaker_note %}}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Press the &lt;code&gt;S&lt;/code&gt; key to view the speaker notes!&lt;/p&gt;
+
+&lt;aside class=&#34;notes&#34;&gt;
+  &lt;ul&gt;
+&lt;li&gt;Only the speaker can read these notes&lt;/li&gt;
+&lt;li&gt;Press &lt;code&gt;S&lt;/code&gt; key to view&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;/aside&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&#34;themes&#34;&gt;Themes&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;black: Black background, white text, blue links (default)&lt;/li&gt;
+&lt;li&gt;white: White background, black text, blue links&lt;/li&gt;
+&lt;li&gt;league: Gray background, white text, blue links&lt;/li&gt;
+&lt;li&gt;beige: Beige background, dark text, brown links&lt;/li&gt;
+&lt;li&gt;sky: Blue background, thin dark text, blue links&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;ul&gt;
+&lt;li&gt;night: Black background, thick white text, orange links&lt;/li&gt;
+&lt;li&gt;serif: Cappuccino background, gray text, brown links&lt;/li&gt;
+&lt;li&gt;simple: White background, black text, blue links&lt;/li&gt;
+&lt;li&gt;solarized: Cream-colored background, dark green text, blue links&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+
+&lt;section data-noprocess data-shortcode-slide
+  
+      
+      data-background-image=&#34;/img/boards.jpg&#34;
+  &gt;
+
+
+&lt;h2 id=&#34;custom-slide&#34;&gt;Custom Slide&lt;/h2&gt;
+
+&lt;p&gt;Customize the slide style and background&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-markdown&#34;&gt;{{&amp;lt; slide background-image=&amp;quot;/img/boards.jpg&amp;quot; &amp;gt;}}
+{{&amp;lt; slide background-color=&amp;quot;#0000FF&amp;quot; &amp;gt;}}
+{{&amp;lt; slide class=&amp;quot;my-style&amp;quot; &amp;gt;}}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&#34;custom-css-example&#34;&gt;Custom CSS Example&lt;/h2&gt;
+
+&lt;p&gt;Let&amp;rsquo;s make headers navy colored.&lt;/p&gt;
+
+&lt;p&gt;Create &lt;code&gt;assets/css/reveal_custom.css&lt;/code&gt; with:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;.reveal section h1,
+.reveal section h2,
+.reveal section h3 {
+  color: navy;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&#34;questions&#34;&gt;Questions?&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://discourse.gohugo.io&#34; target=&#34;_blank&#34;&gt;Ask&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://sourcethemes.com/academic/docs/&#34; target=&#34;_blank&#34;&gt;Documentation&lt;/a&gt;&lt;/p&gt;
+</description>
     </item>
     
   </channel>

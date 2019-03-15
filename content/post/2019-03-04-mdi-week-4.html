@@ -1,0 +1,52 @@
+---
+title: 'MDI: Week 4'
+author: Stephen Coleman
+date: '2019-03-04'
+slug: mdi-week-4
+categories: []
+tags:
+  - MDI
+  - Chris Wallace
+  - Paul Kirk
+image:
+  caption: ''
+  focal_point: ''
+---
+
+
+
+<div id="sensible-clustering" class="section level1">
+<h1>Sensible Clustering</h1>
+<p>We check if the <strong>modal</strong> cluster from the MDI iterations is a sensible decision for allocating probes (<strong>note</strong>: we referred to median clustering previously. This was wrong). To do this we construct heatmaps comparing the clustering across a sample of iterations and also plot the adjusted Rand index for the clustering at every iteration compared to the modal clustering.</p>
+<div class="figure">
+<img src="/post/2019-03-04-mdi-week-4_files/rand_index_plot_TR.png" />
+
+</div>
+<p>We plot the adjusted Rand index comparing the allocation at a given iteration (corrected for thinning on the x-axis) to the modal clustering from all recorded iterations.</p>
+<div class="figure">
+<img src="/post/2019-03-04-mdi-week-4_files/iteration_heatplot_TR.png" />
+
+</div>
+<p>We construct a heatmap of the clustering across a sample of iterations.</p>
+<div id="individual-clusterings" class="section level2">
+<h2>Individual clusterings</h2>
+<p>We also cluster the individual datasets using a Dirichlet process (i.e. we apply MDI with a single dataset). We carry out similar sense checks to ensure that the model clustering is representative.</p>
+<div class="figure">
+<img src="/post/2019-03-04-mdi-week-4_files/TR.png" />
+
+</div>
+<div class="figure">
+<img src="/post/2019-03-04-mdi-week-4_files/RE.png" />
+
+</div>
+<p>We compare the clustering in the individual vs the multiple dataset cases. Note that the specific label does not matter, we are interested in the membership of clusters but do not have any reason to expect that the labels should correspond. We see that many of the clusters have a largely common membership across the two clusterings, but that there are significant differences.</p>
+<div class="figure">
+<img src="/post/2019-03-04-mdi-week-4_files/mdi_comparison_heatplotTR.png" />
+
+</div>
+<div class="figure">
+<img src="/post/2019-03-04-mdi-week-4_files/mdi_comparison_heatplotRE.png" />
+
+</div>
+</div>
+</div>

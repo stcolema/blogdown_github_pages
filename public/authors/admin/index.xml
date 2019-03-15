@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>admin on An Rí Rua</title>
+    <link>/authors/admin/</link>
+    <description>Recent content in admin on An Rí Rua</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-uk</language>
+    <copyright>UA-135362222-1</copyright>
+    
+	<atom:link href="/authors/admin/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title></title>
+      <link>/author/admin/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/author/admin/</guid>
+      <description>I am a MSc student currently writing my dissertation as part of the Wallace Group in the Department of Medicine at Cambridge University. The dissertation aims to define tissue specific gene sets by clustering gene expression data across multiple tissue types using Multiple Dataset Integration (MDI), an unsupervised clustering method based upon Dirichlet processes.
+Previously I have worked with Paul Kirk, Laurent Gatto and Ollie Crook to extend MDI to a semi-supervised predictive tool in spatial proetomics.</description>
+    </item>
+    
+  </channel>
+</rss>

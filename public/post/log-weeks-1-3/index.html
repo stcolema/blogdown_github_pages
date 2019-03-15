@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en-us">
+<html lang="en-uk">
 <head>
 
   <meta charset="utf-8">
@@ -21,7 +21,7 @@
   
   
 
-  <meta name="author" content="Nelson Bighetti">
+  <meta name="author" content="Stephen D. Coleman">
 
   
   
@@ -32,7 +32,7 @@
 library(pheatmap) library(data.table) library(RColorBrewer)  Reading The first step in the project is to understand the tool we are using. Therefore a study of Mason et al. (2016) and reading the manual of the associated program were the first steps. Expecting that this would have difficulties scaling to nine datasets different sampling methods were researched (Bardenet, Doucet, and Holmes 2017).">
 
   
-  <link rel="alternate" hreflang="en-us" href="/post/log-weeks-1-3/">
+  <link rel="alternate" hreflang="en-uk" href="/post/log-weeks-1-3/">
 
   
 
@@ -52,7 +52,7 @@ library(pheatmap) library(data.table) library(RColorBrewer)  Reading The first s
   
   
   
-  <meta name="theme-color" content="#2962ff">
+  <meta name="theme-color" content="#4caf50">
   
 
   
@@ -122,8 +122,8 @@ library(pheatmap) library(data.table) library(RColorBrewer)  Reading The first s
   <meta property="og:url" content="/post/log-weeks-1-3/">
   <meta property="og:title" content="MDI: Weeks 1 - 3 | Academic">
   <meta property="og:description" content="Prelude Many of the R chunks below require these R packages (Kolde 2019, Dowle and Srinivasan (2019), Neuwirth (2014)):
-library(pheatmap) library(data.table) library(RColorBrewer)  Reading The first step in the project is to understand the tool we are using. Therefore a study of Mason et al. (2016) and reading the manual of the associated program were the first steps. Expecting that this would have difficulties scaling to nine datasets different sampling methods were researched (Bardenet, Doucet, and Holmes 2017)."><meta property="og:image" content="/img/portrait.jpg">
-  <meta property="og:locale" content="en-us">
+library(pheatmap) library(data.table) library(RColorBrewer)  Reading The first step in the project is to understand the tool we are using. Therefore a study of Mason et al. (2016) and reading the manual of the associated program were the first steps. Expecting that this would have difficulties scaling to nine datasets different sampling methods were researched (Bardenet, Doucet, and Holmes 2017)."><meta property="og:image" content="/img/icon-192.png">
+  <meta property="og:locale" content="en-uk">
   
   <meta property="article:published_time" content="2019-02-20T00:00:00&#43;00:00">
   
@@ -218,85 +218,9 @@ library(pheatmap) library(data.table) library(RColorBrewer)  Reading The first s
         
 
         <li class="nav-item">
-          <a class="nav-link" href="/#publications_featured">
-            
-            <span>Publications</span>
-            
-          </a>
-        </li>
-
-        
-        
-
-        
-
-        
-        
-        
-          
-        
-
-        <li class="nav-item">
           <a class="nav-link" href="/#posts">
             
             <span>Posts</span>
-            
-          </a>
-        </li>
-
-        
-        
-
-        
-
-        
-        
-        
-          
-        
-
-        <li class="nav-item">
-          <a class="nav-link" href="/#projects">
-            
-            <span>Projects</span>
-            
-          </a>
-        </li>
-
-        
-        
-
-        
-
-        
-        
-        
-          
-        
-
-        <li class="nav-item">
-          <a class="nav-link" href="/tutorial/">
-            
-            <span>Tutorials</span>
-            
-          </a>
-        </li>
-
-        
-        
-
-        
-
-        
-        
-        
-          
-        
-
-        <li class="nav-item">
-          <a class="nav-link" href="/#contact">
-            
-            <span>Contact</span>
             
           </a>
         </li>
@@ -485,7 +409,7 @@ library(RColorBrewer)</code></pre>
 <p>We performed MDI on these 9 reduced datasets with 10,000 iterations, a burn-in of 1,000 and a thinning rate of 25. MDI overfits the data, beginning with 50 clusters (as an approximation of a Dirichlet process - note that we can change the number of clusters present); as part of the sampling is reduced to around 10 occupied clusters per dataset (ranging from 8 - 13). We assumed that the median cluster allocation was the predicted cluster forgetting about the <strong>label-flipping</strong> problem of unsupervised methods.</p>
 <p>We constructed a dataframe of the median allocation per dataset for each probe. The probes are translated to the associated gene using the <a href="http://139.165.108.18/srv/genmol/permanent/1be6993fe41c12a051c9244d67c91da2be49e5dd26a6cd79f442bc006971e2ef/CEDAR_GE/Probes_good_reanno_31137_TSS.txt">key available online</a>. As some of the probes mapped to non-unique genes we use a matrix to hold our data (as this does not require unique row names in R). We read this in and visually inspect the head of the data.</p>
 <pre class="r"><code># Read in the data and convert to a matrix with apporpriate row names
-compare_df &lt;- data.table::fread(&quot;allocation_data_run_1.csv&quot;)
+compare_df &lt;- data.table::fread(&quot;./allocation_data_run_1.csv&quot;)
 compare_df_mat &lt;- as.matrix(compare_df[, -10])
 row.names(compare_df_mat) &lt;- compare_df$V1
 
@@ -533,20 +457,100 @@ head(compare_df_mat)</code></pre>
 <p>As in the initial attempt we feed in our data and move the to a matrix format.</p>
 <pre class="r"><code># Read in the data and convert to a matrix with apporpriate row names
 compare_df_all &lt;- data.table::fread(&quot;allocation_data_run_2.csv&quot;)
-compare_df_all_mat &lt;- as.matrix(compare_df_all[, -10])
-row.names(compare_df_all_mat) &lt;- compare_df_all$V1</code></pre>
-<p>We now create a heatmap of these genes.</p>
-<p><img src="/post/2019-02-20-log-weeks-1-3_files/figure-html/mdi_2_heatmap-1.png" width="672" /></p>
-<p>Notice the clustering of datasets; we have groupings of the intestinal sample cells (IL, RE and TR), of CD14, CD19, CD4 and CD8 and then CD15 and platelets on their own.</p>
-<p>The grey areas are absent genes for the dataset in question. This is too dense (being some 18,517 observations long), so we consider subsets.</p>
-<p><img src="/post/2019-02-20-log-weeks-1-3_files/figure-html/mox_pheatmap-1.png" width="672" /></p>
-<p>Unfortunately too many of the MOX genes are absent from too many datasets to read to significantly into these results.</p>
-<p>Investigate higher granularity.</p>
-<p><img src="/post/2019-02-20-log-weeks-1-3_files/figure-html/mdi_2_granularity-1.png" width="672" /><img src="/post/2019-02-20-log-weeks-1-3_files/figure-html/mdi_2_granularity-2.png" width="672" /><img src="/post/2019-02-20-log-weeks-1-3_files/figure-html/mdi_2_granularity-3.png" width="672" /><img src="/post/2019-02-20-log-weeks-1-3_files/figure-html/mdi_2_granularity-4.png" width="672" /><img src="/post/2019-02-20-log-weeks-1-3_files/figure-html/mdi_2_granularity-5.png" width="672" /></p>
-<p>Recalling the clustering of datasets from the initial heatmap, we investigate these groupings. We inspect different combinations trying the CD combinations and the intestinal combinations.</p>
-<p><img src="/post/2019-02-20-log-weeks-1-3_files/figure-html/pheatmap_combinations_mdi_2-1.png" width="672" /><img src="/post/2019-02-20-log-weeks-1-3_files/figure-html/pheatmap_combinations_mdi_2-2.png" width="672" /></p>
-<p>To show that platelets and CD15 do not sit natually in any clustering of datasets we include the following heatmaps. The sparseness of the platelets dataset causes confusion and CD15 does not sit naturally in either clustering.</p>
-<p><img src="/post/2019-02-20-log-weeks-1-3_files/figure-html/pheatmap_combinations_mdi_2_pla_cd15-1.png" width="672" /><img src="/post/2019-02-20-log-weeks-1-3_files/figure-html/pheatmap_combinations_mdi_2_pla_cd15-2.png" width="672" /></p>
+head(compare_df_all)</code></pre>
+<pre><code>##    CD14 CD15 CD19 CD4 CD8 IL PLA RE TR     V1
+## 1:    3   -1    3   3   3  3  -1  9 13  GGACT
+## 2:    9    9    9  -1  -1 -1  -1 -1 -1  A4GNT
+## 3:    9   -1   -1   9   9 13  -1  9 15   AAAS
+## 4:    9   -1    9   9   9  9  -1  3  3   AACS
+## 5:    9    9    9   9   9  9   9  9  9 AACSP1
+## 6:   12    3    8   3   3 12  14 12 12  NCEH1</code></pre>
+<pre class="r"><code># compare_df_all_mat &lt;- as.matrix(compare_df_all[, -10])
+# row.names(compare_df_all_mat) &lt;- compare_df_all$V1</code></pre>
+<!-- We now create a heatmap of these genes. -->
+<!-- ```{r mdi_2_heatmap, echo = FALSE} -->
+<!-- col_pal <- c("#DDDDDD", rev(RColorBrewer::brewer.pal(n = 11, "RdYlBu"))) -->
+<!-- ph_full <- pheatmap::pheatmap(compare_df_all_mat, -->
+<!--   cluster_cols = T, -->
+<!--   color = col_pal, -->
+<!--   main = "Heatmap for all genes" -->
+<!-- ) -->
+<!-- row_order <- ph_full$tree_row[["order"]] -->
+<!-- df_ph_order <- compare_df_all_mat[row_order, ] -->
+<!-- ``` -->
+<!-- Notice the clustering of datasets; we have groupings of the intestinal sample cells (IL, RE and TR), of CD14, CD19, CD4 and CD8 and then CD15 and platelets on their own. -->
+<!-- The grey areas are absent genes for the dataset in question. This is too dense (being some 18,517 observations long), so we consider subsets.  -->
+<!-- ```{r mox_pheatmap, echo = FALSE} -->
+<!-- MOX_ind <- grep("MOX", row.names(compare_df_all_mat)) -->
+<!-- pheatmap(compare_df_all_mat[MOX_ind, ], -->
+<!--          cluster_rows = F, -->
+<!--          cluster_cols = F, -->
+<!--          color = col_pal -->
+<!-- ) -->
+<!-- ``` -->
+<!-- Unfortunately too many of the MOX genes are absent from too many datasets to read -->
+<!-- to significantly into these results. -->
+<!-- Investigate higher granularity. -->
+<!-- ```{r mdi_2_granularity, echo = FALSE} -->
+<!-- pheatmap(df_ph_order[1:2500, ], -->
+<!--   cluster_rows = F, -->
+<!--   cluster_cols = F, -->
+<!--   color = col_pal, -->
+<!--   main = "Heatmap for genes 1:2500" -->
+<!-- ) -->
+<!-- pheatmap(df_ph_order[2501:5000, ], -->
+<!--   cluster_rows = F, -->
+<!--   cluster_cols = F, -->
+<!--   color = col_pal, -->
+<!--   main = "Heatmap for genes 2501:5000" -->
+<!-- ) -->
+<!-- # There's very little information here -->
+<!-- pheatmap(df_ph_order[5001:10000, ], -->
+<!--   cluster_rows = F, -->
+<!--   cluster_cols = F, -->
+<!--   color = col_pal, -->
+<!--   main = "Heatmap for genes 5001:10000" -->
+<!-- ) -->
+<!-- pheatmap(df_ph_order[10001:15000, ], -->
+<!--   cluster_rows = F, -->
+<!--   cluster_cols = F, -->
+<!--   color = col_pal, -->
+<!--   main = "Heatmap for genes 10001:15000" -->
+<!-- ) -->
+<!-- # Here it quite similar -->
+<!-- pheatmap(df_ph_order[15001:18517, ], -->
+<!--   cluster_rows = F, -->
+<!--   cluster_cols = F, -->
+<!--   color = col_pal, -->
+<!--   main = "Heatmap for genes 15001:18517" -->
+<!-- ) -->
+<!-- ``` -->
+<!-- Recalling the clustering of datasets from the initial heatmap, we investigate these groupings. We inspect different combinations trying the CD combinations and the intestinal combinations. -->
+<!-- ```{r pheatmap_combinations_mdi_2, echo = FALSE} -->
+<!-- pheatmap::pheatmap(compare_df_all_mat[, c(1, 3, 4, 5)], -->
+<!--   cluster_cols = T, -->
+<!--   color = col_pal, -->
+<!--   main = "Heatmap for all genes" -->
+<!-- ) -->
+<!-- pheatmap::pheatmap(compare_df_all_mat[, c(6, 8, 9)], -->
+<!--   cluster_cols = T, -->
+<!--   color = col_pal, -->
+<!--   main = "Heatmap for all genes" -->
+<!-- ) -->
+<!-- ``` -->
+<!-- To show that platelets and CD15 do not sit natually in any clustering of datasets we include the following heatmaps. The sparseness of the platelets dataset causes confusion and CD15 does not sit naturally in either clustering. -->
+<!-- ```{r pheatmap_combinations_mdi_2_pla_cd15, echo = FALSE} -->
+<!-- pheatmap::pheatmap(compare_df_all_mat[, c(7, 2, 1, 3, 4, 5)], -->
+<!--   cluster_cols = T, -->
+<!--   color = col_pal, -->
+<!--   main = "Heatmap for all genes" -->
+<!-- ) -->
+<!-- pheatmap::pheatmap(compare_df_all_mat[, c(2, 7, 6, 8, 9)], -->
+<!--   cluster_cols = T, -->
+<!--   color = col_pal, -->
+<!--   main = "Heatmap for all genes" -->
+<!-- ) -->
+<!-- ``` -->
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1>References</h1>
@@ -607,13 +611,13 @@ row.names(compare_df_all_mat) &lt;- compare_df_all$V1</code></pre>
 <div class="media author-card" itemscope itemtype="http://schema.org/Person">
   
   
-  <img class="portrait mr-3" src="/author/admin/avatar_hu52a603635ecebd45650b162dadabb4e5_12861_250x250_fill_q90_lanczos_center.jpg" itemprop="image" alt="Avatar">
+  <img class="portrait mr-3" src="/author/admin/avatar_hu11694fcbfa2843aadb61b1863cf087d6_77729_250x250_fill_q90_lanczos_center.JPG" itemprop="image" alt="Avatar">
   
 
   <div class="media-body">
-    <h5 class="card-title" itemprop="name"><a href="/authors/admin">Nelson Bighetti</a></h5>
-    <h6 class="card-subtitle">Professor of Artificial Intelligence</h6>
-    <p class="card-text" itemprop="description">My research interests include distributed robotics, mobile computing and programmable matter.</p>
+    <h5 class="card-title" itemprop="name"><a href="/authors/admin">Stephen D. Coleman</a></h5>
+    <h6 class="card-subtitle">MSc student of Bioinformatics</h6>
+    <p class="card-text" itemprop="description">It&rsquo;s a statistician&rsquo;s life for me.</p>
     <ul class="network-icon" aria-hidden="true">
       
       
@@ -628,7 +632,7 @@ row.names(compare_df_all_mat) &lt;- compare_df_all$V1</code></pre>
         
       
       <li>
-        <a itemprop="sameAs" href="/#contact" >
+        <a itemprop="sameAs" href="/#mailto:stcolema@tcd.ie" >
           <i class="fas fa-envelope"></i>
         </a>
       </li>
@@ -645,7 +649,7 @@ row.names(compare_df_all_mat) &lt;- compare_df_all$V1</code></pre>
         
       
       <li>
-        <a itemprop="sameAs" href="https://twitter.com/GeorgeCushen" target="_blank" rel="noopener">
+        <a itemprop="sameAs" href="https://twitter.com/stcolema1" target="_blank" rel="noopener">
           <i class="fab fa-twitter"></i>
         </a>
       </li>
@@ -653,21 +657,6 @@ row.names(compare_df_all_mat) &lt;- compare_df_all$V1</code></pre>
       
       
       
-      
-      
-      
-      
-        
-      
-      <li>
-        <a itemprop="sameAs" href="https://scholar.google.co.uk/citations?user=sIwtMXoAAAAJ" target="_blank" rel="noopener">
-          <i class="ai ai-google-scholar"></i>
-        </a>
-      </li>
-      
-      
-      
-      
         
       
       
@@ -677,7 +666,7 @@ row.names(compare_df_all_mat) &lt;- compare_df_all$V1</code></pre>
         
       
       <li>
-        <a itemprop="sameAs" href="https://github.com/gcushen" target="_blank" rel="noopener">
+        <a itemprop="sameAs" href="https://github.com/stcolema" target="_blank" rel="noopener">
           <i class="fab fa-github"></i>
         </a>
       </li>
@@ -689,6 +678,16 @@ row.names(compare_df_all_mat) &lt;- compare_df_all$V1</code></pre>
 
 
       
+      
+      <div class="article-widget">
+        <div class="hr-light"></div>
+        <h3>Related</h3>
+        <ul>
+          
+          <li><a href="/post/an-introduction-to-mdi/">An introduction to MDI</a></li>
+          
+        </ul>
+      </div>
       
     
 

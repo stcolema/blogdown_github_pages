@@ -1,0 +1,40 @@
+---
+title: 'MDI: Week 4'
+author: Stephen Coleman
+date: '2019-03-04'
+slug: mdi-week-4
+categories: []
+tags:
+  - MDI
+  - Chris Wallace
+  - Paul Kirk
+image:
+  caption: ''
+  focal_point: ''
+---
+
+# Sensible Clustering
+We check if the **modal** cluster from the MDI iterations is a sensible decision for allocating probes (**note**: we referred to median clustering previously. This was wrong). To do this we construct heatmaps comparing the clustering across a sample of iterations and also plot the adjusted Rand index for the clustering at every iteration compared to the modal clustering.
+
+
+![](/post/2019-03-04-mdi-week-4_files/rand_index_plot_TR.png)
+
+We plot the adjusted Rand index comparing the allocation at a given iteration (corrected for thinning on the x-axis) to the modal clustering from all recorded iterations.
+
+![](/post/2019-03-04-mdi-week-4_files/iteration_heatplot_TR.png)
+
+We construct a heatmap of the clustering across a sample of iterations.
+
+## Individual clusterings
+We also cluster the individual datasets using a Dirichlet process (i.e. we apply MDI with a single dataset). We carry out similar sense checks to ensure that the model clustering  is representative.
+
+![](/post/2019-03-04-mdi-week-4_files/TR.png)
+
+![](/post/2019-03-04-mdi-week-4_files/RE.png)
+
+
+We compare the clustering in the individual vs the multiple dataset cases. Note that the specific label does not matter, we are interested in the membership of clusters but do not have any reason to expect that the labels should correspond. We see that many of the clusters have a largely common membership across the two clusterings, but that there are significant differences.
+
+![](/post/2019-03-04-mdi-week-4_files/mdi_comparison_heatplotTR.png)
+
+![](/post/2019-03-04-mdi-week-4_files/mdi_comparison_heatplotRE.png)

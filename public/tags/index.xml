@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Tags on Scleronomous Rex</title>
+    <title>Tags on An Rí Rua</title>
     <link>/tags/</link>
-    <description>Recent content in Tags on Scleronomous Rex</description>
+    <description>Recent content in Tags on An Rí Rua</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-uk</language>
-    <lastBuildDate>Wed, 20 Feb 2019 00:00:00 +0000</lastBuildDate>
+    <copyright>UA-135362222-1</copyright>
+    <lastBuildDate>Mon, 04 Mar 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
     
@@ -14,16 +15,16 @@
     <item>
       <title>Chris Wallace</title>
       <link>/tags/chris-wallace/</link>
-      <pubDate>Wed, 20 Feb 2019 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 04 Mar 2019 00:00:00 +0000</pubDate>
       
       <guid>/tags/chris-wallace/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Mdi</title>
+      <title>MDI</title>
       <link>/tags/mdi/</link>
-      <pubDate>Wed, 20 Feb 2019 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 04 Mar 2019 00:00:00 +0000</pubDate>
       
       <guid>/tags/mdi/</guid>
       <description></description>
@@ -32,7 +33,7 @@
     <item>
       <title>Paul Kirk</title>
       <link>/tags/paul-kirk/</link>
-      <pubDate>Tue, 19 Feb 2019 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 04 Mar 2019 00:00:00 +0000</pubDate>
       
       <guid>/tags/paul-kirk/</guid>
       <description></description>

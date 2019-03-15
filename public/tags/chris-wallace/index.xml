@@ -1,22 +1,33 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Chris Wallace on Scleronomous Rex</title>
+    <title>Chris Wallace on An Rí Rua</title>
     <link>/tags/chris-wallace/</link>
-    <description>Recent content in Chris Wallace on Scleronomous Rex</description>
+    <description>Recent content in Chris Wallace on An Rí Rua</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-uk</language>
-    <lastBuildDate>Wed, 20 Feb 2019 00:00:00 +0000</lastBuildDate>
+    <copyright>UA-135362222-1</copyright>
+    <lastBuildDate>Mon, 04 Mar 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/chris-wallace/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
+      <title>MDI: Week 4</title>
+      <link>/post/mdi-week-4/</link>
+      <pubDate>Mon, 04 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/post/mdi-week-4/</guid>
+      <description>Sensible Clustering We check if the modal cluster from the MDI iterations is a sensible decision for allocating probes (note: we referred to median clustering previously. This was wrong). To do this we construct heatmaps comparing the clustering across a sample of iterations and also plot the adjusted Rand index for the clustering at every iteration compared to the modal clustering.
+ We plot the adjusted Rand index comparing the allocation at a given iteration (corrected for thinning on the x-axis) to the modal clustering from all recorded iterations.</description>
+    </item>
+    
+    <item>
       <title>MDI: Weeks 1 - 3</title>
-      <link>/2019/02/20/log-weeks-1-3/</link>
+      <link>/post/weeks-1-3/log-weeks-1-3/</link>
       <pubDate>Wed, 20 Feb 2019 00:00:00 +0000</pubDate>
       
-      <guid>/2019/02/20/log-weeks-1-3/</guid>
+      <guid>/post/weeks-1-3/log-weeks-1-3/</guid>
       <description>Prelude Many of the R chunks below require these R packages (Kolde 2019, Dowle and Srinivasan (2019), Neuwirth (2014)):
 library(pheatmap) library(data.table) library(RColorBrewer)  Reading The first step in the project is to understand the tool we are using. Therefore a study of Mason et al. (2016) and reading the manual of the associated program were the first steps. Expecting that this would have difficulties scaling to nine datasets different sampling methods were researched (Bardenet, Doucet, and Holmes 2017).</description>
     </item>
