@@ -467,6 +467,10 @@ names(cleaned_data) &lt;- files_to_write</code></pre>
 <h2>Variance stabilisation</h2>
 <p>We wish to standardise the expresison values across probes and to do so apply variance stabilisation <span class="citation">(Huber, Von Heydebreck, et al. 2002)</span> after first converting the expression values from <span class="math inline">\(log_2\)</span> scale. We do this in this <a href="https://github.com/stcolema/ra_chris_wallace/blob/master/Data_prep/apply_vsn.R">script</a> which can be called from the command line.</p>
 </div>
+<div id="gene-subsets" class="section level2">
+<h2>Gene subsets</h2>
+<p>We select three different subsets of genes using <a href="https://github.com/stcolema/ra_chris_wallace/blob/master/Data_prep/gene_subsetter.R">this RScript</a>.</p>
+</div>
 </div>
 <div id="pipeline-summary" class="section level1">
 <h1>Pipeline summary</h1>
@@ -478,6 +482,7 @@ names(cleaned_data) &lt;- files_to_write</code></pre>
 <li>Remove NAs absent from 0.1 of the total people in the dataset;</li>
 <li>Otherwsie fill the missing values with the minimum present expression value for the probe in question.</li>
 </ul></li>
+<li>(Optional) Select gene subsets;</li>
 <li>Remove outlier individuals using PCA as described above;</li>
 <li>Apply VSN using the R package <span class="citation">(Huber, von Heydebreck, et al. 2002)</span>; and</li>
 <li><p>Run MDI.</p></li>
