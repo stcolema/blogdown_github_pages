@@ -183,6 +183,10 @@ cleaned_data$TR <- data_lst$transposed_TR_GE_Corrected4_Covars.csv[, ..keep_cols
 
 We wish to standardise the expresison values across probes and to do so apply variance stabilisation [@huber2002variance] after first converting the expression values from $log_2$ scale. We do this in this [script](https://github.com/stcolema/ra_chris_wallace/blob/master/Data_prep/apply_vsn.R) which can be called from the command line.
 
+## Gene subsets
+
+We select three different subsets of genes using [this RScript](https://github.com/stcolema/ra_chris_wallace/blob/master/Data_prep/gene_subsetter.R).
+
 # Pipeline summary
 Now our current workflow / pipeline can be described as:
 
@@ -191,6 +195,7 @@ Now our current workflow / pipeline can be described as:
 
     * Remove NAs absent from 0.1 of the total people in the dataset;
     * Otherwsie fill the missing values with the minimum present expression value for the probe in question.
+3. (Optional) Select gene subsets;
 3. Remove outlier individuals using PCA as described above;
 4. Apply VSN using the R package [@vsn2002]; and
 5. Run MDI.
