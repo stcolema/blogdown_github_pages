@@ -19,8 +19,10 @@
       <description>
 
 
-&lt;div id=&#34;pca-plotting&#34; class=&#34;section level1&#34;&gt;
-&lt;h1&gt;PCA plotting&lt;/h1&gt;
+&lt;div id=&#34;new-work&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;New work&lt;/h1&gt;
+&lt;div id=&#34;pca-plotting&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;PCA plotting&lt;/h2&gt;
 &lt;p&gt;We implemented PCA across people (PCA across probes is too dense to be readable). We then eyeballed the results in each dataset and removed outlier individuals. This is not a rigourous method and we welcome arguments for a quantitative method to choose outliers.&lt;/p&gt;
 &lt;p&gt;First we load the relevant libraries &lt;span class=&#34;citation&#34;&gt;(Dowle and Srinivasan 2019, &lt;span class=&#34;citation&#34;&gt;Wickham et al. (2019)&lt;/span&gt;, &lt;span class=&#34;citation&#34;&gt;Kassambara and Mundt (2017)&lt;/span&gt;, &lt;span class=&#34;citation&#34;&gt;Bache and Wickham (2014)&lt;/span&gt;)&lt;/span&gt;&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Load data.table to access fread and fwrite functions
@@ -88,12 +90,14 @@ names(cleaned_data) &amp;lt;- files_to_write&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Based on an inspection of this plot, we decide to remove IPC154 and IPC155 from the CD14 dataset for all following steps.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;/post/weeks-5-6/2019-03-22-mdi-weeks-5-6_files/figure-html/pca_plots_CD15-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;Similarly, for CD15 we remove IPC137. We continue in this vein for all of the 9 datasets.&lt;/p&gt;
+&lt;/div&gt;
 &lt;div id=&#34;variance-stabilisation&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;Variance stabilisation&lt;/h2&gt;
 &lt;p&gt;We wish to standardise the expresison values across probes and to do so apply variance stabilisation &lt;span class=&#34;citation&#34;&gt;(Huber, Von Heydebreck, et al. 2002)&lt;/span&gt; after first converting the expression values from &lt;span class=&#34;math inline&#34;&gt;\(log_2\)&lt;/span&gt; scale. We do this in this &lt;a href=&#34;https://github.com/stcolema/ra_chris_wallace/blob/master/Data_prep/apply_vsn.R&#34;&gt;script&lt;/a&gt; which can be called from the command line.&lt;/p&gt;
 &lt;/div&gt;
-&lt;div id=&#34;pipeline-summary&#34; class=&#34;section level2&#34;&gt;
-&lt;h2&gt;Pipeline summary&lt;/h2&gt;
+&lt;/div&gt;
+&lt;div id=&#34;pipeline-summary&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Pipeline summary&lt;/h1&gt;
 &lt;p&gt;Now our current workflow / pipeline can be described as:&lt;/p&gt;
 &lt;ol style=&#34;list-style-type: decimal&#34;&gt;
 &lt;li&gt;Download the data from &lt;a href=&#34;http://139.165.108.18/srv/genmol/permanent/1be6993fe41c12a051c9244d67c91da2be49e5dd26a6cd79f442bc006971e2ef/CEDAR_GE/GE_Corr/crohn-index.html&#34;&gt;associated website&lt;/a&gt;;&lt;/li&gt;
@@ -106,6 +110,9 @@ names(cleaned_data) &amp;lt;- files_to_write&lt;/code&gt;&lt;/pre&gt;
 &lt;li&gt;Apply VSN using the R package &lt;span class=&#34;citation&#34;&gt;(Huber, von Heydebreck, et al. 2002)&lt;/span&gt;; and&lt;/li&gt;
 &lt;li&gt;&lt;p&gt;Run MDI.&lt;/p&gt;&lt;/li&gt;
 &lt;/ol&gt;
+&lt;/div&gt;
+&lt;div id=&#34;references&#34; class=&#34;section level1 unnumbered&#34;&gt;
+&lt;h1&gt;References&lt;/h1&gt;
 &lt;div id=&#34;refs&#34; class=&#34;references&#34;&gt;
 &lt;div id=&#34;ref-magrittr2014&#34;&gt;
 &lt;p&gt;Bache, Stefan Milton, and Hadley Wickham. 2014. &lt;em&gt;Magrittr: A Forward-Pipe Operator for R&lt;/em&gt;. &lt;a href=&#34;https://CRAN.R-project.org/package=magrittr&#34; class=&#34;uri&#34;&gt;https://CRAN.R-project.org/package=magrittr&lt;/a&gt;.&lt;/p&gt;
@@ -124,7 +131,6 @@ names(cleaned_data) &amp;lt;- files_to_write&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;div id=&#34;ref-dplyr2019&#34;&gt;
 &lt;p&gt;Wickham, Hadley, Romain François, Lionel Henry, and Kirill Müller. 2019. &lt;em&gt;Dplyr: A Grammar of Data Manipulation&lt;/em&gt;. &lt;a href=&#34;https://CRAN.R-project.org/package=dplyr&#34; class=&#34;uri&#34;&gt;https://CRAN.R-project.org/package=dplyr&lt;/a&gt;.&lt;/p&gt;
-&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;

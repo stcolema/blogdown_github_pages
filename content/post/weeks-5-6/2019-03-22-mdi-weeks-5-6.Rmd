@@ -12,7 +12,9 @@ image:
   focal_point: ''
 ---
 
-# PCA plotting
+# New work
+
+## PCA plotting
 We implemented PCA across people (PCA across probes is too dense to be readable). We then eyeballed the results in each dataset and removed outlier individuals. This is not a rigourous method and we welcome arguments for a quantitative method to choose outliers.
 
 First we load the relevant libraries [@datatable2019, @dplyr2019, @factoextra2017, @magrittr2014]
@@ -181,7 +183,7 @@ cleaned_data$TR <- data_lst$transposed_TR_GE_Corrected4_Covars.csv[, ..keep_cols
 
 We wish to standardise the expresison values across probes and to do so apply variance stabilisation [@huber2002variance] after first converting the expression values from $log_2$ scale. We do this in this [script](https://github.com/stcolema/ra_chris_wallace/blob/master/Data_prep/apply_vsn.R) which can be called from the command line.
 
-## Pipeline summary
+# Pipeline summary
 Now our current workflow / pipeline can be described as:
 
 1. Download the data from [associated website](http://139.165.108.18/srv/genmol/permanent/1be6993fe41c12a051c9244d67c91da2be49e5dd26a6cd79f442bc006971e2ef/CEDAR_GE/GE_Corr/crohn-index.html);
@@ -192,4 +194,6 @@ Now our current workflow / pipeline can be described as:
 3. Remove outlier individuals using PCA as described above;
 4. Apply VSN using the R package [@vsn2002]; and
 5. Run MDI.
+
+# References
 

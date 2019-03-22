@@ -28,9 +28,8 @@
   
     
   
-  <meta name="description" content="PCA plotting We implemented PCA across people (PCA across probes is too dense to be readable). We then eyeballed the results in each dataset and removed outlier individuals. This is not a rigourous method and we welcome arguments for a quantitative method to choose outliers.
-First we load the relevant libraries (Dowle and Srinivasan 2019, Wickham et al. (2019), Kassambara and Mundt (2017), Bache and Wickham (2014))
-# Load data.">
+  <meta name="description" content="New work PCA plotting We implemented PCA across people (PCA across probes is too dense to be readable). We then eyeballed the results in each dataset and removed outlier individuals. This is not a rigourous method and we welcome arguments for a quantitative method to choose outliers.
+First we load the relevant libraries (Dowle and Srinivasan 2019, Wickham et al. (2019), Kassambara and Mundt (2017), Bache and Wickham (2014))">
 
   
   <link rel="alternate" hreflang="en-uk" href="/post/weeks-5-6/mdi-weeks-5-6/">
@@ -122,9 +121,8 @@ First we load the relevant libraries (Dowle and Srinivasan 2019, Wickham et al. 
   <meta property="og:site_name" content="An Rí Rua">
   <meta property="og:url" content="/post/weeks-5-6/mdi-weeks-5-6/">
   <meta property="og:title" content="MDI: Weeks 5 &amp; 6 | An Rí Rua">
-  <meta property="og:description" content="PCA plotting We implemented PCA across people (PCA across probes is too dense to be readable). We then eyeballed the results in each dataset and removed outlier individuals. This is not a rigourous method and we welcome arguments for a quantitative method to choose outliers.
-First we load the relevant libraries (Dowle and Srinivasan 2019, Wickham et al. (2019), Kassambara and Mundt (2017), Bache and Wickham (2014))
-# Load data."><meta property="og:image" content="/img/icon-192.png">
+  <meta property="og:description" content="New work PCA plotting We implemented PCA across people (PCA across probes is too dense to be readable). We then eyeballed the results in each dataset and removed outlier individuals. This is not a rigourous method and we welcome arguments for a quantitative method to choose outliers.
+First we load the relevant libraries (Dowle and Srinivasan 2019, Wickham et al. (2019), Kassambara and Mundt (2017), Bache and Wickham (2014))"><meta property="og:image" content="/img/icon-192.png">
   <meta property="og:locale" content="en-uk">
   
   <meta property="article:published_time" content="2019-03-22T00:00:00&#43;00:00">
@@ -393,8 +391,10 @@ First we load the relevant libraries (Dowle and Srinivasan 2019, Wickham et al. 
       
 
 
-<div id="pca-plotting" class="section level1">
-<h1>PCA plotting</h1>
+<div id="new-work" class="section level1">
+<h1>New work</h1>
+<div id="pca-plotting" class="section level2">
+<h2>PCA plotting</h2>
 <p>We implemented PCA across people (PCA across probes is too dense to be readable). We then eyeballed the results in each dataset and removed outlier individuals. This is not a rigourous method and we welcome arguments for a quantitative method to choose outliers.</p>
 <p>First we load the relevant libraries <span class="citation">(Dowle and Srinivasan 2019, <span class="citation">Wickham et al. (2019)</span>, <span class="citation">Kassambara and Mundt (2017)</span>, <span class="citation">Bache and Wickham (2014)</span>)</span></p>
 <pre class="r"><code># Load data.table to access fread and fwrite functions
@@ -462,12 +462,14 @@ names(cleaned_data) &lt;- files_to_write</code></pre>
 <p>Based on an inspection of this plot, we decide to remove IPC154 and IPC155 from the CD14 dataset for all following steps.</p>
 <p><img src="/post/weeks-5-6/2019-03-22-mdi-weeks-5-6_files/figure-html/pca_plots_CD15-1.png" width="672" /></p>
 <p>Similarly, for CD15 we remove IPC137. We continue in this vein for all of the 9 datasets.</p>
+</div>
 <div id="variance-stabilisation" class="section level2">
 <h2>Variance stabilisation</h2>
 <p>We wish to standardise the expresison values across probes and to do so apply variance stabilisation <span class="citation">(Huber, Von Heydebreck, et al. 2002)</span> after first converting the expression values from <span class="math inline">\(log_2\)</span> scale. We do this in this <a href="https://github.com/stcolema/ra_chris_wallace/blob/master/Data_prep/apply_vsn.R">script</a> which can be called from the command line.</p>
 </div>
-<div id="pipeline-summary" class="section level2">
-<h2>Pipeline summary</h2>
+</div>
+<div id="pipeline-summary" class="section level1">
+<h1>Pipeline summary</h1>
 <p>Now our current workflow / pipeline can be described as:</p>
 <ol style="list-style-type: decimal">
 <li>Download the data from <a href="http://139.165.108.18/srv/genmol/permanent/1be6993fe41c12a051c9244d67c91da2be49e5dd26a6cd79f442bc006971e2ef/CEDAR_GE/GE_Corr/crohn-index.html">associated website</a>;</li>
@@ -480,6 +482,9 @@ names(cleaned_data) &lt;- files_to_write</code></pre>
 <li>Apply VSN using the R package <span class="citation">(Huber, von Heydebreck, et al. 2002)</span>; and</li>
 <li><p>Run MDI.</p></li>
 </ol>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1>References</h1>
 <div id="refs" class="references">
 <div id="ref-magrittr2014">
 <p>Bache, Stefan Milton, and Hadley Wickham. 2014. <em>Magrittr: A Forward-Pipe Operator for R</em>. <a href="https://CRAN.R-project.org/package=magrittr" class="uri">https://CRAN.R-project.org/package=magrittr</a>.</p>
@@ -498,7 +503,6 @@ names(cleaned_data) &lt;- files_to_write</code></pre>
 </div>
 <div id="ref-dplyr2019">
 <p>Wickham, Hadley, Romain François, Lionel Henry, and Kirill Müller. 2019. <em>Dplyr: A Grammar of Data Manipulation</em>. <a href="https://CRAN.R-project.org/package=dplyr" class="uri">https://CRAN.R-project.org/package=dplyr</a>.</p>
-</div>
 </div>
 </div>
 </div>
