@@ -7,8 +7,129 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-uk</language>
     <copyright>UA-135362222-1</copyright>
-    <lastBuildDate>Mon, 04 Mar 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 22 Mar 2019 00:00:00 +0000</lastBuildDate>
     <atom:link href="/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>MDI: Weeks 5 &amp; 6</title>
+      <link>/post/weeks-5-6/mdi-weeks-5-6/</link>
+      <pubDate>Fri, 22 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/post/weeks-5-6/mdi-weeks-5-6/</guid>
+      <description>
+
+
+&lt;div id=&#34;pca-plotting&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;PCA plotting&lt;/h1&gt;
+&lt;p&gt;We implemented PCA across people (PCA across probes is too dense to be readable). We then eyeballed the results in each dataset and removed outlier individuals. This is not a rigourous method and we welcome arguments for a quantitative method to choose outliers.&lt;/p&gt;
+&lt;p&gt;First we load the relevant libraries &lt;span class=&#34;citation&#34;&gt;(Dowle and Srinivasan 2019, &lt;span class=&#34;citation&#34;&gt;Wickham et al. (2019)&lt;/span&gt;, &lt;span class=&#34;citation&#34;&gt;Kassambara and Mundt (2017)&lt;/span&gt;, &lt;span class=&#34;citation&#34;&gt;Bache and Wickham (2014)&lt;/span&gt;)&lt;/span&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Load data.table to access fread and fwrite functions
+library(data.table)
+
+# Load magrittr for the pipe %&amp;gt;%
+library(magrittr)
+
+# For select, filter
+library(dplyr)
+
+# For PCA plots
+library(factoextra, quietly = T) &lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Read in the data and create some variables to hold results. This data has had NAs filled using the minimum value present for that probe and removing the probe from that dataset if the probe has missing values for more than 0.1 of the people.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Read in data
+data_dir &amp;lt;- &amp;quot;/home/MINTS/sdc56/Desktop/blogdown_github_pages/content/post/weeks-5-6/Data&amp;quot;
+files_present &amp;lt;- list.files(path = data_dir)
+
+file_name &amp;lt;- grep(&amp;quot;Covars.csv&amp;quot;, files_present, value = TRUE)
+
+genes_present &amp;lt;- c()
+
+pca_lst &amp;lt;- list()
+pca_plot_lst &amp;lt;- list()
+data_lst &amp;lt;- list()
+
+# Put all the data in a list of data tables
+for (f in file_name) {
+  data_lst[[f]] &amp;lt;- fread(paste(data_dir, f, sep = &amp;quot;/&amp;quot;), header = T)
+}
+
+# Acquire the relevant file names
+files_to_write &amp;lt;- strsplit(names(data_lst), &amp;quot;_?_(.*?)_?&amp;quot;) %&amp;gt;%
+  lapply(&amp;quot;[[&amp;quot;, 2) %&amp;gt;%
+  unlist()
+
+num_datasets &amp;lt;- length(data_lst)
+
+cleaned_data &amp;lt;- vector(&amp;quot;list&amp;quot;, 9)
+
+names(cleaned_data) &amp;lt;- files_to_write&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Apply the PCA.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;for (i in 1:num_datasets) {
+# Carry out PCA and record the biplot
+  raw_file_name &amp;lt;- file_name[[i]]
+  edit_file_name &amp;lt;- files_to_write[[i]]
+
+  pca_lst[[edit_file_name]] &amp;lt;- .res_pca &amp;lt;- prcomp(t(data_lst[[raw_file_name]][, -1]))
+
+  pca_title &amp;lt;- paste0(edit_file_name, &amp;quot;: PCA for individuals&amp;quot;)
+
+  pca_plot_lst[[edit_file_name]] &amp;lt;- fviz_pca_ind(.res_pca,
+    col.ind = &amp;quot;contrib&amp;quot;,
+    # gradient.cols = c(&amp;quot;#00AFBB&amp;quot;, &amp;quot;#E7B800&amp;quot;, &amp;quot;#FC4E07&amp;quot;),
+    title = pca_title
+  ) +
+    scale_color_gradient2(
+      low = &amp;quot;black&amp;quot;, mid = &amp;quot;blue&amp;quot;,
+      high = &amp;quot;red&amp;quot;, midpoint = 1.0
+    )
+
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We then visually inspect the PCA plots and remove indviduals we deem to be outliers.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/post/weeks-5-6/2019-03-22-mdi-weeks-5-6_files/figure-html/pca_plots_CD14-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Based on an inspection of this plot, we decide to remove IPC154 and IPC155 from the CD14 dataset for all following steps.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/post/weeks-5-6/2019-03-22-mdi-weeks-5-6_files/figure-html/pca_plots_CD15-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Similarly, for CD15 we remove IPC137. We continue in this vein for all of the 9 datasets.&lt;/p&gt;
+&lt;div id=&#34;variance-stabilisation&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Variance stabilisation&lt;/h2&gt;
+&lt;p&gt;We wish to standardise the expresison values across probes and to do so apply variance stabilisation &lt;span class=&#34;citation&#34;&gt;(Huber, Von Heydebreck, et al. 2002)&lt;/span&gt; after first converting the expression values from &lt;span class=&#34;math inline&#34;&gt;\(log_2\)&lt;/span&gt; scale. We do this in this &lt;a href=&#34;https://github.com/stcolema/ra_chris_wallace/blob/master/Data_prep/apply_vsn.R&#34;&gt;script&lt;/a&gt; which can be called from the command line.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;pipeline-summary&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Pipeline summary&lt;/h2&gt;
+&lt;p&gt;Now our current workflow / pipeline can be described as:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;Download the data from &lt;a href=&#34;http://139.165.108.18/srv/genmol/permanent/1be6993fe41c12a051c9244d67c91da2be49e5dd26a6cd79f442bc006971e2ef/CEDAR_GE/GE_Corr/crohn-index.html&#34;&gt;associated website&lt;/a&gt;;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Transpose this data and remove and / or fill NAs using &lt;a href=&#34;https://github.com/stcolema/ra_chris_wallace/blob/master/Data_prep/matrix_transposer.R&#34;&gt;this script&lt;/a&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Remove NAs absent from 0.1 of the total people in the dataset;&lt;/li&gt;
+&lt;li&gt;Otherwsie fill the missing values with the minimum present expression value for the probe in question.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Remove outlier individuals using PCA as described above;&lt;/li&gt;
+&lt;li&gt;Apply VSN using the R package &lt;span class=&#34;citation&#34;&gt;(Huber, von Heydebreck, et al. 2002)&lt;/span&gt;; and&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Run MDI.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div id=&#34;refs&#34; class=&#34;references&#34;&gt;
+&lt;div id=&#34;ref-magrittr2014&#34;&gt;
+&lt;p&gt;Bache, Stefan Milton, and Hadley Wickham. 2014. &lt;em&gt;Magrittr: A Forward-Pipe Operator for R&lt;/em&gt;. &lt;a href=&#34;https://CRAN.R-project.org/package=magrittr&#34; class=&#34;uri&#34;&gt;https://CRAN.R-project.org/package=magrittr&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-datatable2019&#34;&gt;
+&lt;p&gt;Dowle, Matt, and Arun Srinivasan. 2019. &lt;em&gt;Data.table: Extension of ‘Data.frame‘&lt;/em&gt;. &lt;a href=&#34;https://CRAN.R-project.org/package=data.table&#34; class=&#34;uri&#34;&gt;https://CRAN.R-project.org/package=data.table&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-vsn2002&#34;&gt;
+&lt;p&gt;Huber, Wolfgang, Anja von Heydebreck, Holger Sueltmann, Annemarie Poustka, and Martin Vingron. 2002. “Variance Stabilization Applied to Microarray Data Calibration and to the Quantification of Differential Expression.” &lt;em&gt;Bioinformatics&lt;/em&gt; 18 Suppl. 1: S96–S104.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-huber2002variance&#34;&gt;
+&lt;p&gt;Huber, Wolfgang, Anja Von Heydebreck, Holger Sültmann, Annemarie Poustka, and Martin Vingron. 2002. “Variance Stabilization Applied to Microarray Data Calibration and to the Quantification of Differential Expression.” &lt;em&gt;Bioinformatics&lt;/em&gt; 18 (suppl_1). Oxford University Press: S96–S104.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-factoextra2017&#34;&gt;
+&lt;p&gt;Kassambara, Alboukadel, and Fabian Mundt. 2017. &lt;em&gt;Factoextra: Extract and Visualize the Results of Multivariate Data Analyses&lt;/em&gt;. &lt;a href=&#34;http://www.sthda.com/english/rpkgs/factoextra&#34; class=&#34;uri&#34;&gt;http://www.sthda.com/english/rpkgs/factoextra&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-dplyr2019&#34;&gt;
+&lt;p&gt;Wickham, Hadley, Romain François, Lionel Henry, and Kirill Müller. 2019. &lt;em&gt;Dplyr: A Grammar of Data Manipulation&lt;/em&gt;. &lt;a href=&#34;https://CRAN.R-project.org/package=dplyr&#34; class=&#34;uri&#34;&gt;https://CRAN.R-project.org/package=dplyr&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</description>
+    </item>
     
     <item>
       <title>MDI: Week 4</title>

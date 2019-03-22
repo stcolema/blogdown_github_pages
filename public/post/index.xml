@@ -7,10 +7,21 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-uk</language>
     <copyright>UA-135362222-1</copyright>
-    <lastBuildDate>Mon, 04 Mar 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 22 Mar 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>MDI: Weeks 5 &amp; 6</title>
+      <link>/post/weeks-5-6/mdi-weeks-5-6/</link>
+      <pubDate>Fri, 22 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/post/weeks-5-6/mdi-weeks-5-6/</guid>
+      <description>PCA plotting We implemented PCA across people (PCA across probes is too dense to be readable). We then eyeballed the results in each dataset and removed outlier individuals. This is not a rigourous method and we welcome arguments for a quantitative method to choose outliers.
+First we load the relevant libraries (Dowle and Srinivasan 2019, Wickham et al. (2019), Kassambara and Mundt (2017), Bache and Wickham (2014))
+# Load data.</description>
+    </item>
     
     <item>
       <title>MDI: Week 4</title>

@@ -1,0 +1,195 @@
+---
+title: 'MDI: Weeks 5 & 6'
+author: Stephen Coleman
+date: '2019-03-22'
+slug: mdi-weeks-5-6
+categories: []
+tags:
+  - MDI
+bibliography: weeks56.bib
+image:
+  caption: ''
+  focal_point: ''
+---
+
+# PCA plotting
+We implemented PCA across people (PCA across probes is too dense to be readable). We then eyeballed the results in each dataset and removed outlier individuals. This is not a rigourous method and we welcome arguments for a quantitative method to choose outliers.
+
+First we load the relevant libraries [@datatable2019, @dplyr2019, @factoextra2017, @magrittr2014]
+
+
+```{r libraries, echo = T, message=FALSE}
+# Load data.table to access fread and fwrite functions
+library(data.table)
+
+# Load magrittr for the pipe %>%
+library(magrittr)
+
+# For select, filter
+library(dplyr)
+
+# For PCA plots
+library(factoextra, quietly = T) 
+```
+
+
+```{r functions, echo = FALSE}
+prep_data <- function(dt) {
+  row.names(dt) <- dt[, 1] %>%
+    unlist()
+
+  dt %<>%
+    select(-V1)
+}
+
+# Used in initial idea for removing points from PCA that failed to meet some 
+# criterion
+contrib_cut <- function(pca_res, cut = 1.5, dims = 1:3, criterion = "contrib"){
+  contrib <- get_pca_ind(pca_res)[[criterion]]
+  ind_to_remove <-  apply(contrib[,dims], 1, function(r) any(r > cut))
+}
+
+get_cut_data <- function(pca_lst, threshold = c(1.0, 1.5, 2.0), criterion = "contrib"){
+  cut_data <- list()
+  for(cut in threshold){
+    cut_data[[as.character(cut)]] <- pca_lst %>% 
+      lapply(., contrib_cut, cut = cut, criterion = criterion) %>% 
+      lapply(., sum) %>% 
+      unlist()
+    # unlist(lapply(lapply(pca_lst, contrib_cut), sum))
+  }
+  cut_data
+}
+```
+
+Read in the data and create some variables to hold results. This data has had NAs filled using the minimum value present for that probe and removing the probe from that dataset if the probe has missing values for more than 0.1 of the people.
+
+```{r data, echo = TRUE}
+# Read in data
+data_dir <- "/home/MINTS/sdc56/Desktop/blogdown_github_pages/content/post/weeks-5-6/Data"
+files_present <- list.files(path = data_dir)
+
+file_name <- grep("Covars.csv", files_present, value = TRUE)
+
+genes_present <- c()
+
+pca_lst <- list()
+pca_plot_lst <- list()
+data_lst <- list()
+
+# Put all the data in a list of data tables
+for (f in file_name) {
+  data_lst[[f]] <- fread(paste(data_dir, f, sep = "/"), header = T)
+}
+
+# Acquire the relevant file names
+files_to_write <- strsplit(names(data_lst), "_?_(.*?)_?") %>%
+  lapply("[[", 2) %>%
+  unlist()
+
+num_datasets <- length(data_lst)
+
+cleaned_data <- vector("list", 9)
+
+names(cleaned_data) <- files_to_write
+```
+
+Apply the PCA.
+
+```{r do_pca, echo = TRUE}
+for (i in 1:num_datasets) {
+# Carry out PCA and record the biplot
+  raw_file_name <- file_name[[i]]
+  edit_file_name <- files_to_write[[i]]
+
+  pca_lst[[edit_file_name]] <- .res_pca <- prcomp(t(data_lst[[raw_file_name]][, -1]))
+
+  pca_title <- paste0(edit_file_name, ": PCA for individuals")
+
+  pca_plot_lst[[edit_file_name]] <- fviz_pca_ind(.res_pca,
+    col.ind = "contrib",
+    # gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+    title = pca_title
+  ) +
+    scale_color_gradient2(
+      low = "black", mid = "blue",
+      high = "red", midpoint = 1.0
+    )
+
+}
+```
+
+We then visually inspect the PCA plots and remove indviduals we deem to be outliers.
+
+```{r pca_plots_CD14, echo = FALSE}
+# Dropping outliers
+print(pca_plot_lst$CD14)
+cd14_cols_to_drop <- c("IPC154", "IPC155")
+keep_cols_cd14 <- !(colnames(data_lst$transposed_CD14_GE_Corrected4_Covars.csv) %in% cd14_cols_to_drop)
+cleaned_data$CD14 <- data_lst$transposed_CD14_GE_Corrected4_Covars.csv[, ..keep_cols_cd14 ]
+```
+
+Based on an inspection of this plot, we decide to remove IPC154 and IPC155 from the CD14 dataset for all following steps.
+
+```{r pca_plots_CD15, echo = FALSE}
+print(pca_plot_lst$CD15)
+cd15_cols_to_drop <- c("IPC137") # c("IPC300", "IPC097", "IPC244", "IPC315", "IPC334", "IPC332", "IPC262", "IPC137")
+keep_cols_cd15 <- !(colnames(data_lst$transposed_CD15_GE_Corrected4_Covars.csv) %in% cd15_cols_to_drop)
+cleaned_data$CD15 <- data_lst$transposed_CD15_GE_Corrected4_Covars.csv[, ..keep_cols_cd15 ]
+```
+
+Similarly, for CD15 we remove IPC137. We continue in this vein for all of the 9 datasets.
+
+```{r pca_plots, include = FALSE}
+print(pca_plot_lst$CD19)
+cd19_cols_to_drop <- c()
+keep_cols_cd19 <- !(colnames(data_lst$transposed_CD19_GE_Corrected4_Covars.csv) %in% cd19_cols_to_drop)
+cleaned_data$CD19 <- data_lst$transposed_CD19_GE_Corrected4_Covars.csv[, ..keep_cols_cd19 ]
+
+print(pca_plot_lst$CD4)
+cd4_cols_to_drop <- c("IPC329", "IPC331")
+keep_cols_cd4 <- !(colnames(data_lst$transposed_CD4_GE_Corrected4_Covars.csv) %in% cd4_cols_to_drop)
+cleaned_data$CD4 <- data_lst$transposed_CD4_GE_Corrected4_Covars.csv[, ..keep_cols_cd4 ]
+
+print(pca_plot_lst$CD8)
+cd8_cols_to_drop <- c("IPC078", "IPC049", "IPC048", "IPC050")
+keep_cols_cd8 <- !(colnames(data_lst$transposed_CD8_GE_Corrected4_Covars.csv) %in% cd8_cols_to_drop)
+cleaned_data$CD8 <- data_lst$transposed_CD8_GE_Corrected4_Covars.csv[, ..keep_cols_cd8 ]
+
+print(pca_plot_lst$IL)
+il_cols_to_drop <- c("IPC434")
+keep_cols_il <- !(colnames(data_lst$transposed_IL_GE_Corrected4_Covars.csv) %in% il_cols_to_drop)
+cleaned_data$IL <- data_lst$transposed_IL_GE_Corrected4_Covars.csv[, ..keep_cols_il ]
+
+print(pca_plot_lst$PLA)
+pla_cols_to_drop <- c("IPC029") # maybe c("IPC029", "IPC106")
+keep_cols_pla <- !(colnames(data_lst$transposed_PLA_GE_Corrected4_Covars.csv) %in% pla_cols_to_drop)
+cleaned_data$PLA <- data_lst$transposed_PLA_GE_Corrected4_Covars.csv[, ..keep_cols_pla ]
+
+print(pca_plot_lst$RE)
+re_cols_to_drop <- c("IPC361") # maybe c("IPC361", "IPC253")
+keep_cols_re <- !(colnames(data_lst$transposed_RE_GE_Corrected4_Covars.csv) %in% re_cols_to_drop)
+cleaned_data$RE <- data_lst$transposed_RE_GE_Corrected4_Covars.csv[, ..keep_cols_re ]
+
+print(pca_plot_lst$TR)
+tr_cols_to_drop <- c()
+keep_cols_tr <- !(colnames(data_lst$transposed_TR_GE_Cortrcted4_Covars.csv) %in% tr_cols_to_drop)
+cleaned_data$TR <- data_lst$transposed_TR_GE_Corrected4_Covars.csv[, ..keep_cols_re ]
+```
+
+## Variance stabilisation
+
+We wish to standardise the expresison values across probes and to do so apply variance stabilisation [@huber2002variance] after first converting the expression values from $log_2$ scale. We do this in this [script](https://github.com/stcolema/ra_chris_wallace/blob/master/Data_prep/apply_vsn.R) which can be called from the command line.
+
+## Pipeline summary
+Now our current workflow / pipeline can be described as:
+
+1. Download the data from [associated website](http://139.165.108.18/srv/genmol/permanent/1be6993fe41c12a051c9244d67c91da2be49e5dd26a6cd79f442bc006971e2ef/CEDAR_GE/GE_Corr/crohn-index.html);
+2. Transpose this data and remove and / or fill NAs using [this script](https://github.com/stcolema/ra_chris_wallace/blob/master/Data_prep/matrix_transposer.R)
+
+    * Remove NAs absent from 0.1 of the total people in the dataset;
+    * Otherwsie fill the missing values with the minimum present expression value for the probe in question.
+3. Remove outlier individuals using PCA as described above;
+4. Apply VSN using the R package [@vsn2002]; and
+5. Run MDI.
+
