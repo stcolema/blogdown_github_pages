@@ -7,8 +7,107 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-uk</language>
     <copyright>UA-135362222-1</copyright>
-    <lastBuildDate>Fri, 22 Mar 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 28 Mar 2019 00:00:00 +0000</lastBuildDate>
     <atom:link href="/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>MDI: Week 7</title>
+      <link>/post/week-7/mdi-week-7/</link>
+      <pubDate>Thu, 28 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/post/week-7/mdi-week-7/</guid>
+      <description>
+
+
+&lt;div id=&#34;gene-subsetting&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Gene subsetting&lt;/h1&gt;
+&lt;p&gt;The aim of this week was to analyse the data at the level of the subsets provided by Chris. Basically we want to run the data through our pipeline in subsets of genes.&lt;/p&gt;
+&lt;div id=&#34;pipeline&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Pipeline&lt;/h2&gt;
+&lt;p&gt;The pipeline stands at:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/stcolema/ra_chris_wallace/blob/master/Data_prep/download_data.R&#34;&gt;Download&lt;/a&gt; the &lt;a href=&#34;http://139.165.108.18/srv/genmol/permanent/1be6993fe41c12a051c9244d67c91da2be49e5dd26a6cd79f442bc006971e2ef/CEDAR_GE/GE_Corr/crohn-index.html&#34;&gt;data&lt;/a&gt;;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/stcolema/ra_chris_wallace/blob/master/Data_prep/gene_subsetter_original_data.R&#34;&gt;Subset the data&lt;/a&gt; using the gene subsets (divided into big, med, small);&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/stcolema/ra_chris_wallace/blob/master/Data_prep/matrix_transposer.R&#34;&gt;Transpose the data, remove NAs and apply vsn&lt;/a&gt;;&lt;/li&gt;
+&lt;li&gt;Inspect the data by &lt;a href=&#34;https://github.com/stcolema/ra_chris_wallace/blob/master/Data_prep/pca_outlier_finding_gene_subsets.R&#34;&gt;PCA&lt;/a&gt; and remove outlier individuals for each dataset in each gene set;&lt;/li&gt;
+&lt;li&gt;To apply MDI we require that each dataset have the same row names in the same order, so we re-arrange our datasets to have common order of probes and include rows of 0’s for probes entirely missing using &lt;a href=&#34;https://github.com/stcolema/ra_chris_wallace/blob/master/Data_prep/finad_all_probe_ids.R&#34;&gt;this script&lt;/a&gt;; and&lt;/li&gt;
+&lt;li&gt;Apply MDI.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;I made a mistake in originally doing step 1 after step 3, but this does not make sense as it is possible that the missingness is outside of this subset (so we do not have to remove any points) or entirely in this subset (in which case imputation may be misleading).&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;subsetting-the-data&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Subsetting the data&lt;/h2&gt;
+&lt;p&gt;The gene subset data was saved in a list of &lt;code&gt;Data frame&lt;/code&gt;’s. Not &lt;code&gt;data.frame&lt;/code&gt;’s. Apparently Bioconductor has &lt;a href=&#34;https://bioconductor.org/packages/release/bioc/html/S4Vectors.html&#34;&gt;its own version&lt;/a&gt; of the data frame. Once we realised this and loaded the correct package this was not a problem.&lt;/p&gt;
+&lt;p&gt;Using the &lt;a href=&#34;http://139.165.108.18/srv/genmol/permanent/1be6993fe41c12a051c9244d67c91da2be49e5dd26a6cd79f442bc006971e2ef/CEDAR_GE/Probes_good_reanno_31137_TSS.txt&#34;&gt;key relating probe IDs to genes&lt;/a&gt; and the names of the genes in the subsets we created smaller .csv files containing the expression data relating only to the probes present that map to these genes.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;transpose-remove-nas-and-apply-vsn&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Transpose, remove NAs and apply VSN&lt;/h2&gt;
+&lt;p&gt;The only point of note is that we had harsher cirteria for removing people / probes in the small and medium datasets. If there was 5% of points missing we stripped out the person / probe. This had no impact as none of the people or probes in these subsets are above this threshold of missingness.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(data.table)
+small_obs_lost &amp;lt;- fread(&amp;quot;Observations_lost_small.csv&amp;quot;, header = T)
+med_obs_lost &amp;lt;- fread(&amp;quot;Observations_lost_med.csv&amp;quot;, header = T)
+
+head(small_obs_lost)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##                                  File N_probes_lost N_people_lost
+## 1: CD14_GE_Corrected4_Covars_smallnet             0             0
+## 2: CD15_GE_Corrected4_Covars_smallnet             0             0
+## 3: CD19_GE_Corrected4_Covars_smallnet             0             0
+## 4:  CD4_GE_Corrected4_Covars_smallnet             0             0
+## 5:  CD8_GE_Corrected4_Covars_smallnet             0             0
+## 6:   IL_GE_Corrected4_Covars_smallnet             0             0&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;head(med_obs_lost)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##                                File N_probes_lost N_people_lost
+## 1: CD14_GE_Corrected4_Covars_midnet             0             0
+## 2: CD15_GE_Corrected4_Covars_midnet             0             0
+## 3: CD19_GE_Corrected4_Covars_midnet             0             0
+## 4:  CD4_GE_Corrected4_Covars_midnet             0             0
+## 5:  CD8_GE_Corrected4_Covars_midnet             0             0
+## 6:   IL_GE_Corrected4_Covars_midnet             0             0&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;pca&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;PCA&lt;/h2&gt;
+&lt;div id=&#34;individuals&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Individuals&lt;/h3&gt;
+&lt;p&gt;We identify outliers on a visual basis in the biplots. I will show a subset of plots as between the 3 subsets and 9 tissue types we have 27 plots which seems a little heavy. The script, with the full list of outliers dropped, is found &lt;a href=&#34;https://github.com/stcolema/ra_chris_wallace/blob/master/Data_prep/pca_outlier_finding_gene_subsets.R&#34;&gt;here&lt;/a&gt;. I found tibbles a nice way of keeping track of gene subset, tissue and data. The final tibble held a column for each of these as well as a “Cleaned data” column. It made it very easy to have all the data in one place and to save it in a nice compressed form.&lt;/p&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;/post/week-7/2019-03-28-mdi-week-7_files/Big_gene_subset_CD15&#34; alt=&#34;PCA plot for individuals in the large subset of genes in the CD15 dataset.&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;PCA plot for individuals in the large subset of genes in the CD15 dataset.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;/post/week-7/2019-03-28-mdi-week-7_files/Med_gene_subset_CD15&#34; alt=&#34;PCA plot for individuals in the medium subset of genes in the CD15 dataset.&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;PCA plot for individuals in the medium subset of genes in the CD15 dataset.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;/post/week-7/2019-03-28-mdi-week-7_files/Small_gene_subset_CD15&#34; alt=&#34;PCA plot for individuals in the small subset of genes in the CD15 dataset. Note that the outliers are the same individuals as the preceding plots.&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;PCA plot for individuals in the small subset of genes in the CD15 dataset. Note that the outliers are the same individuals as the preceding plots.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;probes&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Probes&lt;/h3&gt;
+&lt;p&gt;As we had smaller gene sets, the PCA for the Probes was also created. A sample of biplots is included.&lt;/p&gt;
+&lt;p&gt;For the small subset of genes:&lt;/p&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;/post/week-7/2019-03-28-mdi-week-7_files/Small_gene_subset_CD4_Probes&#34; alt=&#34;PCA for probe expression in small gene subset of CD4 dataset.&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;PCA for probe expression in small gene subset of CD4 dataset.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;/post/week-7/2019-03-28-mdi-week-7_files/Small_gene_subset_PLA_Probes&#34; alt=&#34;PCA for probe expression in small gene subset of PLA dataset.&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;PCA for probe expression in small gene subset of PLA dataset.&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;For the medium subset of genes:&lt;/p&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;/post/week-7/2019-03-28-mdi-week-7_files/Med_gene_subset_CD8_Probes&#34; alt=&#34;PCA for probe expression in medium gene subset of CD8 dataset.&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;PCA for probe expression in medium gene subset of CD8 dataset.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;/post/week-7/2019-03-28-mdi-week-7_files/Med_gene_subset_PLA_Probes&#34; alt=&#34;PCA for probe epxression in medium gene subset of PLA dataset.&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;PCA for probe epxression in medium gene subset of PLA dataset.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</description>
+    </item>
     
     <item>
       <title>MDI: Weeks 5 &amp; 6</title>

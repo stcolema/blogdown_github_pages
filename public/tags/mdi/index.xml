@@ -7,10 +7,21 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-uk</language>
     <copyright>UA-135362222-1</copyright>
-    <lastBuildDate>Fri, 22 Mar 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 28 Mar 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/mdi/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>MDI: Week 7</title>
+      <link>/post/week-7/mdi-week-7/</link>
+      <pubDate>Thu, 28 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/post/week-7/mdi-week-7/</guid>
+      <description>Gene subsetting The aim of this week was to analyse the data at the level of the subsets provided by Chris. Basically we want to run the data through our pipeline in subsets of genes.
+Pipeline The pipeline stands at:
+Download the data; Subset the data using the gene subsets (divided into big, med, small); Transpose the data, remove NAs and apply vsn; Inspect the data by PCA and remove outlier individuals for each dataset in each gene set; To apply MDI we require that each dataset have the same row names in the same order, so we re-arrange our datasets to have common order of probes and include rows of 0’s for probes entirely missing using this script; and Apply MDI.</description>
+    </item>
     
     <item>
       <title>MDI: Weeks 5 &amp; 6</title>
