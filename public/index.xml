@@ -7,8 +7,149 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-uk</language>
     <copyright>UA-135362222-1</copyright>
-    <lastBuildDate>Thu, 28 Mar 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 17 Apr 2019 00:00:00 +0000</lastBuildDate>
     <atom:link href="/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>MDI: Weeks 8 &amp; 9</title>
+      <link>/post/weeks-8-9/mdi-weeks-8-9/</link>
+      <pubDate>Wed, 17 Apr 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/post/weeks-8-9/mdi-weeks-8-9/</guid>
+      <description>
+
+
+&lt;div id=&#34;summary&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Summary&lt;/h1&gt;
+&lt;p&gt;In this period I went to Women in Data Science (WiDS), Zurich, got the HPC scripts running properly (an &amp;amp; lost me a day or two), briefly inspected mixing for the gene sets Chris gave me and got the MATLAB version of MDI running (possibly incorrectly - I have to ask PK).&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;wids&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;WiDS&lt;/h1&gt;
+&lt;p&gt;Some nice speakers that were of particular interest to me:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;Maria Rodriguez Martinez of IBM gave a talk on predicting drug effectiveness which was interesting and overlapped with the &lt;a href=&#34;https://www.synapse.org/#!Synapse:syn8404040/wiki/478422&#34;&gt;Dream challenge&lt;/a&gt; from last year;&lt;/li&gt;
+&lt;li&gt;Natasha Antropova of Google DeepMind talked about their collaboration with CRUK on working at breast cancer diagnosis via computer vision;&lt;/li&gt;
+&lt;li&gt;Sandhya Prabhakaran talked about Bayesian fuzzy clustering via an Indian Buffet process - an interesting talk but a little light on details (as to be expected at such an open conference perhaps);&lt;/li&gt;
+&lt;li&gt;Ruth Urner talked about asymptotic bounds on ML methods and the ability to guarantee some bound on generalisability. Quite information theoretic, but very interesting.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Beyond this I had some nice conversations with:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;Margaux Penwarden of McKinsey/QuantumBlack about fairness and explainability in A.I.;&lt;/li&gt;
+&lt;li&gt;Nicholas Kelley of Novartis about their plans for integrating machine learning into their business; and&lt;/li&gt;
+&lt;li&gt;Lise Regnier from Warner Bros. She had given a great talk on being a data scientist in an environment unused to it and recommended the use osf &lt;a href=&#34;https://github.com/slundberg/shap&#34;&gt;SHapley Additive exPlanations&lt;/a&gt; (SHAP) a unified approach to explain the output of any machine learning model. I haven’t looked into this yet, but she claimed to use it to make more causal claims.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;It was an interesting conference - got quite a bit of exposure to different ideas, problems and methods than I normally think about. Sarah Ebling’s talk on building tools to translate sign language and Michelle Sebag talking about meta-features are good examples of this. Beyond purely intellectual pursuits, I would reccommend this conference if one was coming towards a point where one was considering moving to industry or wanted to see what skills are sought in industry. There was quite a bit of fishing for candidates from different companies.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;hpc&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;HPC&lt;/h1&gt;
+&lt;p&gt;I had a bash script calling MDI across 1,000 seeds. As I am only recoring the 500th iteration I was running a number of these side-by-side in the node. I followed a post on Stack Exchange that reccommended using “&amp;amp;” to force things into parallel. However, slurm saw everything go into the background and assumed the script ran and killed it instantly. I had to include a “wait” command after my for loop to ensure that the script was not instantly terminated.&lt;/p&gt;
+&lt;p&gt;Stuart also helped out with installing R packages on the HPC - I’ve added his instrucitons to the &lt;a href=&#34;https://docs.google.com/document/d/1dm19_BhKEXE9_7Zwwr1iySKR9oIuQ8WLO0SngHh5gKE/edit#heading=h.l6mfijbskc0m&#34;&gt;group info doc&lt;/a&gt; a section since added to by Kath.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;mixing-in-gene-subsets&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Mixing in gene subsets&lt;/h1&gt;
+&lt;p&gt;The clusters do not become fixed as quickly in the small and medium-sized gene sets. Label flipping does seem to occur a little bit, but the mixtures are still a little sticky - comparing different seeds we see different numbers of clusters emerge in the datasets; we might have to use the Split-Merge step of the MATLAB code for the subsetted data too and we should consider model averaging if we don’t use this. In the big gene set the behaviour is quite similar to the full dataset.&lt;/p&gt;
+&lt;div id=&#34;cd14&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;CD14&lt;/h2&gt;
+&lt;div id=&#34;rand-index&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Rand index&lt;/h3&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;/post/weeks-8-9/2019-04-17-mdi-weeks-8-9_files/CD14_seed_1.png&#34; alt=&#34;Random seed set to 1&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;Random seed set to 1&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;/post/weeks-8-9/2019-04-17-mdi-weeks-8-9_files/CD14_seed_4.png&#34; alt=&#34;Random seed set to 4&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;Random seed set to 4&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;/post/weeks-8-9/2019-04-17-mdi-weeks-8-9_files/CD14_seed_10.png&#34; alt=&#34;Random seed set to 10&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;Random seed set to 10&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;heatmaps&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Heatmaps&lt;/h3&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;/post/weeks-8-9/2019-04-17-mdi-weeks-8-9_files/iteration_heatplot_before_burn_CD14_seed_1.png&#34; alt=&#34;Random seed set to 1&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;Random seed set to 1&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;/post/weeks-8-9/2019-04-17-mdi-weeks-8-9_files/iteration_heatplot_before_burn_CD14_seed_4.png&#34; alt=&#34;Random seed set to 4&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;Random seed set to 4&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;/post/weeks-8-9/2019-04-17-mdi-weeks-8-9_files/iteration_heatplot_before_burn_CD14_seed_10.png&#34; alt=&#34;Random seed set to 10&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;Random seed set to 10&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;il&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;IL&lt;/h2&gt;
+&lt;div id=&#34;rand-index-1&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Rand index&lt;/h3&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;/post/weeks-8-9/2019-04-17-mdi-weeks-8-9_files/IL_seed_1.png&#34; alt=&#34;Random seed set to 1&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;Random seed set to 1&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;/post/weeks-8-9/2019-04-17-mdi-weeks-8-9_files/IL_seed_4.png&#34; alt=&#34;Random seed set to 4&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;Random seed set to 4&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;/post/weeks-8-9/2019-04-17-mdi-weeks-8-9_files/IL_seed_10.png&#34; alt=&#34;Random seed set to 10&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;Random seed set to 10&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;heatmaps-1&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Heatmaps&lt;/h3&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;/post/weeks-8-9/2019-04-17-mdi-weeks-8-9_files/iteration_heatplot_before_burn_IL_seed_1.png&#34; alt=&#34;Random seed set to 1&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;Random seed set to 1&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;/post/weeks-8-9/2019-04-17-mdi-weeks-8-9_files/iteration_heatplot_before_burn_IL_seed_4.png&#34; alt=&#34;Random seed set to 4&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;Random seed set to 4&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;/post/weeks-8-9/2019-04-17-mdi-weeks-8-9_files/iteration_heatplot_before_burn_IL_seed_10.png&#34; alt=&#34;Random seed set to 10&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;Random seed set to 10&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;pla&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;PLA&lt;/h2&gt;
+&lt;div id=&#34;rand-index-2&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Rand Index&lt;/h3&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;/post/weeks-8-9/2019-04-17-mdi-weeks-8-9_files/PLA_seed_1.png&#34; alt=&#34;Random seed set to 1&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;Random seed set to 1&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;/post/weeks-8-9/2019-04-17-mdi-weeks-8-9_files/PLA_seed_4.png&#34; alt=&#34;Random seed set to 4&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;Random seed set to 4&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;/post/weeks-8-9/2019-04-17-mdi-weeks-8-9_files/PLA_seed_10.png&#34; alt=&#34;Random seed set to 10&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;Random seed set to 10&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;heatmaps-2&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Heatmaps&lt;/h3&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;/post/weeks-8-9/2019-04-17-mdi-weeks-8-9_files/iteration_heatplot_before_burn_PLA_seed_1.png&#34; alt=&#34;Random seed set to 1&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;Random seed set to 1&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;/post/weeks-8-9/2019-04-17-mdi-weeks-8-9_files/iteration_heatplot_before_burn_PLA_seed_4.png&#34; alt=&#34;Random seed set to 4&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;Random seed set to 4&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;/post/weeks-8-9/2019-04-17-mdi-weeks-8-9_files/iteration_heatplot_before_burn_PLA_seed_10.png&#34; alt=&#34;Random seed set to 10&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;Random seed set to 10&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</description>
+    </item>
     
     <item>
       <title>MDI: Week 7</title>

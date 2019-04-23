@@ -1,0 +1,107 @@
+---
+title: 'MDI: Weeks 8 & 9'
+author: Stephen Coleman
+date: '2019-04-17'
+slug: mdi-weeks-8-9
+categories: []
+tags:
+  - MDI
+image:
+  caption: ''
+  focal_point: ''
+---
+
+# Summary
+
+In this period I went to Women in Data Science (WiDS), Zurich, got the HPC scripts running properly (an & lost me a day or two), briefly inspected mixing for the gene sets Chris gave me and got the MATLAB version of MDI running (possibly incorrectly - I have to ask PK).
+
+# WiDS
+
+Some nice speakers that were of particular interest to me:
+
+1. Maria Rodriguez Martinez of IBM gave a talk on predicting drug effectiveness which was interesting and overlapped with the [Dream challenge](https://www.synapse.org/#!Synapse:syn8404040/wiki/478422) from last year;
+2. Natasha Antropova of Google DeepMind talked about their collaboration with CRUK on working at breast cancer diagnosis via computer vision;
+3. Sandhya Prabhakaran talked about Bayesian fuzzy clustering via an Indian Buffet process - an interesting talk but a little light on details (as to be expected at such an open conference perhaps);
+4. Ruth Urner talked about asymptotic bounds on ML methods and the ability to guarantee some bound on generalisability. Quite information theoretic, but very interesting.
+
+Beyond this I had some nice conversations with:
+
+1. Margaux Penwarden of McKinsey/QuantumBlack about fairness and explainability in A.I.;
+2. Nicholas Kelley of Novartis about their plans for integrating machine learning into their business; and
+3. Lise Regnier from Warner Bros. She had given a great talk on being a data scientist in an environment unused to it and recommended the use osf [SHapley Additive exPlanations](https://github.com/slundberg/shap) (SHAP) a unified approach to explain the output of any machine learning model. I haven't looked into this yet, but she claimed to use it to make more causal claims.
+
+It was an interesting conference - got quite a bit of exposure to different ideas, problems and methods than I normally think about. Sarah Ebling's talk on building tools to translate sign language and Michelle Sebag talking about meta-features are good examples of this. Beyond purely intellectual pursuits, I would reccommend this conference if one was coming towards a point where one was considering moving to industry or wanted to see what skills are sought in industry. There was quite a bit of fishing for candidates from different companies.
+
+# HPC
+
+I had a bash script calling MDI across 1,000 seeds. As I am only recoring the 500th iteration I was running a number of these side-by-side in the node. I followed a post on Stack Exchange that reccommended using "&" to force things into parallel. However, slurm saw everything go into the background and assumed the script ran and killed it instantly. I had to include a "wait" command after my for loop to ensure that the script was not instantly terminated.
+
+Stuart also helped out with installing R packages on the HPC - I've added his instrucitons to the [group info doc](https://docs.google.com/document/d/1dm19_BhKEXE9_7Zwwr1iySKR9oIuQ8WLO0SngHh5gKE/edit#heading=h.l6mfijbskc0m) a section since added to by Kath.
+
+# Mixing in gene subsets
+
+The clusters do not become fixed as quickly in the small and medium-sized gene sets. Label flipping does seem to occur a little bit, but the mixtures are still a little sticky - comparing different seeds we see different numbers of clusters emerge in the datasets; we might have to use the Split-Merge step of the MATLAB code for the subsetted data too and we should consider model averaging if we don't use this. In the big gene set the behaviour is quite similar to the full dataset.
+
+
+## CD14
+
+### Rand index
+
+
+![Random seed set to 1](/post/weeks-8-9/2019-04-17-mdi-weeks-8-9_files/CD14_seed_1.png)
+
+
+![Random seed set to 4](/post/weeks-8-9/2019-04-17-mdi-weeks-8-9_files/CD14_seed_4.png)
+
+![Random seed set to 10](/post/weeks-8-9/2019-04-17-mdi-weeks-8-9_files/CD14_seed_10.png)
+
+### Heatmaps
+
+![Random seed set to 1](/post/weeks-8-9/2019-04-17-mdi-weeks-8-9_files/iteration_heatplot_before_burn_CD14_seed_1.png)
+
+![Random seed set to 4](/post/weeks-8-9/2019-04-17-mdi-weeks-8-9_files/iteration_heatplot_before_burn_CD14_seed_4.png)
+
+![Random seed set to 10](/post/weeks-8-9/2019-04-17-mdi-weeks-8-9_files/iteration_heatplot_before_burn_CD14_seed_10.png)
+
+
+## IL
+
+### Rand index
+
+![Random seed set to 1](/post/weeks-8-9/2019-04-17-mdi-weeks-8-9_files/IL_seed_1.png)
+
+
+![Random seed set to 4](/post/weeks-8-9/2019-04-17-mdi-weeks-8-9_files/IL_seed_4.png)
+
+![Random seed set to 10](/post/weeks-8-9/2019-04-17-mdi-weeks-8-9_files/IL_seed_10.png)
+
+### Heatmaps
+
+![Random seed set to 1](/post/weeks-8-9/2019-04-17-mdi-weeks-8-9_files/iteration_heatplot_before_burn_IL_seed_1.png)
+
+![Random seed set to 4](/post/weeks-8-9/2019-04-17-mdi-weeks-8-9_files/iteration_heatplot_before_burn_IL_seed_4.png)
+
+![Random seed set to 10](/post/weeks-8-9/2019-04-17-mdi-weeks-8-9_files/iteration_heatplot_before_burn_IL_seed_10.png)
+
+## PLA
+
+### Rand Index
+
+![Random seed set to 1](/post/weeks-8-9/2019-04-17-mdi-weeks-8-9_files/PLA_seed_1.png)
+
+
+
+![Random seed set to 4](/post/weeks-8-9/2019-04-17-mdi-weeks-8-9_files/PLA_seed_4.png)
+
+![Random seed set to 10](/post/weeks-8-9/2019-04-17-mdi-weeks-8-9_files/PLA_seed_10.png)
+
+### Heatmaps
+
+![Random seed set to 1](/post/weeks-8-9/2019-04-17-mdi-weeks-8-9_files/iteration_heatplot_before_burn_PLA_seed_1.png)
+
+![Random seed set to 4](/post/weeks-8-9/2019-04-17-mdi-weeks-8-9_files/iteration_heatplot_before_burn_PLA_seed_4.png)
+
+
+
+![Random seed set to 10](/post/weeks-8-9/2019-04-17-mdi-weeks-8-9_files/iteration_heatplot_before_burn_PLA_seed_10.png)
+
