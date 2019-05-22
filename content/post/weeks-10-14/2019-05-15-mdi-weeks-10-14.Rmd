@@ -1,0 +1,47 @@
+---
+title: MDI Weeks 10 - 14
+author: Stephen Coleman
+date: '2019-05-15'
+slug: mdi-weeks-10-14
+categories: []
+tags:
+  - MDI
+  - Chris Wallace
+  - Paul Kirk
+image:
+  caption: ''
+  focal_point: ''
+bibliography: Weeks_10_14.bib
+---
+
+# Summary
+This period has been a bit strange - the Easter bank holiday, MASAMB and a wedding in Ireland saw a number of days lost for MDI work (approximately 10). What have we done in this period:
+
+1. Run MATLAB MDI on the small gene sets (n = 102 probes) across 7 key datasets (we dropped CD15 and PLA);
+2. Ran Many seeds MDI (this is Mason's implementation using multiple start points) on the same data; and
+3. Inspected and compared outputs.
+
+## Running MATLAB
+
+Our first impression is MATLAB is odd. If one calls a function in a script, the call must be before the function definition. This seems completely non-intuitive but otherwise it's a grand language - easy to read and interpret despite no background.
+
+The MATLAB implementation has the advantage of using the split-merge step outlined in [@dahl_sequentially-allocated_nodate] as part of the MCMC process. This attempts to split / merge clusters to overcome the problem of a "sticky" likelihood surface.
+
+The MATLAB MDI has to do some intense book-keeping, tracking all the required interactions. This involves building a large vector of length $2^{(k \times k-1)}$ where $k$ is the number of datasets. This consumes a huge amount of memory and limits us to 7 datasets for now. 
+
+The initial run had very few accepted split-merge steps and some oddities about the output. Increasing the amount of split-merge steps attempted at each step was an attempt at a solution to the first problem. The second problem only emerged in inspecting the output - it appeared that the clustering was still "sticky" (by which we mean the clustering stopped changing at an early iteration and remained fixed). Furthermore, the "empty" cluster (i.e. the cluster containing the probes that had an expression level of 0 as MDI requires the same members present in all datasets and cannot handle NAs) was very close to some non-zero probes - it was their nearest cluster unless we allowed many probes to inhabit their own cluster. My suspicion is that this was caused by the normalisation step in the MATLAB version of MDI, so we turned off this step in the belief it was not necessary as all the expression vlaues had already undergone $log_2$ transformation and Robust Spline Normalisation and thus were on similar scales. Interestingly turning off normalisation slowed down the algorithm. 
+
+However, this interpretation was wrong - the problem had been in the chocie of method to define clusters. Use of the ``Simtocl()`` function from the ``mcclust`` package in R [@fritsch_2012] overcame this issue. This is a function which interprets a posterior similarity matrix (PSM) as a clustering. In this case the normalised and unnormalised data do cluster slightly differently. Due to this we continue with unnormalised data from now on.
+
+The updated MATLAB run was still quite sticky as can be seen in the PSM associated with each dataset - there is no points that move cluster after the hundreth iteration (we use a burn-in of 100 in the following heatmaps).
+
+![PSM for TR dataset - MATLAB MDI with 1,163 iterations and no normalisation.](/post/weeks-10-14/2019-05-15-mdi-weeks-10-14_files/MATLAB_norm/similarity_matrix_TR.png)
+
+![PSM for TR dataset - MATLAB MDI with 1,163 iterations and normalisation.](/post/weeks-10-14/2019-05-15-mdi-weeks-10-14_files/MATLAB_no_norm/similarity_matrix_TR.png)
+
+
+## Running Many seeds
+
+![PSM for TR dataset - Many seeds MDI with 5,000 different random seeds.](/post/weeks-10-14/2019-05-15-mdi-weeks-10-14_files/Many_seeds_5000/similarity_matrix_TR.png)
+
+## Bibliography

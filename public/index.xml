@@ -7,8 +7,205 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-uk</language>
     <copyright>UA-135362222-1</copyright>
-    <lastBuildDate>Wed, 17 Apr 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 22 May 2019 00:00:00 +0000</lastBuildDate>
     <atom:link href="/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>MDI: Week 15 &amp; 16</title>
+      <link>/post/weeks-15-16/mdi-week-15-16/</link>
+      <pubDate>Wed, 22 May 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/post/weeks-15-16/mdi-week-15-16/</guid>
+      <description>
+
+
+&lt;p&gt;This project is immensely enabled by the R programming language &lt;span class=&#34;citation&#34;&gt;(R Core Team 2019)&lt;/span&gt;. Most data analysis and processing was carried out within R using a number of packages. The packages from &lt;span class=&#34;citation&#34;&gt;Wickham et al. (2019)&lt;/span&gt; (data processing and wrangling), &lt;span class=&#34;citation&#34;&gt;Bache and Wickham (2014)&lt;/span&gt; (data processing), &lt;span class=&#34;citation&#34;&gt;Wickham (2016)&lt;/span&gt; (visualisation), &lt;span class=&#34;citation&#34;&gt;Müller and Wickham (2019)&lt;/span&gt; (data storage) and &lt;span class=&#34;citation&#34;&gt;Dowle and Srinivasan (2019)&lt;/span&gt; (reading, writing and processing data) deserve special mention as they tend to be imported in multiple of my scripts for multiple purposes.&lt;/p&gt;
+&lt;p&gt;I have fallen behind in tracking my progress, so starting afresh.&lt;/p&gt;
+&lt;div id=&#34;mdi-tissue-specific-gene-sets&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;MDI: Tissue specific gene sets&lt;/h1&gt;
+&lt;div id=&#34;introduction&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;We want to apply multiple dataset integration (MDI) &lt;span class=&#34;citation&#34;&gt;(P. Kirk et al. 2012)&lt;/span&gt;, a Bayesian unsupervised clustering method, to gene expression data from various tissue / cell types to create tissue specific gene sets. We are using the data from the Correlated Expression and Disease Association Research (CEDAR) cohort &lt;span class=&#34;citation&#34;&gt;(The International IBD Genetics Consortium et al. 2018)&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;We have 9 .csv files, one for each tissue / cell type present of normalised gene expression data for 323 individuals. These are healthy individuals of European descent; the cohort consists of 182 women and 141 men with an average age of 56 years (but ranging from 19 to 86). None of the individuals are suffering from any autoimmune or inflammatory disease and were not taking corticosteroids or non-steroid anti-inflammatory drugs (with the exception of aspirin).&lt;/p&gt;
+&lt;p&gt;With regards to tissue types, samples from six circulating immune cells types:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;CD4+ T lymphocytes (CD4);&lt;/li&gt;
+&lt;li&gt;CD8+ T lymphocytes (CD8);&lt;/li&gt;
+&lt;li&gt;CD14+ monocytes (CD14);&lt;/li&gt;
+&lt;li&gt;CD15+ granulocytes (CD15);&lt;/li&gt;
+&lt;li&gt;CD19+ B lymphocytes (CD19); and&lt;/li&gt;
+&lt;li&gt;platelets (PLA).&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Data from intestinal biopsies are also present, with sample taken from three distinct locations:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;the illeum (IL);&lt;/li&gt;
+&lt;li&gt;the rectum (RE); and&lt;/li&gt;
+&lt;li&gt;the colon (TR).&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Not every individual is present in every dataset. However, as we are clustering genes this should not present a problem&lt;/p&gt;
+&lt;p&gt;Whole genome expression data were generated using HT-12 Expression Beadchips following the instructions of the manufacturer (Illumina). 29,464 autosomal probes (corresponding to 19,731 genes) were included across the datasets, but further thinning under various criteria reduced this further in each dataset. The fluorescence intensities were &lt;span class=&#34;math inline&#34;&gt;\(\log_2\)&lt;/span&gt; transformed and Robust Spline Normalized with Lumi38.&lt;/p&gt;
+&lt;p&gt;It should be noted that some datasets are less information rich than others (for instance the platelets dataset has only around 8 thousand probes present).&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;pipeline&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Pipeline&lt;/h2&gt;
+&lt;p&gt;Overview of steps currently implemented:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/stcolema/ra_chris_wallace/blob/master/Data_prep/download_data.R&#34;&gt;Download&lt;/a&gt; the &lt;a href=&#34;http://139.165.108.18/srv/genmol/permanent/1be6993fe41c12a051c9244d67c91da2be49e5dd26a6cd79f442bc006971e2ef/CEDAR_GE/GE_Corr/crohn-index.html&#34;&gt;data&lt;/a&gt;;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/stcolema/ra_chris_wallace/blob/master/Data_prep/gene_subsetter_original_data.R&#34;&gt;Subset the data&lt;/a&gt; using the gene subsets (divided into big, med, small);&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/stcolema/ra_chris_wallace/blob/master/Data_prep/matrix_transposer.R&#34;&gt;Transpose the data and remove NAs&lt;/a&gt;;&lt;/li&gt;
+&lt;li&gt;Inspect the data by &lt;a href=&#34;https://github.com/stcolema/ra_chris_wallace/blob/master/Data_prep/pca_outlier_finding_gene_subsets.R&#34;&gt;PCA&lt;/a&gt; and remove outlier individuals for each dataset in each gene set;&lt;/li&gt;
+&lt;li&gt;To apply MDI we require that each dataset have the same row names in the same order, so we re-arrange our datasets to have common order of probes and include rows of 0’s for probes entirely missing using &lt;a href=&#34;https://github.com/stcolema/ra_chris_wallace/blob/master/Data_prep/finad_all_probe_ids.R&#34;&gt;this script&lt;/a&gt;;&lt;/li&gt;
+&lt;li&gt;Apply MDI (either as implemented by &lt;span class=&#34;citation&#34;&gt;Mason et al. (2016)&lt;/span&gt; or the original MATLAB code); and&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/stcolema/ra_chris_wallace/blob/master/Analysis/analysis_script.R&#34;&gt;Inspect the output&lt;/a&gt; under several areas:
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;Convergence of the &lt;span class=&#34;math inline&#34;&gt;\(\phi\)&lt;/span&gt; parameter between datasets over iterations;&lt;/li&gt;
+&lt;li&gt;The disctribution of the &lt;span class=&#34;math inline&#34;&gt;\(\phi\)&lt;/span&gt; parameter samples over MCMC iterations;&lt;/li&gt;
+&lt;li&gt;The posterior similarity matrix (PSM) for the clustering over MCMC iterations;&lt;/li&gt;
+&lt;li&gt;The adjusted rand index comparing the clustering in each iteration to the predicted clustering using &lt;code&gt;Simtocl()&lt;/code&gt; from the &lt;code&gt;mclust&lt;/code&gt; &lt;span class=&#34;citation&#34;&gt;(Fritsch 2012)&lt;/span&gt; package in R;&lt;/li&gt;
+&lt;li&gt;Inspect the clustering with the expression data using the &lt;code&gt;pheatmap&lt;/code&gt; function &lt;span class=&#34;citation&#34;&gt;(Kolde 2019)&lt;/span&gt;.&lt;/li&gt;
+&lt;/ol&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div id=&#34;transpose-the-data-and-remove-nas&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Transpose the data and remove NAs&lt;/h2&gt;
+&lt;p&gt;The data comes in the form [people &lt;span class=&#34;math inline&#34;&gt;\(\times\)&lt;/span&gt; probes]. As we are interested in clustering genes (represented by the probes), we wish to transpose the data to fit the format required by MDI. Furthermore, MDI cannot handle NAs. We therefore wish to either remove NAs or impute a value in. As the missingness is not at random as if the expression levels are too low for a given reading it is left empty. This means we will fill NAs with the minimum expression value in the given row. However, if a probe is missing across a significant number of people (defined here as being above some fraction of the people present), we remove it from the dataset. We use an initial value of 0.1 for this threshold.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;pca-and-visualisation&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;PCA and visualisation&lt;/h2&gt;
+&lt;p&gt;We inspect the data to get some insight into underlying structure using PCA 9as simplemented by &lt;span class=&#34;citation&#34;&gt;Kassambara and Mundt (2017)&lt;/span&gt;). This step can also be used to identify outliers that might be removed.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;re-arrange-the-order&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Re-arrange the order&lt;/h2&gt;
+&lt;p&gt;We want the same rownames and the order of rownames (here probe IDs) in each dataset. Some probes are not present in every dataset and these are added with an expression level of 0 (well below the minimum value representing observed data). We then put each dataset in the same order of probes.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;mdi&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;MDI&lt;/h2&gt;
+&lt;p&gt;We have a choice of two flavours of MDI.&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;The C++ implementation from &lt;span class=&#34;citation&#34;&gt;Mason et al. (2016)&lt;/span&gt;; or&lt;/li&gt;
+&lt;li&gt;The MATLAB implementation from &lt;span class=&#34;citation&#34;&gt;P. Kirk et al. (2012)&lt;/span&gt; and used for glioblastoma subtyping by &lt;span class=&#34;citation&#34;&gt;Savage et al. (2013)&lt;/span&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The C++ version is faster and can handle the full 9 datasets. However, the MATLAB code includes a split-merge step &lt;span class=&#34;citation&#34;&gt;(Dahl 2005)&lt;/span&gt; that is designed to help the program explore the full posterior space.&lt;/p&gt;
+&lt;div id=&#34;c-implementation-and-many-seeds&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;C++ implementation and many seeds&lt;/h3&gt;
+&lt;p&gt;We have observed that the C++ version is given to becoming stuck in a single clustering and not exploring the space much at all.&lt;/p&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;/post/2019-03-04-mdi-week-4_files/iteration_heatplot_TR.png&#34; alt=&#34;Clustering across iterations for each probe in the TR dataset. Notice how quickly it becomes stuck.&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;Clustering across iterations for each probe in the TR dataset. Notice how quickly it becomes stuck.&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;Ideally the MATLAB code should overcome this issue but we also consider model averaging. The idea is that we take &lt;span class=&#34;math inline&#34;&gt;\(n\)&lt;/span&gt; start points for the C++ code, thin aggressively (on the basis that as the code becomes stuck quickly, the clustering in the final iteration is representative of the entire run) and treat this recorded clustering as a single draw from the posterior space and use the &lt;span class=&#34;math inline&#34;&gt;\(n\)&lt;/span&gt; draws to decribe the clustering. To do this we use &lt;span class=&#34;math inline&#34;&gt;\(n\)&lt;/span&gt; different random seeds and run for a small number of iterations (initially 500) and keep only the 500th iteration in each run. We then use &lt;a href=&#34;https://github.com/stcolema/ra_chris_wallace/blob/master/Data_prep/big_csv.py&#34;&gt;a python script&lt;/a&gt; to collapse these values into one .csv file of the same format as if we had run &lt;span class=&#34;math inline&#34;&gt;\(n\)&lt;/span&gt; iterations using the vanilla C++ implementation.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;matlab-implementation&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;MATLAB implementation&lt;/h3&gt;
+&lt;p&gt;The MATLAB code uses more memory and thus is limited to at most 7 datasets.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;bibliography&#34; class=&#34;section level2 unnumbered&#34;&gt;
+&lt;h2&gt;Bibliography&lt;/h2&gt;
+&lt;div id=&#34;refs&#34; class=&#34;references&#34;&gt;
+&lt;div id=&#34;ref-bache2014magrittr&#34;&gt;
+&lt;p&gt;Bache, Stefan Milton, and Hadley Wickham. 2014. &lt;em&gt;Magrittr: A Forward-Pipe Operator for R&lt;/em&gt;. &lt;a href=&#34;https://CRAN.R-project.org/package=magrittr&#34; class=&#34;uri&#34;&gt;https://CRAN.R-project.org/package=magrittr&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-dahl_sequentially-allocated_2005&#34;&gt;
+&lt;p&gt;Dahl, David B. 2005. “Sequentially-Allocated Merge-Split Sampler for Conjugate and Nonconjugate Dirichlet Process Mixture Models,” 27.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-dowle2019data&#34;&gt;
+&lt;p&gt;Dowle, Matt, and Arun Srinivasan. 2019. &lt;em&gt;Data.table: Extension of ‘Data.frame‘&lt;/em&gt;. &lt;a href=&#34;https://CRAN.R-project.org/package=data.table&#34; class=&#34;uri&#34;&gt;https://CRAN.R-project.org/package=data.table&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-fritsch2012mcclust&#34;&gt;
+&lt;p&gt;Fritsch, Arno. 2012. &lt;em&gt;Mcclust: Process an Mcmc Sample of Clusterings&lt;/em&gt;. &lt;a href=&#34;https://CRAN.R-project.org/package=mcclust&#34; class=&#34;uri&#34;&gt;https://CRAN.R-project.org/package=mcclust&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-kassambara2017factoextra&#34;&gt;
+&lt;p&gt;Kassambara, Alboukadel, and Fabian Mundt. 2017. &lt;em&gt;Factoextra: Extract and Visualize the Results of Multivariate Data Analyses&lt;/em&gt;. &lt;a href=&#34;http://www.sthda.com/english/rpkgs/factoextra&#34; class=&#34;uri&#34;&gt;http://www.sthda.com/english/rpkgs/factoextra&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-kirk_bayesian_2012&#34;&gt;
+&lt;p&gt;Kirk, Paul, Jim E. Griffin, Richard S. Savage, Zoubin Ghahramani, and David L. Wild. 2012. “Bayesian Correlated Clustering to Integrate Multiple Datasets.” &lt;em&gt;Bioinformatics&lt;/em&gt; 28 (24): 3290–7. doi:&lt;a href=&#34;https://doi.org/10.1093/bioinformatics/bts595&#34;&gt;10.1093/bioinformatics/bts595&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-kolde2019pheatmap&#34;&gt;
+&lt;p&gt;Kolde, Raivo. 2019. &lt;em&gt;Pheatmap: Pretty Heatmaps&lt;/em&gt;. &lt;a href=&#34;https://CRAN.R-project.org/package=pheatmap&#34; class=&#34;uri&#34;&gt;https://CRAN.R-project.org/package=pheatmap&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-mason2016mdi&#34;&gt;
+&lt;p&gt;Mason, Samuel A, Faiz Sayyid, Paul DW Kirk, Colin Starr, and David L Wild. 2016. “MDI-Gpu: Accelerating Integrative Modelling for Genomic-Scale Data Using Gp-Gpu Computing.” &lt;em&gt;Statistical Applications in Genetics and Molecular Biology&lt;/em&gt; 15 (1). De Gruyter: 83–86.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-muller2019tibble&#34;&gt;
+&lt;p&gt;Müller, Kirill, and Hadley Wickham. 2019. &lt;em&gt;Tibble: Simple Data Frames&lt;/em&gt;. &lt;a href=&#34;https://CRAN.R-project.org/package=tibble&#34; class=&#34;uri&#34;&gt;https://CRAN.R-project.org/package=tibble&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-R2019&#34;&gt;
+&lt;p&gt;R Core Team. 2019. &lt;em&gt;R: A Language and Environment for Statistical Computing&lt;/em&gt;. Vienna, Austria: R Foundation for Statistical Computing. &lt;a href=&#34;https://www.R-project.org/&#34; class=&#34;uri&#34;&gt;https://www.R-project.org/&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-savage_identifying_2013&#34;&gt;
+&lt;p&gt;Savage, Richard S., Zoubin Ghahramani, Jim E. Griffin, Paul Kirk, and David L. Wild. 2013. “Identifying Cancer Subtypes in Glioblastoma by Combining Genomic, Transcriptomic and Epigenomic Data.” &lt;em&gt;arXiv:1304.3577 [Q-Bio, Stat]&lt;/em&gt;, April. &lt;a href=&#34;http://arxiv.org/abs/1304.3577&#34; class=&#34;uri&#34;&gt;http://arxiv.org/abs/1304.3577&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-the_international_ibd_genetics_consortium_ibd_2018&#34;&gt;
+&lt;p&gt;The International IBD Genetics Consortium, Yukihide Momozawa, Julia Dmitrieva, Emilie Théâtre, Valérie Deffontaine, Souad Rahmouni, Benoît Charloteaux, et al. 2018. “IBD Risk Loci Are Enriched in Multigenic Regulatory Modules Encompassing Putative Causative Genes.” &lt;em&gt;Nature Communications&lt;/em&gt; 9 (1): 2427. doi:&lt;a href=&#34;https://doi.org/10.1038/s41467-018-04365-8&#34;&gt;10.1038/s41467-018-04365-8&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-wickham2016ggplot2&#34;&gt;
+&lt;p&gt;Wickham, Hadley. 2016. &lt;em&gt;Ggplot2: Elegant Graphics for Data Analysis&lt;/em&gt;. Springer-Verlag New York. &lt;a href=&#34;https://ggplot2.tidyverse.org&#34; class=&#34;uri&#34;&gt;https://ggplot2.tidyverse.org&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-wickham2019dplyr&#34;&gt;
+&lt;p&gt;Wickham, Hadley, Romain François, Lionel Henry, and Kirill Müller. 2019. &lt;em&gt;Dplyr: A Grammar of Data Manipulation&lt;/em&gt;. &lt;a href=&#34;https://CRAN.R-project.org/package=dplyr&#34; class=&#34;uri&#34;&gt;https://CRAN.R-project.org/package=dplyr&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>MDI Weeks 10 - 14</title>
+      <link>/post/weeks-10-14/mdi-weeks-10-14/</link>
+      <pubDate>Wed, 15 May 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/post/weeks-10-14/mdi-weeks-10-14/</guid>
+      <description>
+
+
+&lt;div id=&#34;summary&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Summary&lt;/h1&gt;
+&lt;p&gt;This period has been a bit strange - the Easter bank holiday, MASAMB and a wedding in Ireland saw a number of days lost for MDI work (approximately 10). What have we done in this period:&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;Run MATLAB MDI on the small gene sets (n = 102 probes) across 7 key datasets (we dropped CD15 and PLA);&lt;/li&gt;
+&lt;li&gt;Ran Many seeds MDI (this is Mason’s implementation using multiple start points) on the same data; and&lt;/li&gt;
+&lt;li&gt;Inspected and compared outputs.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div id=&#34;running-matlab&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Running MATLAB&lt;/h2&gt;
+&lt;p&gt;Our first impression is MATLAB is odd. If one calls a function in a script, the call must be before the function definition. This seems completely non-intuitive but otherwise it’s a grand language - easy to read and interpret despite no background.&lt;/p&gt;
+&lt;p&gt;The MATLAB implementation has the advantage of using the split-merge step outlined in &lt;span class=&#34;citation&#34;&gt;(Dahl, n.d.)&lt;/span&gt; as part of the MCMC process. This attempts to split / merge clusters to overcome the problem of a “sticky” likelihood surface.&lt;/p&gt;
+&lt;p&gt;The MATLAB MDI has to do some intense book-keeping, tracking all the required interactions. This involves building a large vector of length &lt;span class=&#34;math inline&#34;&gt;\(2^{(k \times k-1)}\)&lt;/span&gt; where &lt;span class=&#34;math inline&#34;&gt;\(k\)&lt;/span&gt; is the number of datasets. This consumes a huge amount of memory and limits us to 7 datasets for now.&lt;/p&gt;
+&lt;p&gt;The initial run had very few accepted split-merge steps and some oddities about the output. Increasing the amount of split-merge steps attempted at each step was an attempt at a solution to the first problem. The second problem only emerged in inspecting the output - it appeared that the clustering was still “sticky” (by which we mean the clustering stopped changing at an early iteration and remained fixed). Furthermore, the “empty” cluster (i.e. the cluster containing the probes that had an expression level of 0 as MDI requires the same members present in all datasets and cannot handle NAs) was very close to some non-zero probes - it was their nearest cluster unless we allowed many probes to inhabit their own cluster. My suspicion is that this was caused by the normalisation step in the MATLAB version of MDI, so we turned off this step in the belief it was not necessary as all the expression vlaues had already undergone &lt;span class=&#34;math inline&#34;&gt;\(log_2\)&lt;/span&gt; transformation and Robust Spline Normalisation and thus were on similar scales. Interestingly turning off normalisation slowed down the algorithm.&lt;/p&gt;
+&lt;p&gt;However, this interpretation was wrong - the problem had been in the chocie of method to define clusters. Use of the &lt;code&gt;Simtocl()&lt;/code&gt; function from the &lt;code&gt;mcclust&lt;/code&gt; package in R &lt;span class=&#34;citation&#34;&gt;(Fritsch 2012)&lt;/span&gt; overcame this issue. This is a function which interprets a posterior similarity matrix (PSM) as a clustering. In this case the normalised and unnormalised data do cluster slightly differently. Due to this we continue with unnormalised data from now on.&lt;/p&gt;
+&lt;p&gt;The updated MATLAB run was still quite sticky as can be seen in the PSM associated with each dataset - there is no points that move cluster after the hundreth iteration (we use a burn-in of 100 in the following heatmaps).&lt;/p&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;/post/weeks-10-14/2019-05-15-mdi-weeks-10-14_files/MATLAB_norm/similarity_matrix_TR.png&#34; alt=&#34;PSM for TR dataset - MATLAB MDI with 1,163 iterations and no normalisation.&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;PSM for TR dataset - MATLAB MDI with 1,163 iterations and no normalisation.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;/post/weeks-10-14/2019-05-15-mdi-weeks-10-14_files/MATLAB_no_norm/similarity_matrix_TR.png&#34; alt=&#34;PSM for TR dataset - MATLAB MDI with 1,163 iterations and normalisation.&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;PSM for TR dataset - MATLAB MDI with 1,163 iterations and normalisation.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;running-many-seeds&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Running Many seeds&lt;/h2&gt;
+&lt;div class=&#34;figure&#34;&gt;
+&lt;img src=&#34;/post/weeks-10-14/2019-05-15-mdi-weeks-10-14_files/Many_seeds_5000/similarity_matrix_TR.png&#34; alt=&#34;PSM for TR dataset - Many seeds MDI with 5,000 different random seeds.&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;PSM for TR dataset - Many seeds MDI with 5,000 different random seeds.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;bibliography&#34; class=&#34;section level2 unnumbered&#34;&gt;
+&lt;h2&gt;Bibliography&lt;/h2&gt;
+&lt;div id=&#34;refs&#34; class=&#34;references&#34;&gt;
+&lt;div id=&#34;ref-dahl_sequentially-allocated_nodate&#34;&gt;
+&lt;p&gt;Dahl, David B. n.d. “Sequentially-Allocated Merge-Split Sampler for Conjugate and Nonconjugate Dirichlet Process Mixture Models,” 27.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-fritsch_2012&#34;&gt;
+&lt;p&gt;Fritsch, Arno. 2012. &lt;em&gt;Mcclust: Process an Mcmc Sample of Clusterings&lt;/em&gt;. &lt;a href=&#34;https://CRAN.R-project.org/package=mcclust&#34; class=&#34;uri&#34;&gt;https://CRAN.R-project.org/package=mcclust&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</description>
+    </item>
     
     <item>
       <title>MDI: Weeks 8 &amp; 9</title>
@@ -30,7 +227,7 @@
 &lt;li&gt;Maria Rodriguez Martinez of IBM gave a talk on predicting drug effectiveness which was interesting and overlapped with the &lt;a href=&#34;https://www.synapse.org/#!Synapse:syn8404040/wiki/478422&#34;&gt;Dream challenge&lt;/a&gt; from last year;&lt;/li&gt;
 &lt;li&gt;Natasha Antropova of Google DeepMind talked about their collaboration with CRUK on working at breast cancer diagnosis via computer vision;&lt;/li&gt;
 &lt;li&gt;Sandhya Prabhakaran talked about Bayesian fuzzy clustering via an Indian Buffet process - an interesting talk but a little light on details (as to be expected at such an open conference perhaps);&lt;/li&gt;
-&lt;li&gt;Ruth Urner talked about asymptotic bounds on ML methods and the ability to guarantee some bound on generalisability. Quite information theoretic, but very interesting.&lt;/li&gt;
+&lt;li&gt;Ruth Urner talked about asymptotic bounds in the context of ML methods and their ability to generalise. Quite information theoretic, but very interesting.&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;Beyond this I had some nice conversations with:&lt;/p&gt;
 &lt;ol style=&#34;list-style-type: decimal&#34;&gt;
@@ -384,10 +581,10 @@ names(cleaned_data) &amp;lt;- files_to_write&lt;/code&gt;&lt;/pre&gt;
     
     <item>
       <title>MDI: Week 4</title>
-      <link>/post/mdi-week-4/</link>
+      <link>/post/week-4/mdi-week-4/</link>
       <pubDate>Mon, 04 Mar 2019 00:00:00 +0000</pubDate>
       
-      <guid>/post/mdi-week-4/</guid>
+      <guid>/post/week-4/mdi-week-4/</guid>
       <description>
 
 

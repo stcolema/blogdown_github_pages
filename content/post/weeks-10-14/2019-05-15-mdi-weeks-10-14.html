@@ -1,0 +1,62 @@
+---
+title: MDI Weeks 10 - 14
+author: Stephen Coleman
+date: '2019-05-15'
+slug: mdi-weeks-10-14
+categories: []
+tags:
+  - MDI
+  - Chris Wallace
+  - Paul Kirk
+image:
+  caption: ''
+  focal_point: ''
+bibliography: Weeks_10_14.bib
+---
+
+
+
+<div id="summary" class="section level1">
+<h1>Summary</h1>
+<p>This period has been a bit strange - the Easter bank holiday, MASAMB and a wedding in Ireland saw a number of days lost for MDI work (approximately 10). What have we done in this period:</p>
+<ol style="list-style-type: decimal">
+<li>Run MATLAB MDI on the small gene sets (n = 102 probes) across 7 key datasets (we dropped CD15 and PLA);</li>
+<li>Ran Many seeds MDI (this is Mason’s implementation using multiple start points) on the same data; and</li>
+<li>Inspected and compared outputs.</li>
+</ol>
+<div id="running-matlab" class="section level2">
+<h2>Running MATLAB</h2>
+<p>Our first impression is MATLAB is odd. If one calls a function in a script, the call must be before the function definition. This seems completely non-intuitive but otherwise it’s a grand language - easy to read and interpret despite no background.</p>
+<p>The MATLAB implementation has the advantage of using the split-merge step outlined in <span class="citation">(Dahl, n.d.)</span> as part of the MCMC process. This attempts to split / merge clusters to overcome the problem of a “sticky” likelihood surface.</p>
+<p>The MATLAB MDI has to do some intense book-keeping, tracking all the required interactions. This involves building a large vector of length <span class="math inline">\(2^{(k \times k-1)}\)</span> where <span class="math inline">\(k\)</span> is the number of datasets. This consumes a huge amount of memory and limits us to 7 datasets for now.</p>
+<p>The initial run had very few accepted split-merge steps and some oddities about the output. Increasing the amount of split-merge steps attempted at each step was an attempt at a solution to the first problem. The second problem only emerged in inspecting the output - it appeared that the clustering was still “sticky” (by which we mean the clustering stopped changing at an early iteration and remained fixed). Furthermore, the “empty” cluster (i.e. the cluster containing the probes that had an expression level of 0 as MDI requires the same members present in all datasets and cannot handle NAs) was very close to some non-zero probes - it was their nearest cluster unless we allowed many probes to inhabit their own cluster. My suspicion is that this was caused by the normalisation step in the MATLAB version of MDI, so we turned off this step in the belief it was not necessary as all the expression vlaues had already undergone <span class="math inline">\(log_2\)</span> transformation and Robust Spline Normalisation and thus were on similar scales. Interestingly turning off normalisation slowed down the algorithm.</p>
+<p>However, this interpretation was wrong - the problem had been in the chocie of method to define clusters. Use of the <code>Simtocl()</code> function from the <code>mcclust</code> package in R <span class="citation">(Fritsch 2012)</span> overcame this issue. This is a function which interprets a posterior similarity matrix (PSM) as a clustering. In this case the normalised and unnormalised data do cluster slightly differently. Due to this we continue with unnormalised data from now on.</p>
+<p>The updated MATLAB run was still quite sticky as can be seen in the PSM associated with each dataset - there is no points that move cluster after the hundreth iteration (we use a burn-in of 100 in the following heatmaps).</p>
+<div class="figure">
+<img src="/post/weeks-10-14/2019-05-15-mdi-weeks-10-14_files/MATLAB_norm/similarity_matrix_TR.png" alt="PSM for TR dataset - MATLAB MDI with 1,163 iterations and no normalisation." />
+<p class="caption">PSM for TR dataset - MATLAB MDI with 1,163 iterations and no normalisation.</p>
+</div>
+<div class="figure">
+<img src="/post/weeks-10-14/2019-05-15-mdi-weeks-10-14_files/MATLAB_no_norm/similarity_matrix_TR.png" alt="PSM for TR dataset - MATLAB MDI with 1,163 iterations and normalisation." />
+<p class="caption">PSM for TR dataset - MATLAB MDI with 1,163 iterations and normalisation.</p>
+</div>
+</div>
+<div id="running-many-seeds" class="section level2">
+<h2>Running Many seeds</h2>
+<div class="figure">
+<img src="/post/weeks-10-14/2019-05-15-mdi-weeks-10-14_files/Many_seeds_5000/similarity_matrix_TR.png" alt="PSM for TR dataset - Many seeds MDI with 5,000 different random seeds." />
+<p class="caption">PSM for TR dataset - Many seeds MDI with 5,000 different random seeds.</p>
+</div>
+</div>
+<div id="bibliography" class="section level2 unnumbered">
+<h2>Bibliography</h2>
+<div id="refs" class="references">
+<div id="ref-dahl_sequentially-allocated_nodate">
+<p>Dahl, David B. n.d. “Sequentially-Allocated Merge-Split Sampler for Conjugate and Nonconjugate Dirichlet Process Mixture Models,” 27.</p>
+</div>
+<div id="ref-fritsch_2012">
+<p>Fritsch, Arno. 2012. <em>Mcclust: Process an Mcmc Sample of Clusterings</em>. <a href="https://CRAN.R-project.org/package=mcclust" class="uri">https://CRAN.R-project.org/package=mcclust</a>.</p>
+</div>
+</div>
+</div>
+</div>

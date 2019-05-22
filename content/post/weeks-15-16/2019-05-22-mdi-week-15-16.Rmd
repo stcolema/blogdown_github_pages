@@ -1,0 +1,102 @@
+---
+title: 'MDI: Week 15 & 16'
+author: Stephen Coleman
+date: '2019-05-22'
+slug: mdi-week-15-16
+categories: []
+tags: []
+image:
+  caption: ''
+  focal_point: ''
+bibliography: Weeks_15_16.bib
+---
+
+This project is immensely enabled by the R programming language [@R2019]. Most data analysis and processing was carried out within R using a number of packages. The packages from @wickham2019dplyr (data processing and wrangling), @bache2014magrittr (data processing), @wickham2016ggplot2 (visualisation), @muller2019tibble (data storage) and @dowle2019data (reading, writing and processing data) deserve special mention as they tend to be imported in multiple of my scripts for multiple purposes.
+
+I have fallen behind in tracking my progress, so starting afresh.
+
+# MDI: Tissue specific gene sets
+
+## Introduction
+
+We want to apply multiple dataset integration (MDI) [@kirk_bayesian_2012], a Bayesian unsupervised clustering method, to gene expression data from various tissue / cell types to create tissue specific gene sets. We are using the data from the Correlated Expression and Disease Association Research (CEDAR) cohort [@the_international_ibd_genetics_consortium_ibd_2018].
+
+We have 9 .csv files, one for each tissue / cell type present of normalised gene expression data for 323 individuals. These are healthy individuals of European descent; the cohort consists of 182 women and 141 men with an average age of 56 years (but ranging from 19 to 86). None of the individuals are suffering from any autoimmune or inflammatory disease and were not taking corticosteroids or non-steroid anti-inflammatory drugs (with the exception of aspirin). 
+	
+With regards to tissue types, samples from six circulating immune cells types:
+	
+1. CD4+ T lymphocytes (CD4);
+2. CD8+ T lymphocytes (CD8);
+3. CD14+ monocytes (CD14);
+4. CD15+ granulocytes (CD15);
+5. CD19+ B lymphocytes (CD19); and 
+6. platelets (PLA).
+	
+Data from intestinal biopsies are also present, with sample taken from three distinct locations:
+
+1. the illeum (IL);
+2. the rectum (RE); and
+3. the colon (TR).
+
+Not every individual is present in every dataset. However, as we are clustering genes this should not present a problem
+
+Whole genome expression data were generated using HT-12 Expression Beadchips following the instructions of the manufacturer (Illumina). 29,464 autosomal probes (corresponding to 19,731 genes) were included across the datasets, but further thinning under various criteria reduced this further in each dataset. The fluorescence intensities were $\log_2$ transformed and Robust Spline Normalized with Lumi38.
+	
+It should be noted that some datasets are less information rich than others (for instance the platelets dataset has only around 8 thousand probes present). 
+
+
+## Pipeline
+
+Overview of steps currently implemented:
+
+1. [Download](https://github.com/stcolema/ra_chris_wallace/blob/master/Data_prep/download_data.R) the [data](http://139.165.108.18/srv/genmol/permanent/1be6993fe41c12a051c9244d67c91da2be49e5dd26a6cd79f442bc006971e2ef/CEDAR_GE/GE_Corr/crohn-index.html);
+2. [Subset the data](https://github.com/stcolema/ra_chris_wallace/blob/master/Data_prep/gene_subsetter_original_data.R) using the gene subsets (divided into big, med, small);
+3. [Transpose the data and remove NAs](https://github.com/stcolema/ra_chris_wallace/blob/master/Data_prep/matrix_transposer.R);
+4. Inspect the data by [PCA](https://github.com/stcolema/ra_chris_wallace/blob/master/Data_prep/pca_outlier_finding_gene_subsets.R) and remove outlier individuals for each dataset in each gene set;
+5. To apply MDI we require that each dataset have the same row names in the same order, so we re-arrange our datasets to have common order of probes and include rows of 0's for probes entirely missing using [this script](https://github.com/stcolema/ra_chris_wallace/blob/master/Data_prep/finad_all_probe_ids.R);
+6. Apply MDI (either as implemented by @mason2016mdi or the original MATLAB code); and
+7. [Inspect the output](https://github.com/stcolema/ra_chris_wallace/blob/master/Analysis/analysis_script.R) under several areas:
+    1. Convergence of the $\phi$ parameter between datasets over iterations;
+    2. The disctribution of the $\phi$ parameter samples over MCMC iterations;
+    3. The posterior similarity matrix (PSM) for the clustering over MCMC iterations;
+    4. The adjusted rand index comparing the clustering in each iteration to the predicted clustering using ``Simtocl()`` from the ``mclust`` [@fritsch2012mcclust] package in R;
+    5. Inspect the clustering with the expression data using the ``pheatmap`` function [@kolde2019pheatmap].
+
+## Transpose the data and remove NAs
+
+The data comes in the form [people $\times$ probes]. As we are interested in clustering genes (represented by the probes), we wish to transpose the data to fit the format required by MDI. Furthermore, MDI cannot handle NAs. We therefore wish to either remove NAs or impute a value in. As the missingness is not at random as if the expression levels are too low for a given reading it is left empty. This means we will fill NAs with the minimum expression value in the given row. However, if a probe is missing across a significant number of people (defined here as being above some fraction of the people present), we remove it from the dataset. We use an initial value of 0.1 for this threshold.
+
+## PCA and visualisation
+
+We inspect the data to get some insight into underlying structure using PCA 9as simplemented by @kassambara2017factoextra). This step can also be used to identify outliers that might be removed.
+
+## Re-arrange the order
+
+We want the same rownames and the order of rownames (here probe IDs) in each dataset. Some probes are not present in every dataset and these are added with an expression level of 0 (well below the minimum value representing observed data). We then put each dataset in the same order of probes.
+
+## MDI
+
+We have a choice of two flavours of MDI.
+
+1. The C++ implementation from @mason2016mdi; or
+2. The MATLAB implementation from @kirk_bayesian_2012 and used for glioblastoma subtyping by @savage_identifying_2013.
+
+The C++ version is faster and can handle the full 9 datasets. However, the MATLAB code includes a split-merge step [@dahl_sequentially-allocated_2005] that is designed to help the program explore the full posterior space. 
+
+### C++ implementation and many seeds
+
+We have observed that the C++ version is given to becoming stuck in a single clustering and not exploring the space much at all.
+
+![Clustering across iterations for each probe in the TR dataset. Notice how quickly it becomes stuck. ](/post/2019-03-04-mdi-week-4_files/iteration_heatplot_TR.png)
+
+Ideally the MATLAB code should overcome this issue but we also consider model averaging. The idea is that we take $n$ start points for the C++ code, thin aggressively (on the basis that as the code becomes stuck quickly, the clustering in the final iteration is representative of the entire run) and treat this recorded clustering as a single draw from the posterior space and use the $n$ draws to decribe the clustering. To do this we use $n$ different random seeds and run for a small number of iterations (initially 500) and keep only the 500th iteration in each run. We then use [a python script](https://github.com/stcolema/ra_chris_wallace/blob/master/Data_prep/big_csv.py) to collapse these values into one .csv file of the same format as if we had run $n$ iterations using the vanilla C++ implementation.
+
+### MATLAB implementation
+
+The MATLAB code uses more memory and thus is limited to at most 7 datasets. 
+
+## Bibliography
+
+
+
+

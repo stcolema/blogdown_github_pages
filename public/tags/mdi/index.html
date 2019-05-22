@@ -125,7 +125,7 @@
   <meta property="og:description" content="MSc student of Bioinformatics"><meta property="og:image" content="/img/icon-192.png">
   <meta property="og:locale" content="en-uk">
   
-  <meta property="og:updated_time" content="2019-04-17T00:00:00&#43;00:00">
+  <meta property="og:updated_time" content="2019-05-15T00:00:00&#43;00:00">
   
 
   
@@ -290,12 +290,22 @@
   
   
   <div>
+    <h2><a href="/post/weeks-10-14/mdi-weeks-10-14/">MDI Weeks 10 - 14</a></h2>
+    <div class="article-style">
+      
+      Summary This period has been a bit strange - the Easter bank holiday, MASAMB and a wedding in Ireland saw a number of days lost for MDI work (approximately 10). What have we done in this period:
+Run MATLAB MDI on the small gene sets (n = 102 probes) across 7 key datasets (we dropped CD15 and PLA); Ran Many seeds MDI (this is Mason’s implementation using multiple start points) on the same data; and Inspected and compared outputs.
+      
+    </div>
+  </div>
+  
+  <div>
     <h2><a href="/post/weeks-8-9/mdi-weeks-8-9/">MDI: Weeks 8 &amp; 9</a></h2>
     <div class="article-style">
       
       Summary In this period I went to Women in Data Science (WiDS), Zurich, got the HPC scripts running properly (an &amp; lost me a day or two), briefly inspected mixing for the gene sets Chris gave me and got the MATLAB version of MDI running (possibly incorrectly - I have to ask PK).
  WiDS Some nice speakers that were of particular interest to me:
-Maria Rodriguez Martinez of IBM gave a talk on predicting drug effectiveness which was interesting and overlapped with the Dream challenge from last year; Natasha Antropova of Google DeepMind talked about their collaboration with CRUK on working at breast cancer diagnosis via computer vision; Sandhya Prabhakaran talked about Bayesian fuzzy clustering via an Indian Buffet process - an interesting talk but a little light on details (as to be expected at such an open conference perhaps); Ruth Urner talked about asymptotic bounds on ML methods and the ability to guarantee some bound on generalisability.
+Maria Rodriguez Martinez of IBM gave a talk on predicting drug effectiveness which was interesting and overlapped with the Dream challenge from last year; Natasha Antropova of Google DeepMind talked about their collaboration with CRUK on working at breast cancer diagnosis via computer vision; Sandhya Prabhakaran talked about Bayesian fuzzy clustering via an Indian Buffet process - an interesting talk but a little light on details (as to be expected at such an open conference perhaps); Ruth Urner talked about asymptotic bounds in the context of ML methods and their ability to generalise.
       
     </div>
   </div>
@@ -322,7 +332,7 @@ First we load the relevant libraries (Dowle and Srinivasan 2019, Wickham et al. 
   </div>
   
   <div>
-    <h2><a href="/post/mdi-week-4/">MDI: Week 4</a></h2>
+    <h2><a href="/post/week-4/mdi-week-4/">MDI: Week 4</a></h2>
     <div class="article-style">
       
       Sensible Clustering We check if the modal cluster from the MDI iterations is a sensible decision for allocating probes (note: we referred to median clustering previously. This was wrong). To do this we construct heatmaps comparing the clustering across a sample of iterations and also plot the adjusted Rand index for the clustering at every iteration compared to the modal clustering.

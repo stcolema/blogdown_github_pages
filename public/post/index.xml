@@ -7,10 +7,29 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-uk</language>
     <copyright>UA-135362222-1</copyright>
-    <lastBuildDate>Wed, 17 Apr 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 22 May 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>MDI: Week 15 &amp; 16</title>
+      <link>/post/weeks-15-16/mdi-week-15-16/</link>
+      <pubDate>Wed, 22 May 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/post/weeks-15-16/mdi-week-15-16/</guid>
+      <description>This project is immensely enabled by the R programming language (R Core Team 2019). Most data analysis and processing was carried out within R using a number of packages. The packages from Wickham et al. (2019) (data processing and wrangling), Bache and Wickham (2014) (data processing), Wickham (2016) (visualisation), Müller and Wickham (2019) (data storage) and Dowle and Srinivasan (2019) (reading, writing and processing data) deserve special mention as they tend to be imported in multiple of my scripts for multiple purposes.</description>
+    </item>
+    
+    <item>
+      <title>MDI Weeks 10 - 14</title>
+      <link>/post/weeks-10-14/mdi-weeks-10-14/</link>
+      <pubDate>Wed, 15 May 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/post/weeks-10-14/mdi-weeks-10-14/</guid>
+      <description>Summary This period has been a bit strange - the Easter bank holiday, MASAMB and a wedding in Ireland saw a number of days lost for MDI work (approximately 10). What have we done in this period:
+Run MATLAB MDI on the small gene sets (n = 102 probes) across 7 key datasets (we dropped CD15 and PLA); Ran Many seeds MDI (this is Mason’s implementation using multiple start points) on the same data; and Inspected and compared outputs.</description>
+    </item>
     
     <item>
       <title>MDI: Weeks 8 &amp; 9</title>
@@ -20,7 +39,7 @@
       <guid>/post/weeks-8-9/mdi-weeks-8-9/</guid>
       <description>Summary In this period I went to Women in Data Science (WiDS), Zurich, got the HPC scripts running properly (an &amp;amp; lost me a day or two), briefly inspected mixing for the gene sets Chris gave me and got the MATLAB version of MDI running (possibly incorrectly - I have to ask PK).
  WiDS Some nice speakers that were of particular interest to me:
-Maria Rodriguez Martinez of IBM gave a talk on predicting drug effectiveness which was interesting and overlapped with the Dream challenge from last year; Natasha Antropova of Google DeepMind talked about their collaboration with CRUK on working at breast cancer diagnosis via computer vision; Sandhya Prabhakaran talked about Bayesian fuzzy clustering via an Indian Buffet process - an interesting talk but a little light on details (as to be expected at such an open conference perhaps); Ruth Urner talked about asymptotic bounds on ML methods and the ability to guarantee some bound on generalisability.</description>
+Maria Rodriguez Martinez of IBM gave a talk on predicting drug effectiveness which was interesting and overlapped with the Dream challenge from last year; Natasha Antropova of Google DeepMind talked about their collaboration with CRUK on working at breast cancer diagnosis via computer vision; Sandhya Prabhakaran talked about Bayesian fuzzy clustering via an Indian Buffet process - an interesting talk but a little light on details (as to be expected at such an open conference perhaps); Ruth Urner talked about asymptotic bounds in the context of ML methods and their ability to generalise.</description>
     </item>
     
     <item>
@@ -46,10 +65,10 @@ First we load the relevant libraries (Dowle and Srinivasan 2019, Wickham et al. 
     
     <item>
       <title>MDI: Week 4</title>
-      <link>/post/mdi-week-4/</link>
+      <link>/post/week-4/mdi-week-4/</link>
       <pubDate>Mon, 04 Mar 2019 00:00:00 +0000</pubDate>
       
-      <guid>/post/mdi-week-4/</guid>
+      <guid>/post/week-4/mdi-week-4/</guid>
       <description>Sensible Clustering We check if the modal cluster from the MDI iterations is a sensible decision for allocating probes (note: we referred to median clustering previously. This was wrong). To do this we construct heatmaps comparing the clustering across a sample of iterations and also plot the adjusted Rand index for the clustering at every iteration compared to the modal clustering.
  We plot the adjusted Rand index comparing the allocation at a given iteration (corrected for thinning on the x-axis) to the modal clustering from all recorded iterations.</description>
     </item>

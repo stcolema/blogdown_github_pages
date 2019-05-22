@@ -7,17 +7,27 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-uk</language>
     <copyright>UA-135362222-1</copyright>
-    <lastBuildDate>Mon, 04 Mar 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 15 May 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/chris-wallace/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
+      <title>MDI Weeks 10 - 14</title>
+      <link>/post/weeks-10-14/mdi-weeks-10-14/</link>
+      <pubDate>Wed, 15 May 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/post/weeks-10-14/mdi-weeks-10-14/</guid>
+      <description>Summary This period has been a bit strange - the Easter bank holiday, MASAMB and a wedding in Ireland saw a number of days lost for MDI work (approximately 10). What have we done in this period:
+Run MATLAB MDI on the small gene sets (n = 102 probes) across 7 key datasets (we dropped CD15 and PLA); Ran Many seeds MDI (this is Mason’s implementation using multiple start points) on the same data; and Inspected and compared outputs.</description>
+    </item>
+    
+    <item>
       <title>MDI: Week 4</title>
-      <link>/post/mdi-week-4/</link>
+      <link>/post/week-4/mdi-week-4/</link>
       <pubDate>Mon, 04 Mar 2019 00:00:00 +0000</pubDate>
       
-      <guid>/post/mdi-week-4/</guid>
+      <guid>/post/week-4/mdi-week-4/</guid>
       <description>Sensible Clustering We check if the modal cluster from the MDI iterations is a sensible decision for allocating probes (note: we referred to median clustering previously. This was wrong). To do this we construct heatmaps comparing the clustering across a sample of iterations and also plot the adjusted Rand index for the clustering at every iteration compared to the modal clustering.
  We plot the adjusted Rand index comparing the allocation at a given iteration (corrected for thinning on the x-axis) to the modal clustering from all recorded iterations.</description>
     </item>
