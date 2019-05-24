@@ -55,7 +55,7 @@ bibliography: Weeks_15_16.bib
 <li>Convergence of the <span class="math inline">\(\phi\)</span> parameter between datasets over iterations;</li>
 <li>The disctribution of the <span class="math inline">\(\phi\)</span> parameter samples over MCMC iterations;</li>
 <li>The posterior similarity matrix (PSM) for the clustering over MCMC iterations;</li>
-<li>The adjusted rand index comparing the clustering in each iteration to the predicted clustering using <code>Simtocl()</code> from the <code>mclust</code> <span class="citation">(Fritsch 2012)</span> package in R;</li>
+<li>The adjusted rand index comparing the clustering in each iteration to the predicted clustering using <code>Simtocl()</code> from the <code>mcclust</code> <span class="citation">(Fritsch 2012)</span> package in R;</li>
 <li>Inspect the clustering with the expression data using the <code>pheatmap</code> function <span class="citation">(Kolde 2019)</span>.</li>
 </ol></li>
 </ol>
@@ -63,10 +63,67 @@ bibliography: Weeks_15_16.bib
 <div id="transpose-the-data-and-remove-nas" class="section level2">
 <h2>Transpose the data and remove NAs</h2>
 <p>The data comes in the form [people <span class="math inline">\(\times\)</span> probes]. As we are interested in clustering genes (represented by the probes), we wish to transpose the data to fit the format required by MDI. Furthermore, MDI cannot handle NAs. We therefore wish to either remove NAs or impute a value in. As the missingness is not at random as if the expression levels are too low for a given reading it is left empty. This means we will fill NAs with the minimum expression value in the given row. However, if a probe is missing across a significant number of people (defined here as being above some fraction of the people present), we remove it from the dataset. We use an initial value of 0.1 for this threshold.</p>
+<p>For the small and medium gene sets, no people or probes are removed under this criterion; for the big gene set we have the following loss:</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="center">Probes dropped</th>
+<th align="center">People dropped</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>CD14</td>
+<td align="center">1</td>
+<td align="center">0</td>
+</tr>
+<tr class="even">
+<td>CD15</td>
+<td align="center">2</td>
+<td align="center">0</td>
+</tr>
+<tr class="odd">
+<td>CD19</td>
+<td align="center">3</td>
+<td align="center">0</td>
+</tr>
+<tr class="even">
+<td>CD4</td>
+<td align="center">1</td>
+<td align="center">0</td>
+</tr>
+<tr class="odd">
+<td>CD8</td>
+<td align="center">1</td>
+<td align="center">0</td>
+</tr>
+<tr class="even">
+<td>IL</td>
+<td align="center">2</td>
+<td align="center">0</td>
+</tr>
+<tr class="odd">
+<td>PLA</td>
+<td align="center">1</td>
+<td align="center">0</td>
+</tr>
+<tr class="even">
+<td>RE</td>
+<td align="center">2</td>
+<td align="center">0</td>
+</tr>
+<tr class="odd">
+<td>TR</td>
+<td align="center">1</td>
+<td align="center">0</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div id="pca-and-visualisation" class="section level2">
 <h2>PCA and visualisation</h2>
-<p>We inspect the data to get some insight into underlying structure using PCA 9as simplemented by <span class="citation">Kassambara and Mundt (2017)</span>). This step can also be used to identify outliers that might be removed.</p>
+<p>We inspect the data to get some insight into underlying structure using PCA (as implemented in the <code>factoExtra</code> package by <span class="citation">Kassambara and Mundt (2017)</span>). This step can also be used to identify outliers that might be removed.</p>
 </div>
 <div id="re-arrange-the-order" class="section level2">
 <h2>Re-arrange the order</h2>
@@ -91,7 +148,106 @@ bibliography: Weeks_15_16.bib
 </div>
 <div id="matlab-implementation" class="section level3">
 <h3>MATLAB implementation</h3>
-<p>The MATLAB code uses more memory and thus is limited to at most 7 datasets.</p>
+<p>The MATLAB code uses more memory and thus is limited to at most 7 datasets. We remove PLA and CD15; PLA has a lot less gene expression data present (as one would expect in platelets as they lack a nucleus, so any RNA present is residual from before differentiation occurred), from previous analysis (see post 1 for details) we have seen that the CD15 dataset is less similar to the others and is thus unlikely to contribute much to an integrative clustering method.</p>
+<div class="figure">
+<img src="/post/weeks-15-16/2019-05-22-mdi-week-15-16_files/mdi_2_heatmap-1.png" alt="Heatmap of clustering for all 9 datasets and all probes. Notice how PLA has more empty probes (cluster 0 here) and that both CD15 and PLA are further away from the other datasets in the hierarchical clustering." />
+<p class="caption">Heatmap of clustering for all 9 datasets and all probes. Notice how PLA has more empty probes (cluster 0 here) and that both CD15 and PLA are further away from the other datasets in the hierarchical clustering.</p>
+</div>
+<p>The MATLAB includes a split-merge step where at every <span class="math inline">\(i^{th}\)</span> iteration of MCMC, random clusters are attempted to be merged or split. This is meant to help the algorithm explore the posterior space more throoughly.</p>
+</div>
+</div>
+<div id="analysis" class="section level2">
+<h2>Analysis</h2>
+<p>We inspect the PSMs as representative of the clustering including uncertainty. We inspect the <span class="math inline">\(\phi_{ij}\)</span> parameters from MDI; these are associated with two given datasets, dataset <span class="math inline">\(i\)</span> and dataset <span class="math inline">\(j\)</span> here, and are indivative of global similarity between them. <span class="math inline">\(\phi_{ij}\)</span> is a random variable sampled from a Gamma distribution where the shape parameter is defined by the number of observations (in our case probes) with the same label in the two datsets - thus the greater the <span class="math inline">\(\phi_{ij}\)</span> the more correlated the clustering between the datasets is.</p>
+<div id="phi-plotted-over-iterations" class="section level3">
+<h3><span class="math inline">\(\phi\)</span> plotted over iterations</h3>
+<p>We inspect a scatter plot of the values sampled for <span class="math inline">\(\phi\)</span> over iterations.</p>
+<div class="figure">
+<img src="/post/weeks-15-16/Many_seeds_small_7_output_5000/Phi_series_plots/file_1_Phi_13.png" alt="\phi_{1,3} (between CD14 and CD4) after 500 iterations for 5,000 different initailsiations." />
+<p class="caption"><span class="math inline">\(\phi_{1,3}\)</span> (between CD14 and CD4) after 500 iterations for 5,000 different initailsiations.</p>
+</div>
+<div class="figure">
+<img src="/post/weeks-15-16/matlab_output_no_vsn_no_norm_n1225_t25/Phi_series_plots/file_1_Phi_13.png" alt="\phi_{1,3} (between CD14 and CD4) after 1,225 iterations for the MATLAB implementation." />
+<p class="caption"><span class="math inline">\(\phi_{1,3}\)</span> (between CD14 and CD4) after 1,225 iterations for the MATLAB implementation.</p>
+</div>
+</div>
+<div id="distribution-of-phi-over-iterations" class="section level3">
+<h3>Distribution of <span class="math inline">\(\phi\)</span> over iterations</h3>
+<p>We inspect histograms of the sampled values for <span class="math inline">\(\phi\)</span>.</p>
+<div class="figure">
+<img src="/post/weeks-15-16/Many_seeds_small_7_output_5000/Phi_histograms/Phi_13_histogram_plot.png" alt="Histogram of values of \phi_{1,3} (between CD14 and CD4) sampled in 500th iteration for 5,000 different initialisations." />
+<p class="caption">Histogram of values of <span class="math inline">\(\phi_{1,3}\)</span> (between CD14 and CD4) sampled in 500th iteration for 5,000 different initialisations.</p>
+</div>
+<div class="figure">
+<img src="/post/weeks-15-16/matlab_output_no_vsn_no_norm_n1225_t25/Phi_histograms/Phi_13_histogram_plot.png" alt="Histogram of values of \phi{1,3} (between CD14 and CD4) sampled over 1,225 iterations with a thinning factor of 25 for the MATLAB implementation." />
+<p class="caption">Histogram of values of <span class="math inline">\(\phi{1,3}\)</span> (between CD14 and CD4) sampled over 1,225 iterations with a thinning factor of 25 for the MATLAB implementation.</p>
+</div>
+</div>
+<div id="adjusted-rand-index-plots" class="section level3">
+<h3>Adjusted rand index plots</h3>
+<p>Compare clustering in final iteration to all previous clusterings using the adjusted rand index.</p>
+<div class="figure">
+<img src="/post/weeks-15-16/Many_seeds_small_7_output_5000/Adjusted_rand_index_plots/rand_index_plot_CD14.png" />
+
+</div>
+<div class="figure">
+<img src="/post/weeks-15-16/matlab_output_no_vsn_no_norm_n1225_t25/Adjusted_rand_index_plots/rand_index_plot_CD14.png" />
+
+</div>
+</div>
+<div id="psms" class="section level3">
+<h3>PSMs</h3>
+<p>PSMs</p>
+<div class="figure">
+<img src="/post/weeks-15-16/Many_seeds_small_7_output_5000/Similarity_matrices/similarity_matrix_CD14.png" />
+
+</div>
+<div class="figure">
+<img src="/post/weeks-15-16/matlab_output_no_vsn_no_norm_n1225_t25/Similarity_matrices/similarity_matrix_CD14.png" />
+
+</div>
+</div>
+<div id="gene-expression-data" class="section level3">
+<h3>Gene expression data</h3>
+<p>We include heatmaps of the gene expression data annotated by the clustering predicted by the PSMs. For the “Many seeds”&quot; approach there are too many clusters generated by <code>Simtocl()</code> to annotate - this is due to the uncertainty of the clustering.</p>
+<div class="figure">
+<img src="/post/weeks-15-16/Many_seeds_small_7_output_5000/Expression_heatmaps/pheatmap_all_datasets.png" />
+
+</div>
+<div class="figure">
+<img src="/post/weeks-15-16/matlab_output_no_vsn_no_norm_n1225_t25/Expression_heatmaps/pheatmap_CD14.png" />
+
+</div>
+</div>
+<div id="fused-genes" class="section level3">
+<h3>Fused genes</h3>
+<p>For the many seeds implementation we have no fused genes between any datasets.</p>
+<!-- ![](/post/weeks-15-16/Many_seeds_small_7_output_5000/Fusion_expression_data/heatmap_fused_genes_CD14_CD4.png) -->
+<div class="figure">
+<img src="/post/weeks-15-16/Many_seeds_small_7_output_5000/Fusion_expression_data/heatmap_unfused_genes_CD14_CD4.png" />
+
+</div>
+<div class="figure">
+<img src="/post/weeks-15-16/matlab_output_no_vsn_no_norm_n1225_t25/Fusion_expression_data/heatmap_fused_genes_CD14_CD4.png" />
+
+</div>
+<div class="figure">
+<img src="/post/weeks-15-16/matlab_output_no_vsn_no_norm_n1225_t25/Fusion_expression_data/heatmap_unfused_genes_CD14_CD4.png" />
+
+</div>
+</div>
+<div id="compare-clustering-in-matlab-to-mdi" class="section level3">
+<h3>Compare clustering in MATLAB to MDI</h3>
+<p>We compare the predicted clustering in the MATLAB implemenation to the clustering at each iteration of the Many seeds approach.</p>
+<div class="figure">
+<img src="/post/weeks-15-16/2019-05-22-mdi-week-15-16_files/rand_index_many_seeds_matlab.png" alt="Histograms of the distribution of the adjusted rand index between the clustering at each seed for C++ MDI compared to the predicted clustering of the MATLAB MDI, facetted by dataset." />
+<p class="caption">Histograms of the distribution of the adjusted rand index between the clustering at each seed for C++ MDI compared to the predicted clustering of the MATLAB MDI, facetted by dataset.</p>
+</div>
+<p>We compare the PSM for MATLAB and C++ (in the same ordering) and for the gene expression data. It appears that the clustering present in the C++ with many seeds is an uncertain version of the MATLAB. The MATLAB becomes stuck and has each member of each cluster allocated to the same cluster with each iteration (giving this binary similarity matrix). The many seeds PSM has many of the blocks / clusters visible in the MATLAB PSM, but their membership is less well defined - this method captures the uncertainty around the membership. This is reassuring - we can see that this model averaging does relate to the MATLAB while avoiding the problem of the spikey likelihood surface. However, this less distinct membership is harder to translate into clusters.</p>
+<p>A small sense check is that the empty probes are all confidently assigned to the same cluster regardless of initialisation and method (the well defined block in the centre of the two PSMs).</p>
+<p><img src="/post/weeks-15-16/2019-05-22-mdi-week-15-16_files/figure-html/comparison_mdi-1.png" width="672" /></p>
+<p>We see that the gene expression for the CD14 data within the small gene set aligns nicely with the clusters. We see that there is more of a continuum between clusters for the many seeds approach - we notice that the top row of gene cluster most strongly with each other, but then with their neighbours in the expression space. Sometimes some of these genes cluster with the genes at the very bottom of the gene expression heatmap or with the band directly above the band of genes with an expression level of 0 across all people. This is satisfying - there is a relatively strong cluster (that one may pick out by eye in the expression data), but that the boundary between this and it’s neighbours is not overly distinct.</p>
+<p><img src="/post/weeks-15-16/2019-05-22-mdi-week-15-16_files/figure-html/many_seed_psm_gene_expr-1.png" width="672" /></p>
 </div>
 </div>
 <div id="bibliography" class="section level2 unnumbered">
