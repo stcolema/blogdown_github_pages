@@ -307,7 +307,7 @@
   
   <span class="middot-divider"></span>
   <span class="article-reading-time">
-    11 min read
+    13 min read
   </span>
   
 
@@ -535,9 +535,18 @@
 <div id="analysis" class="section level2">
 <h2>Analysis</h2>
 <p>We inspect the PSMs as representative of the clustering including uncertainty. We inspect the <span class="math inline">\(\phi_{ij}\)</span> parameters from MDI; these are associated with two given datasets, dataset <span class="math inline">\(i\)</span> and dataset <span class="math inline">\(j\)</span> here, and are indivative of global similarity between them. <span class="math inline">\(\phi_{ij}\)</span> is a random variable sampled from a Gamma distribution where the shape parameter is defined by the number of observations (in our case probes) with the same label in the two datsets - thus the greater the <span class="math inline">\(\phi_{ij}\)</span> the more correlated the clustering between the datasets is.</p>
+<p>We compare:</p>
+<ol style="list-style-type: decimal">
+<li>C++ MDI run over 5,000 different seeds and sampling the 500th iteration of each seed for 7 datasets;</li>
+<li>MATLAB MDI for 1,225 iterations and samping every 25th iteration;</li>
+<li>C++ MDI run over 3,000 different seeds and sampling the 1,000th iteration of each seed for 4 CD datasets (CD14, CD19, CD4 and CD8); and</li>
+<li>MATLAB MDI run for 10,000 iterations and samping every 25th iteration for the 4 CD datasets.</li>
+</ol>
 <div id="phi-plotted-over-iterations" class="section level3">
 <h3><span class="math inline">\(\phi\)</span> plotted over iterations</h3>
 <p>We inspect a scatter plot of the values sampled for <span class="math inline">\(\phi\)</span> over iterations.</p>
+<div id="datasets" class="section level4">
+<h4>7 datasets</h4>
 <div class="figure">
 <img src="/post/weeks-15-16/Many_seeds_small_7_output_5000/Phi_series_plots/file_1_Phi_13.png" alt="\phi_{1,3} (between CD14 and CD4) after 500 iterations for 5,000 different initailsiations." />
 <p class="caption"><span class="math inline">\(\phi_{1,3}\)</span> (between CD14 and CD4) after 500 iterations for 5,000 different initailsiations.</p>
@@ -547,40 +556,93 @@
 <p class="caption"><span class="math inline">\(\phi_{1,3}\)</span> (between CD14 and CD4) after 1,225 iterations for the MATLAB implementation.</p>
 </div>
 </div>
+<div id="datasets-1" class="section level4">
+<h4>4 datasets</h4>
+<div class="figure">
+<img src="/post/weeks-15-16/Many_seeds_4_cd/Phi_series_plots/file_1_Phi_13.png" alt="\phi_{1,3} (between CD14 and CD4) after 1,000 iterations for 3,000 different initailsiations and reduced to 4 datasets." />
+<p class="caption"><span class="math inline">\(\phi_{1,3}\)</span> (between CD14 and CD4) after 1,000 iterations for 3,000 different initailsiations and reduced to 4 datasets.</p>
+</div>
+<div class="figure">
+<img src="/post/weeks-15-16/Matlab_4_cd/Phi_series_plots/file_1_Phi_13.png" alt="\phi_{1,3} (between CD14 and CD4) after 10,000 iterations for the MATLAB implementation and reduced to 4 datasets." />
+<p class="caption"><span class="math inline">\(\phi_{1,3}\)</span> (between CD14 and CD4) after 10,000 iterations for the MATLAB implementation and reduced to 4 datasets.</p>
+</div>
+</div>
+</div>
 <div id="distribution-of-phi-over-iterations" class="section level3">
 <h3>Distribution of <span class="math inline">\(\phi\)</span> over iterations</h3>
 <p>We inspect histograms of the sampled values for <span class="math inline">\(\phi\)</span>.</p>
+<div id="datasets-2" class="section level4">
+<h4>7 datasets</h4>
 <div class="figure">
 <img src="/post/weeks-15-16/Many_seeds_small_7_output_5000/Phi_histograms/Phi_13_histogram_plot.png" alt="Histogram of values of \phi_{1,3} (between CD14 and CD4) sampled in 500th iteration for 5,000 different initialisations." />
 <p class="caption">Histogram of values of <span class="math inline">\(\phi_{1,3}\)</span> (between CD14 and CD4) sampled in 500th iteration for 5,000 different initialisations.</p>
 </div>
 <div class="figure">
-<img src="/post/weeks-15-16/matlab_output_no_vsn_no_norm_n1225_t25/Phi_histograms/Phi_13_histogram_plot.png" alt="Histogram of values of \phi{1,3} (between CD14 and CD4) sampled over 1,225 iterations with a thinning factor of 25 for the MATLAB implementation." />
-<p class="caption">Histogram of values of <span class="math inline">\(\phi{1,3}\)</span> (between CD14 and CD4) sampled over 1,225 iterations with a thinning factor of 25 for the MATLAB implementation.</p>
+<img src="/post/weeks-15-16/matlab_output_no_vsn_no_norm_n1225_t25/Phi_histograms/Phi_13_histogram_plot.png" alt="Histogram of values of \phi_{1,3} (between CD14 and CD4) sampled over 1,225 iterations with a thinning factor of 25 for the MATLAB implementation." />
+<p class="caption">Histogram of values of <span class="math inline">\(\phi_{1,3}\)</span> (between CD14 and CD4) sampled over 1,225 iterations with a thinning factor of 25 for the MATLAB implementation.</p>
+</div>
+</div>
+<div id="datasets-3" class="section level4">
+<h4>4 datasets</h4>
+<div class="figure">
+<img src="/post/weeks-15-16/Many_seeds_4_cd/Phi_histograms/Phi_13_histogram_plot.png" alt="Histogram of values of \phi_{1,3} (between CD14 and CD4) sampled in 1,000th iteration for 3,000 different initialisations for 4 datasets." />
+<p class="caption">Histogram of values of <span class="math inline">\(\phi_{1,3}\)</span> (between CD14 and CD4) sampled in 1,000th iteration for 3,000 different initialisations for 4 datasets.</p>
+</div>
+<div class="figure">
+<img src="/post/weeks-15-16/Matlab_4_cd/Phi_histograms/Phi_13_histogram_plot.png" alt="Histogram of values of \phi_{1,3} (between CD14 and CD4) sampled over 10,000 iterations with a thinning factor of 25 for the MATLAB implementation applied to 4 datasets." />
+<p class="caption">Histogram of values of <span class="math inline">\(\phi_{1,3}\)</span> (between CD14 and CD4) sampled over 10,000 iterations with a thinning factor of 25 for the MATLAB implementation applied to 4 datasets.</p>
+</div>
 </div>
 </div>
 <div id="adjusted-rand-index-plots" class="section level3">
 <h3>Adjusted rand index plots</h3>
 <p>Compare clustering in final iteration to all previous clusterings using the adjusted rand index.</p>
+<div id="datasets-4" class="section level4">
+<h4>7 datasets</h4>
 <div class="figure">
-<img src="/post/weeks-15-16/Many_seeds_small_7_output_5000/Adjusted_rand_index_plots/rand_index_plot_CD14.png" />
-
+<img src="/post/weeks-15-16/Many_seeds_small_7_output_5000/Adjusted_rand_index_plots/rand_index_plot_CD14.png" alt="Plot comparing the clustering in every recorded iteration / initialisation to the last recorded using the adjusted rand index for C++ MDI with 5,000 different initialisations over 7 datasets." />
+<p class="caption">Plot comparing the clustering in every recorded iteration / initialisation to the last recorded using the adjusted rand index for C++ MDI with 5,000 different initialisations over 7 datasets.</p>
 </div>
 <div class="figure">
-<img src="/post/weeks-15-16/matlab_output_no_vsn_no_norm_n1225_t25/Adjusted_rand_index_plots/rand_index_plot_CD14.png" />
-
+<img src="/post/weeks-15-16/matlab_output_no_vsn_no_norm_n1225_t25/Adjusted_rand_index_plots/rand_index_plot_CD14.png" alt="Plot comparing the clustering in every recorded iteration / initialisation to the last recorded using the adjusted rand index for MATLAB MDI with 1,225 iterations over 7 datasets." />
+<p class="caption">Plot comparing the clustering in every recorded iteration / initialisation to the last recorded using the adjusted rand index for MATLAB MDI with 1,225 iterations over 7 datasets.</p>
+</div>
+</div>
+<div id="datasets-5" class="section level4">
+<h4>4 datasets</h4>
+<div class="figure">
+<img src="/post/weeks-15-16/Many_seeds_4_cd/Adjusted_rand_index_plots/rand_index_plot_CD14.png" alt="Plot comparing the clustering in every recorded iteration / initialisation to the last recorded using the adjusted rand index for C++ MDI with 3,000 different initialisations over 4 datasets." />
+<p class="caption">Plot comparing the clustering in every recorded iteration / initialisation to the last recorded using the adjusted rand index for C++ MDI with 3,000 different initialisations over 4 datasets.</p>
+</div>
+<div class="figure">
+<img src="/post/weeks-15-16/Matlab_4_cd/Adjusted_rand_index_plots/rand_index_plot_CD14.png" alt="Plot comparing the clustering in every recorded iteration / initialisation to the last recorded using the adjusted rand index for MATLAB MDI with 10,000 iterations over 4 datasets." />
+<p class="caption">Plot comparing the clustering in every recorded iteration / initialisation to the last recorded using the adjusted rand index for MATLAB MDI with 10,000 iterations over 4 datasets.</p>
+</div>
 </div>
 </div>
 <div id="psms" class="section level3">
 <h3>PSMs</h3>
-<p>PSMs</p>
+<div id="datasets-6" class="section level4">
+<h4>7 datasets</h4>
 <div class="figure">
-<img src="/post/weeks-15-16/Many_seeds_small_7_output_5000/Similarity_matrices/similarity_matrix_CD14.png" />
-
+<img src="/post/weeks-15-16/Many_seeds_small_7_output_5000/Similarity_matrices/similarity_matrix_CD14.png" alt="Posterior similarity matrix for C++ MDI with 5,000 initialisations over 7 datasets." />
+<p class="caption">Posterior similarity matrix for C++ MDI with 5,000 initialisations over 7 datasets.</p>
 </div>
 <div class="figure">
-<img src="/post/weeks-15-16/matlab_output_no_vsn_no_norm_n1225_t25/Similarity_matrices/similarity_matrix_CD14.png" />
-
+<img src="/post/weeks-15-16/matlab_output_no_vsn_no_norm_n1225_t25/Similarity_matrices/similarity_matrix_CD14.png" alt="Posterior similarity matrix for MATLAB MDI with 1,225 iterations over 7 datasets." />
+<p class="caption">Posterior similarity matrix for MATLAB MDI with 1,225 iterations over 7 datasets.</p>
+</div>
+</div>
+<div id="datasets-7" class="section level4">
+<h4>4 datasets</h4>
+<div class="figure">
+<img src="/post/weeks-15-16/Many_seeds_4_cd/Similarity_matrices/similarity_matrix_CD14.png" alt="Posterior similarity matrix for C++ MDI with 3,000 initialisations over 4 datasets." />
+<p class="caption">Posterior similarity matrix for C++ MDI with 3,000 initialisations over 4 datasets.</p>
+</div>
+<div class="figure">
+<img src="/post/weeks-15-16/Matlab_4_cd/Similarity_matrices/similarity_matrix_CD14.png" alt="Posterior similarity matrix for MATLAB MDI with 10,000 iterations over 4 datasets." />
+<p class="caption">Posterior similarity matrix for MATLAB MDI with 10,000 iterations over 4 datasets.</p>
+</div>
 </div>
 </div>
 <div id="gene-expression-data" class="section level3">
@@ -597,19 +659,37 @@
 </div>
 <div id="fused-genes" class="section level3">
 <h3>Fused genes</h3>
+<div id="datasets-8" class="section level4">
+<h4>7 datasets</h4>
 <p>For the many seeds implementation we have no fused genes between any datasets.</p>
 <!-- ![](/post/weeks-15-16/Many_seeds_small_7_output_5000/Fusion_expression_data/heatmap_fused_genes_CD14_CD4.png) -->
 <div class="figure">
-<img src="/post/weeks-15-16/Many_seeds_small_7_output_5000/Fusion_expression_data/heatmap_unfused_genes_CD14_CD4.png" />
-
+<img src="/post/weeks-15-16/Many_seeds_small_7_output_5000/Fusion_expression_data/heatmap_unfused_genes_CD14_CD4.png" alt="Unfused genes between CD14 and CD4 for C++ MDI with 5,000 different initialisations and 7 datasets." />
+<p class="caption">Unfused genes between CD14 and CD4 for C++ MDI with 5,000 different initialisations and 7 datasets.</p>
 </div>
 <div class="figure">
-<img src="/post/weeks-15-16/matlab_output_no_vsn_no_norm_n1225_t25/Fusion_expression_data/heatmap_fused_genes_CD14_CD4.png" />
-
+<img src="/post/weeks-15-16/matlab_output_no_vsn_no_norm_n1225_t25/Fusion_expression_data/heatmap_fused_genes_CD14_CD4.png" alt="Fused genes between CD14 and CD4 for MATLAB MDI with 1,225 iterations over 7 datasets." />
+<p class="caption">Fused genes between CD14 and CD4 for MATLAB MDI with 1,225 iterations over 7 datasets.</p>
 </div>
 <div class="figure">
-<img src="/post/weeks-15-16/matlab_output_no_vsn_no_norm_n1225_t25/Fusion_expression_data/heatmap_unfused_genes_CD14_CD4.png" />
-
+<img src="/post/weeks-15-16/matlab_output_no_vsn_no_norm_n1225_t25/Fusion_expression_data/heatmap_unfused_genes_CD14_CD4.png" alt="Unfused genes between CD14 and CD4 for MATLAB MDI with 1,225 iterations over 7 datasets." />
+<p class="caption">Unfused genes between CD14 and CD4 for MATLAB MDI with 1,225 iterations over 7 datasets.</p>
+</div>
+</div>
+<div id="datasets-9" class="section level4">
+<h4>4 datasets</h4>
+<div class="figure">
+<img src="/post/weeks-15-16/Many_seeds_4_cd/Fusion_expression_data/heatmap_unfused_genes_CD14_CD4.png" alt="Unfused genes between CD14 and CD4 for C++ MDI with 3,000 different initialisations and 4 datasets." />
+<p class="caption">Unfused genes between CD14 and CD4 for C++ MDI with 3,000 different initialisations and 4 datasets.</p>
+</div>
+<div class="figure">
+<img src="/post/weeks-15-16/Matlab_4_cd/Fusion_expression_data/heatmap_fused_genes_CD14_CD4.png" alt="Fused genes between CD14 and CD4 for MATLAB MDI with 10,000 iterations over 4 datasets." />
+<p class="caption">Fused genes between CD14 and CD4 for MATLAB MDI with 10,000 iterations over 4 datasets.</p>
+</div>
+<div class="figure">
+<img src="/post/weeks-15-16/Matlab_4_cd/Fusion_expression_data/heatmap_unfused_genes_CD14_CD4.png" alt="Unfused genes between CD14 and CD4 for MATLAB MDI with 10,000 iterations over 4 datasets." />
+<p class="caption">Unfused genes between CD14 and CD4 for MATLAB MDI with 10,000 iterations over 4 datasets.</p>
+</div>
 </div>
 </div>
 <div id="compare-clustering-in-matlab-to-mdi" class="section level3">
